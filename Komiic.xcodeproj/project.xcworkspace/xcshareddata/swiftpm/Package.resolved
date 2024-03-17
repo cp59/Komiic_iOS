@@ -1,0 +1,33 @@
+{
+  "originHash" : "7893e7b207fd478cf40a2dcf74c810c61f035156a8adfb1f3c50852d089ad7aa",
+  "pins" : [
+    {
+      "identity" : "keychain-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/evgenyneu/keychain-swift",
+      "state" : {
+        "revision" : "265806607b45687a3d646e4c9837c31c90f202e8",
+        "version" : "21.0.0"
+      }
+    },
+    {
+      "identity" : "kingfisher",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/onevcat/Kingfisher",
+      "state" : {
+        "revision" : "5b92f029fab2cce44386d28588098b5be0824ef5",
+        "version" : "7.11.0"
+      }
+    },
+    {
+      "identity" : "swiftuisnackbar",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/zaniluca/SwiftUISnackbar",
+      "state" : {
+        "branch" : "main",
+        "revision" : "ff5132c91e3a3855af679e648b95c8ab60c5eeb1"
+      }
+    }
+  ],
+  "version" : 3
+}
