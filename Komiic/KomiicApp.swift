@@ -63,30 +63,6 @@ struct ImageView: View {
 
 }
 
-struct ComicImageView: View {
-    @ObservedObject var imageLoader:ComicImageLoader
-    @State var image:UIImage = UIImage()
-
-    func imageFromData(_ data:Data) -> UIImage {
-        UIImage(data: data) ?? UIImage()
-    }
-
-    init(withURL url:String, comicId:String, chapterId:String) {
-        imageLoader = ComicImageLoader(urlString:url, comicId: comicId, chapterId: chapterId)
-    }
-
-    var body: some View {
-        VStack {
-
-            Image(uiImage: imageLoader.data != nil ? UIImage(data:imageLoader.data!)! : UIImage())
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .scaledToFit()
-        }
-    }
-
-}
-
 class ImageLoader: ObservableObject {
     @Published var dataIsValid = false
     var data:Data?
@@ -103,25 +79,7 @@ class ImageLoader: ObservableObject {
         task.resume()
     }
 }
-class ComicImageLoader: ObservableObject {
-    @Published var dataIsValid = false
-    var data:Data?
 
-    init(urlString:String, comicId:String, chapterId:String) {
-        guard let url = URL(string: urlString) else { return }
-        var request = URLRequest(url: url)
-        request.addValue("https://komiic.com/comic/\(comicId)/chapter/\(chapterId)/images/all", forHTTPHeaderField: "referer")
-        request.addValue("Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoyNTcwOSwicGFpZCI6ZmFsc2UsImV4cCI6MTcxMDQyNDEwMH0.zASFh9Nx6h2WYxpZos32kpdq_MdeWkV7OCNJW6MIJ_U", forHTTPHeaderField: "authorization")
-        request.httpMethod = "GET"
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in            guard let data = data else { return }
-            DispatchQueue.main.async {
-                self.dataIsValid = true
-                self.data = data
-            }
-        }
-        task.resume()
-    }
-}
 
 extension Date {
     func timeAgoDisplay() -> String {
