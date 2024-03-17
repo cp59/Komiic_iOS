@@ -211,11 +211,7 @@ struct KomiicAPI {
                 let accountInfo = try JSONDecoder().decode(AccountInfo.self, from: Data(String(resp[startIndex..<endIndex]).utf8))
                 return completion(accountInfo)
             } catch {
-                print(error)
-                if (resp.contains("token has invalid claims: token is expired")) {
-                    return completion(AccountInfo(id: "tokenExpired", email: "", nickname: "", dateCreated: "", nextChapterMode: "", totalDonateAmount: 0, monthDonateAmount: 0))
-                }
-                return completion(AccountInfo(id: "", email: "", nickname: "", dateCreated: "", nextChapterMode: "", totalDonateAmount: 0, monthDonateAmount: 0))
+                return completion(AccountInfo(id: "tokenExpired", email: "", nickname: "", dateCreated: "", nextChapterMode: "", totalDonateAmount: 0, monthDonateAmount: 0))
             }
         }
         task.resume()
