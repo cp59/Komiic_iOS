@@ -38,7 +38,7 @@ struct ComicDetailView: View {
                 .frame(height: 350)
                 .cornerRadius(14)
                 .padding(EdgeInsets(top: -50, leading: 0, bottom: 0, trailing: 0))
-            Text(comicData.title).font(.title).bold().multilineTextAlignment(.center)
+            Text(comicData.title).font(.title).bold().multilineTextAlignment(.center).padding(5)
             Spacer().frame(height: 10)
             Button {
                 if (comicData.authors.count == 1) {

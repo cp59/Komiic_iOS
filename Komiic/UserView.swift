@@ -88,57 +88,59 @@ struct UserView: View {
                     })
                 }
             } else {
-                Text("尚未登入").font(.title).bold()
-                Spacer().frame(height: 5)
-                Text("登入即可使用下書櫃功能、書簽功能、跨平台閱讀記錄、留言功能、更多漫畫").multilineTextAlignment(.center)
-                Spacer().frame(height: 10)
-                Button(action: {
-                    showingLoginSheet = true
-                }, label: {
-                    Text("登入").frame(maxWidth: .infinity,maxHeight: 35)
-            }).buttonStyle(.borderedProminent).sheet(isPresented: $showingLoginSheet, content:
-            {
                 VStack {
-                    NavigationView {
+                    Text("尚未登入").font(.title).bold()
+                    Spacer().frame(height: 8)
+                    Text("登入即可使用下書櫃功能、書簽功能、跨平台閱讀記錄、留言功能、更多漫畫").multilineTextAlignment(.center)
+                    Spacer().frame(height: 15)
+                    Button(action: {
+                        showingLoginSheet = true
+                    }, label: {
+                        Text("登入").frame(maxWidth: .infinity,maxHeight: 35)
+                    }).buttonStyle(.borderedProminent).sheet(isPresented: $showingLoginSheet, content:
+                                                                {
                         VStack {
-                            Form {
-                                TextField(text: $username, prompt: Text("電子郵件地址")) {
-                                    Text("電子郵件地址")
-                                }.textInputAutocapitalization(.never)
-                                SecureField(text: $password, prompt: Text("密碼")) {
-                                    Text("密碼")
-                                }
-                            }
-                            Button(action: {
-                                if (!logging) {
-                                    logging = true
-                                    komiicApi.login(email: username, password: password, completion: {token in
-                                        logging = false
-                                        if (token.isEmpty) {
-                                            showLoginFailedAlert = true
-                                        } else {
-                                            keychain.set(token, forKey: "token")
-                                            isLogin = true
-                                            showingLoginSheet = false
+                            NavigationView {
+                                VStack {
+                                    Form {
+                                        TextField(text: $username, prompt: Text("電子郵件地址")) {
+                                            Text("電子郵件地址")
+                                        }.textInputAutocapitalization(.never)
+                                        SecureField(text: $password, prompt: Text("密碼")) {
+                                            Text("密碼")
                                         }
-                                    })
-                                }
-                            }, label: {
-                                HStack {
-                                    if (logging) {
-                                        ProgressView().tint(.white).scaleEffect(1.3)
-                                    } else {
-                                        Text("登入")
                                     }
-                                }.frame(maxWidth: .infinity,maxHeight: 35)
-                            }).alert(isPresented: $showLoginFailedAlert, content: {
-                                Alert(title: Text("登入失敗"), message: Text("可能因為輸入資訊不正確，或是網際網路連線不佳"), dismissButton: .default(Text("好")))
-                            })
-                            .buttonStyle(.borderedProminent).padding()
-                        }.navigationTitle("登入Komiic")
-                    }
-                }
-            })
+                                    Button(action: {
+                                        if (!logging) {
+                                            logging = true
+                                            komiicApi.login(email: username, password: password, completion: {token in
+                                                logging = false
+                                                if (token.isEmpty) {
+                                                    showLoginFailedAlert = true
+                                                } else {
+                                                    keychain.set(token, forKey: "token")
+                                                    isLogin = true
+                                                    showingLoginSheet = false
+                                                }
+                                            })
+                                        }
+                                    }, label: {
+                                        HStack {
+                                            if (logging) {
+                                                ProgressView().tint(.white).scaleEffect(1.3)
+                                            } else {
+                                                Text("登入")
+                                            }
+                                        }.frame(maxWidth: .infinity,maxHeight: 35)
+                                    }).alert(isPresented: $showLoginFailedAlert, content: {
+                                        Alert(title: Text("登入失敗"), message: Text("可能因為輸入資訊不正確，或是網際網路連線不佳"), dismissButton: .default(Text("好")))
+                                    })
+                                    .buttonStyle(.borderedProminent).padding()
+                                }.navigationTitle("登入Komiic")
+                            }
+                        }
+                    })
+                }.padding()
             }
         }.onAppear {
             let token = keychain.get("token") ?? ""

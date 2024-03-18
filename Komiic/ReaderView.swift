@@ -33,6 +33,7 @@ struct ReaderView: View {
     @State private var currentPage = ""
     @State private var lastReadPage = -1
     @State private var haveLastReadRecord = false
+    @State private var tabViewSelection = ""
     @State var modifier = AnyModifier { request in
         return request
     }
@@ -77,7 +78,10 @@ struct ReaderView: View {
                                     userDefaults.set(false, forKey: "notFinishedReading")
                                 }
                             }.onChange(of: haveLastReadRecord) { _ in
-                                scrollView.scrollTo("\(lastReadPage)_\(picList[lastReadPage].kid)")
+                                if (lastReadPage != -1) {
+                                    scrollView.scrollTo("\(lastReadPage)_\(picList[lastReadPage].kid)")
+                                    lastReadPage = -1
+                                }
                             }
                             if (imageViewReady) {
                                 if (chaptersList.filter({$0.type.hasPrefix(chapterIsBook ? "b" : "c")}).last?.id == specChapterId) {
@@ -101,9 +105,24 @@ struct ReaderView: View {
                             Spacer()
                         }
                     }
+                }.onTapGesture {
+                    if (showingButton) {
+                        withAnimation {
+                            showingButton = false
+                        }
+                    } else {
+                        withAnimation {
+                            showingButton = true
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+                            withAnimation {
+                                showingButton = false
+                            }
+                        }
+                    }
                 }
             } else {
-                TabView {
+                TabView (selection: $tabViewSelection){
                     ForEach(Array(picList.enumerated()), id:\.element.id) { page,img in
                             KFImage(URL(string:"https://komiic.com/api/image/\(img.kid)"))
                                 .requestModifier(modifier)
@@ -125,10 +144,36 @@ struct ReaderView: View {
                                     }
                                 }
                                 .resizable()
+                                .tag("\(page)_\(img.kid)")
                                 .scaledToFill()
+                        }.onAppear {
+                            if (userDefaults.bool(forKey: "notFinishedReading")) {
+                                tabViewSelection = (userDefaults.string(forKey: "lastReadPage"))!
+                                userDefaults.set(false, forKey: "notFinishedReading")
+                            }
+                        }.onChange(of: haveLastReadRecord) { _ in
+                            if (lastReadPage != -1) {
+                                tabViewSelection = ("\(lastReadPage)_\(picList[lastReadPage].kid)")
+                                lastReadPage = -1
+                            }
                         }
                         Spacer()
-                }.tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                }.tabViewStyle(PageTabViewStyle(indexDisplayMode: .never)).onTapGesture {
+                    if (showingButton) {
+                        withAnimation {
+                            showingButton = false
+                        }
+                    } else {
+                        withAnimation {
+                            showingButton = true
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+                            withAnimation {
+                                showingButton = false
+                            }
+                        }
+                    }
+                }
             }
         }.snackbar(isShowing: $haveLastReadRecord, title: "將從上次閱讀的地方開始",text: "因為你登入的帳號有此漫畫的閱讀紀錄" ,style: .custom(.blue)).onReceive(NotificationCenter.default.publisher(for: UIApplication.willTerminateNotification), perform: { output in
             let userDefaults = UserDefaults()
@@ -136,8 +181,7 @@ struct ReaderView: View {
             userDefaults.setValue(comicId, forKey: "lastReadComicId")
             userDefaults.setValue(specChapterId, forKey: "lastReadChapterId")
             userDefaults.setValue(currentPage, forKey: "lastReadPage")
-        }).overlay(alignment:.topLeading) {
-            HStack (spacing: 10) {
+        }).overlay(alignment:.topTrailing) {
                 Button (action: {
                     ImageCache.default.clearMemoryCache()
                     isPresented = false
@@ -146,15 +190,28 @@ struct ReaderView: View {
                         .resizable()
                         .frame(width: 40, height: 40)
                         .foregroundColor(.gray)
-                }
-                Button (action: {
-                    showingChapterPicker = true
-                }) {
-                    Image(systemName: "list.bullet.circle.fill")
+                }.opacity(showingButton ? 1 : 0).padding(10)
+        }.overlay(alignment:.bottomTrailing) {
+                Menu {
+                    Button{
+                        showingChapterPicker = true
+                    }label: {
+                        Label("選擇章節", systemImage: "list.bullet")
+                    }
+                    Button {
+                        showingReaderSettings = true
+                    }label: {
+                        Label("閱讀器設定", systemImage: "gear")
+                    }
+                } label: {
+                    Image(systemName: "filemenu.and.selection")
                         .resizable()
-                        .frame(width: 40, height: 40)
-                        .foregroundColor(.gray)
-                }.sheet(isPresented: $showingChapterPicker, content: {
+                        .frame(width: 32, height: 32)
+                        .foregroundColor(.white)
+                        .padding(5)
+                        .background(.gray)
+                        .cornerRadius(8)
+                }.opacity(showingButton ? 1 : 0).padding(10).sheet(isPresented: $showingChapterPicker, content: {
                     NavigationView {
                         List() {
                             Section {
@@ -198,15 +255,7 @@ struct ReaderView: View {
                         ).padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 0))
                     }
                     
-                })
-                Button (action: {
-                    showingReaderSettings = true
-                }) {
-                    Image(systemName: "gear.circle.fill")
-                        .resizable()
-                        .frame(width: 40, height: 40)
-                        .foregroundColor(.gray)
-                }.sheet(isPresented: $showingReaderSettings, content: {
+                }).sheet(isPresented: $showingReaderSettings, content: {
                     NavigationView {
                         List() {
                             Toggle(isOn: $useSecondReadMode, label: {
@@ -221,22 +270,6 @@ struct ReaderView: View {
                         ).padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 0))
                     }
                 })
-            }.opacity(showingButton ? 1 : 0).padding(10)
-        }.onTapGesture {
-            if (showingButton) {
-                withAnimation {
-                    showingButton = false
-                }
-            } else {
-                withAnimation {
-                    showingButton = true
-                }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
-                    withAnimation {
-                        showingButton = false
-                    }
-                }
-            }
         }
         .onAppear {
             useSecondReadMode = userDefaults.bool(forKey: "useSecondReadMode")
