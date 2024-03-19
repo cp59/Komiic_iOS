@@ -9,7 +9,15 @@ import SwiftUI
 
 struct ComicFolderView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationView {
+            VStack {
+                ScrollView {
+                    Spacer().frame(height: 20)
+                    SmallComicListView(listType: 3, title: "喜愛書籍", requestParameters: "")
+                    Spacer()
+                }
+            }   .navigationTitle("書櫃")
+        }.navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

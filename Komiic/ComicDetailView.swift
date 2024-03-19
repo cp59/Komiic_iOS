@@ -19,7 +19,6 @@ struct ComicDetailView: View {
     @State private var openCategoryPage = false
     @State private var selectedAuthor: KomiicAPI.ComicAuthor = KomiicAPI.ComicAuthor(id: "0", name: "")
     @State private var selectedCategory: KomiicAPI.ComicCategories = KomiicAPI.ComicCategories(id: "0", name: "")
-    @State private var isLoading = true
     @State private var startReading = false
     var body: some View {
         NavigationLink(destination:
@@ -72,15 +71,9 @@ struct ComicDetailView: View {
                 }
             HStack {
                 Button(action: {
-                    if (!isLoading) {
-                        startReading = true
-                    }
+                    startReading = true
                 }) {
-                    if (isLoading) {
-                        ProgressView().font(.title3).frame(maxWidth: .infinity)
-                    } else {
-                        Label("開始閱讀", systemImage: "book.pages").font(.title3).frame(maxWidth: .infinity)
-                    }
+                    Label("開始閱讀", systemImage: "book.pages").font(.title3).frame(maxWidth: .infinity)
                 }.buttonStyle(.borderedProminent).controlSize(.large).fullScreenCover(isPresented: $startReading, content: {
                     ReaderView(comicId: comicData.id, isPresented: $startReading)
                 })
@@ -150,11 +143,7 @@ struct ComicDetailView: View {
                     Spacer().frame(width: 10)
                 }
             }.frame(height: 60)
-            Spacer().frame(height: 20).onAppear {
-                komiicApi.getChapterByComicId(comicId: comicData.id, completion: {
-                    _ in isLoading = false
-                })
-            }
+            Spacer().frame(height: 20)
             Divider()
             Spacer()
         }

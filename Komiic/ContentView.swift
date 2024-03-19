@@ -13,6 +13,14 @@ struct ContentView: View {
     @State private var startReading = false
     var body: some View {
         TabView {
+            ComicFolderView().tabItem {
+                Image(systemName: "books.vertical.fill")
+                Text("書櫃")
+            }
+            ComicHistoryView().tabItem {
+                Image(systemName: "clock.fill")
+                Text("最近閱讀")
+            }
             BookStoreView()
             .tabItem {
                 Image(systemName: "bag.fill")

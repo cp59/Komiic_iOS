@@ -97,8 +97,8 @@ struct KomiicAPI {
         }
         task.resume()
     }
-    func fetchComicHistory(completion:(@escaping ([ComicHistory]) -> Void)) {
-        let formatParameters = "{\"query\":\"query readComicHistory($pagination: Pagination!) {\\n  readComicHistory(pagination: $pagination) {\\n    id\\n    comicId\\n    chapters {\\n      id\\n      chapterId\\n      page\\n    }\\n    startDate\\n    lastDate\\n    chapterType\\n  }\\n}\",\"variables\":{\"pagination\":{\"limit\":20,\"offset\":0,\"orderBy\":\"DATE_UPDATED\",\"asc\":true}}}"
+    func fetchComicHistory(page:Int = 0,completion:(@escaping ([ComicHistory]) -> Void)) {
+        let formatParameters = "{\"query\":\"query readComicHistory($pagination: Pagination!) {\\n  readComicHistory(pagination: $pagination) {\\n    id\\n    comicId\\n    chapters {\\n      id\\n      chapterId\\n      page\\n    }\\n    startDate\\n    lastDate\\n    chapterType\\n  }\\n}\",\"variables\":{\"pagination\":{\"limit\":20,\"offset\":\(page*20),\"orderBy\":\"DATE_UPDATED\",\"asc\":true}}}"
         let postData = formatParameters.data(using: .utf8)
         var urlRequest = URLRequest(url: URL(string: "\(apiUrl)/api/query")!)
         urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -117,6 +117,34 @@ struct KomiicAPI {
             let endIndex = respText.index(respText.endIndex, offsetBy: -2)
             do {
                 let comics = try JSONDecoder().decode([ComicHistory].self, from: Data(String(respText[startIndex..<endIndex]).utf8))
+                return completion(comics)
+            } catch {
+                print(error)
+                return completion([])
+            }
+        }
+        task.resume()
+    }
+    func fetchFavoritesComic(parameters: String = RequestParameters().getFavoritesComic(),page:Int = 0,completion:(@escaping ([FavoritesComic]) -> Void)) {
+        let formatParameters = parameters.replacingOccurrences(of: "[page]", with: String(page*20))
+        let postData = formatParameters.data(using: .utf8)
+        var urlRequest = URLRequest(url: URL(string: "\(apiUrl)/api/query")!)
+        urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        urlRequest.httpMethod = "POST"
+        urlRequest.addValue("Bearer \(keychain.get("token")!)", forHTTPHeaderField: "authorization")
+        urlRequest.httpBody = postData
+        let task = URLSession.shared.dataTask(with: urlRequest) {data, response, error in
+            guard let data = data else {
+                return completion([])
+            }
+            let respText = String(data: data, encoding: .utf8)!
+            if (respText.index(of: "[{") == nil) {
+                return completion([])
+            }
+            let startIndex = respText.index(of: "[{")!
+            let endIndex = respText.index(respText.endIndex, offsetBy: -2)
+            do {
+                let comics = try JSONDecoder().decode([FavoritesComic].self, from: Data(String(respText[startIndex..<endIndex]).utf8))
                 return completion(comics)
             } catch {
                 print(error)
@@ -273,6 +301,9 @@ struct KomiicAPI {
         func getComicsByCategory (categoryId: String, orderBy: String = "DATE_UPDATED", status: String = "") -> String {
             return "{\"query\":\"query comicByCategory($categoryId: ID!, $pagination: Pagination!) {\\n  comicByCategory(categoryId: $categoryId, pagination: $pagination) {\\n    id\\n    title\\n    status\\n    year\\n    imageUrl\\n    authors {\\n      id\\n      name\\n    }\\n    categories {\\n      id\\n      name\\n    }\\n    dateUpdated\\n    monthViews\\n    views\\n    favoriteCount\\n    lastBookUpdate\\n    lastChapterUpdate\\n  }\\n}\",\"variables\":{\"categoryId\":\"\(categoryId)\",\"pagination\":{\"limit\":20,\"offset\":[page],\"orderBy\":\"\(orderBy)\",\"asc\":false,\"status\":\"\(status)\"}}}"
         }
+        func getFavoritesComic (orderBy: String = "COMIC_DATE_UPDATED", status: String = "", readProgress: String = "ALL") -> String {
+            return "{\"query\":\"query favoritesQuery($pagination: Pagination!) {\\n  getLatestUpdatedDateInFavorite\\n  favoritesV2(pagination: $pagination) {\\n    id\\n    comicId\\n  }\\n}\",\"variables\":{\"pagination\":{\"limit\":20,\"offset\":[page],\"orderBy\":\"\(orderBy)\",\"status\":\"\(status)\",\"asc\":true,\"readProgress\":\"\(readProgress)\"}}}"
+        }
     }
 
     struct ComicData: Decodable {
@@ -337,5 +368,9 @@ struct KomiicAPI {
         let id: String
         let chapterId: String
         let page: Int
+    }
+    struct FavoritesComic: Decodable {
+        let id: String
+        let comicId: String
     }
 }

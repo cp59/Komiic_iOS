@@ -12,6 +12,7 @@ struct ComicListView: View {
     var title:String
     let requestParameters:String
     var listType: Int = 0
+    @State private var lastComic = false
     @State private var comics: [KomiicAPI.ComicData] = []
     @State private var isInit = false
     @State private var isLoading = true
@@ -21,55 +22,126 @@ struct ComicListView: View {
         List {
             ForEach(comics, id: \.id) {comic in
                 ComicItemView(comic: comic)}
-            if (listType == 0) {
-                HStack {
-                    Spacer()
-                    VStack {
-                        if isLoading {
-                            ProgressView().scaleEffect(1.4).padding(10)
-                            Text("載入中...")
-                        }
-                    }.padding(10)
-                    Spacer()
-                    
-                }.onAppear {
-                    if (!isLoading && comics.count != 0) {
-                        komiicApi.fetchList(parameters: requestParameters,page: currentPage+1,completion: {comicsResp in comics.append(contentsOf: comicsResp)})
-                        currentPage+=1
-                        isLoading = true
-                    }
-                }
-                .onDisappear {isLoading = false}
-            } else if (!isInit) {
-                HStack {
-                    Spacer()
-                    if isLoading {
+            if (!lastComic) {
+                if (listType != 1) {
+                    HStack {
+                        Spacer()
                         VStack {
-                            ProgressView().scaleEffect(1.4).padding(10)
-                            Text("載入中...")
+                            if isLoading {
+                                ProgressView().scaleEffect(1.4).padding(10)
+                                Text("載入中...")
+                            }
                         }.padding(10)
+                        Spacer()
+                        
+                    }.onAppear {
+                        if (!isLoading && comics.count != 0) {
+                            currentPage += 1
+                            if (listType == 0) {
+                                komiicApi.fetchList(parameters: requestParameters,page: currentPage,completion: {comicsResp in comics.append(contentsOf: comicsResp)})
+                            } else if (listType == 2) {
+                                komiicApi.fetchComicHistory(page: currentPage, completion: {history in
+                                    if (history.isEmpty) {
+                                        lastComic = true
+                                    } else {
+                                        var queryString = "["
+                                        for (index,comic) in history.enumerated() {
+                                            queryString += "\"\(comic.comicId)\""
+                                            queryString += (index == history.endIndex-1 ? "]" : ",")
+                                        }
+                                        komiicApi.fetchList(parameters: "{\"query\":\"query comicByIds($comicIds: [ID]!) {\\n  comicByIds(comicIds: $comicIds) {\\n    id\\n    title\\n    status\\n    year\\n    imageUrl\\n    authors {\\n      id\\n      name\\n    }\\n    categories {\\n      id\\n      name\\n    }\\n    dateUpdated\\n    monthViews\\n    views\\n    favoriteCount\\n    lastBookUpdate\\n    lastChapterUpdate\\n  }\\n}\",\"variables\":{\"comicIds\":\(queryString)}}",completion: {resp in comics.append(contentsOf: resp)})
+                                    }
+                                })
+                            } else if (listType == 3){
+                                komiicApi.fetchFavoritesComic(parameters: requestParameters,page: currentPage,completion: {history in
+                                    if (history.isEmpty) {
+                                        lastComic = true
+                                    } else {
+                                        var queryString = "["
+                                        for (index,comic) in history.enumerated() {
+                                            queryString += "\"\(comic.comicId)\""
+                                            queryString += (index == history.endIndex-1 ? "]" : ",")
+                                        }
+                                        komiicApi.fetchList(parameters: "{\"query\":\"query comicByIds($comicIds: [ID]!) {\\n  comicByIds(comicIds: $comicIds) {\\n    id\\n    title\\n    status\\n    year\\n    imageUrl\\n    authors {\\n      id\\n      name\\n    }\\n    categories {\\n      id\\n      name\\n    }\\n    dateUpdated\\n    monthViews\\n    views\\n    favoriteCount\\n    lastBookUpdate\\n    lastChapterUpdate\\n  }\\n}\",\"variables\":{\"comicIds\":\(queryString)}}",completion: {resp in comics.append(contentsOf: resp)})
+                                    }
+                                    
+                                })
+                            }
+                            isLoading = true
+                        }
                     }
-                    Spacer()
-                    
+                    .onDisappear {isLoading = false}
+                } else if (!isInit) {
+                    HStack {
+                        Spacer()
+                        if isLoading {
+                            VStack {
+                                ProgressView().scaleEffect(1.4).padding(10)
+                                Text("載入中...")
+                            }.padding(10)
+                        }
+                        Spacer()
+                        
+                    }
                 }
             }
         }
         .padding(EdgeInsets(top: 5, leading: 0, bottom: 0, trailing: 0))
         .onAppear{
             if (!isInit) {
-                komiicApi.fetchList(parameters: requestParameters,completion: {comicsResp in
-                    comics.append(contentsOf: comicsResp)
+                if (listType == 0 && listType == 1) {
+                    komiicApi.fetchList(parameters: requestParameters,completion: {comicsResp in comics.append(contentsOf: comicsResp)
+                        isInit = true
+                        isLoading = false})
+                } else if (listType == 2){
                     isInit = true
-                    isLoading = false})
+                    komiicApi.fetchComicHistory(completion: {history in
+                        var queryString = "["
+                        for (index,comic) in history.enumerated() {
+                            queryString += "\"\(comic.comicId)\""
+                            queryString += (index == history.endIndex-1 ? "]" : ",")
+                        }
+                        komiicApi.fetchList(parameters: "{\"query\":\"query comicByIds($comicIds: [ID]!) {\\n  comicByIds(comicIds: $comicIds) {\\n    id\\n    title\\n    status\\n    year\\n    imageUrl\\n    authors {\\n      id\\n      name\\n    }\\n    categories {\\n      id\\n      name\\n    }\\n    dateUpdated\\n    monthViews\\n    views\\n    favoriteCount\\n    lastBookUpdate\\n    lastChapterUpdate\\n  }\\n}\",\"variables\":{\"comicIds\":\(queryString)}}",completion: {resp in comics.append(contentsOf: resp)
+                            isInit = true
+                            isLoading = false})
+                        
+                    })
+                } else if (listType == 3){
+                    isInit = true
+                    komiicApi.fetchFavoritesComic(parameters: requestParameters,completion: {history in
+                        var queryString = "["
+                        for (index,comic) in history.enumerated() {
+                            queryString += "\"\(comic.comicId)\""
+                            queryString += (index == history.endIndex-1 ? "]" : ",")
+                        }
+                        komiicApi.fetchList(parameters: "{\"query\":\"query comicByIds($comicIds: [ID]!) {\\n  comicByIds(comicIds: $comicIds) {\\n    id\\n    title\\n    status\\n    year\\n    imageUrl\\n    authors {\\n      id\\n      name\\n    }\\n    categories {\\n      id\\n      name\\n    }\\n    dateUpdated\\n    monthViews\\n    views\\n    favoriteCount\\n    lastBookUpdate\\n    lastChapterUpdate\\n  }\\n}\",\"variables\":{\"comicIds\":\(queryString)}}",completion: {resp in comics.append(contentsOf: resp)
+                            isInit = true
+                            isLoading = false})
+                        
+                    })
+                }
             }
         }.onChange(of: refreshList) { _ in
             isInit = false
             isLoading = true
             comics.removeAll()
-            komiicApi.fetchList(parameters: requestParameters,completion: {comicsResp in
-                comics.append(contentsOf: comicsResp)
-                isInit = true
-                isLoading = false})
+            if (listType == 0) {
+                komiicApi.fetchList(parameters: requestParameters,completion: {comicsResp in
+                    comics.append(contentsOf: comicsResp)
+                    isInit = true
+                    isLoading = false})
+            } else {
+                komiicApi.fetchFavoritesComic(parameters: requestParameters,completion: {history in
+                    var queryString = "["
+                    for (index,comic) in history.enumerated() {
+                        queryString += "\"\(comic.comicId)\""
+                        queryString += (index == history.endIndex-1 ? "]" : ",")
+                    }
+                    komiicApi.fetchList(parameters: "{\"query\":\"query comicByIds($comicIds: [ID]!) {\\n  comicByIds(comicIds: $comicIds) {\\n    id\\n    title\\n    status\\n    year\\n    imageUrl\\n    authors {\\n      id\\n      name\\n    }\\n    categories {\\n      id\\n      name\\n    }\\n    dateUpdated\\n    monthViews\\n    views\\n    favoriteCount\\n    lastBookUpdate\\n    lastChapterUpdate\\n  }\\n}\",\"variables\":{\"comicIds\":\(queryString)}}",completion: {resp in comics.append(contentsOf: resp)
+                        isInit = true
+                        isLoading = false})
+                })
+            }
         }
             .navigationTitle(title)
 

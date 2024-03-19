@@ -91,7 +91,7 @@ struct UserView: View {
                 VStack {
                     Text("尚未登入").font(.title).bold()
                     Spacer().frame(height: 8)
-                    Text("登入即可使用下書櫃功能、書簽功能、跨平台閱讀記錄、留言功能、更多漫畫").multilineTextAlignment(.center)
+                    Text("登入即可使用書櫃功能、書簽功能、跨平台閱讀記錄、留言功能、更多漫畫等功能").multilineTextAlignment(.center)
                     Spacer().frame(height: 15)
                     Button(action: {
                         showingLoginSheet = true

@@ -8,8 +8,11 @@
 import SwiftUI
 
 struct ComicHistoryView: View {
+    @State private var refreshList = 0
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationView {
+            ComicListView(title: "最近閱讀", requestParameters: "", listType: 2, refreshList: $refreshList)
+        }.navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

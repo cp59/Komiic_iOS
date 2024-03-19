@@ -34,6 +34,7 @@ struct ReaderView: View {
     @State private var lastReadPage = -1
     @State private var haveLastReadRecord = false
     @State private var tabViewSelection = ""
+    @State private var pageSelection = ""
     @State var modifier = AnyModifier { request in
         return request
     }
@@ -62,6 +63,7 @@ struct ReaderView: View {
                                     }
                                     .onSuccess { _ in
                                         currentPage = "\(page)_\(img.kid)"
+                                        pageSelection = currentPage
                                         if (!token.isEmpty) {
                                             komiicApi.addReadComicHistory(comicId: comicId, chapterId: specChapterId, page: page)
                                         }
@@ -81,6 +83,10 @@ struct ReaderView: View {
                                 if (lastReadPage != -1) {
                                     scrollView.scrollTo("\(lastReadPage)_\(picList[lastReadPage].kid)")
                                     lastReadPage = -1
+                                }
+                            }.onChange(of: pageSelection) { _ in
+                                if (currentPage != pageSelection) {
+                                    scrollView.scrollTo(pageSelection)
                                 }
                             }
                             if (imageViewReady) {
@@ -132,13 +138,14 @@ struct ReaderView: View {
                                         ProgressView().scaleEffect(1.5)
                                         Spacer()
                                     }.frame(width:viewWidth).aspectRatio(CGSize(width: img.width, height: img.height), contentMode: .fill)
-                                        .background(Color(UIColor.darkGray)).cornerRadius(10).padding(10)
+                                        .background(Color(UIColor.darkGray)).cornerRadius(10).padding(10).onAppear {imageViewReady = true}
                                 }
                                 .diskCacheExpiration(.expired)
                                 .fade(duration: 0.25)
                                 .cancelOnDisappear(true)
                                 .onSuccess { _ in
                                     currentPage = "\(page)_\(img.kid)"
+                                    pageSelection = currentPage
                                     if (!token.isEmpty) {
                                         komiicApi.addReadComicHistory(comicId: comicId, chapterId: specChapterId, page: page)
                                     }
@@ -157,7 +164,30 @@ struct ReaderView: View {
                                 lastReadPage = -1
                             }
                         }
-                        Spacer()
+                        .onChange(of: pageSelection, perform: { value in
+                            if (pageSelection != currentPage) {
+                                tabViewSelection = pageSelection
+                            }
+                        })
+                    if (imageViewReady) {
+                        if (chaptersList.filter({$0.type.hasPrefix(chapterIsBook ? "b" : "c")}).last?.id == specChapterId) {
+                            Text("此為最後章節")
+                        } else {
+                            Button(action: {
+                                while true {
+                                    currentChapterIndex += 1
+                                    let nextChapter = chaptersList[currentChapterIndex]
+                                    let nextIsBook = nextChapter.type == "book"
+                                    if (nextIsBook == chapterIsBook) {
+                                        specChapterId = chaptersList[currentChapterIndex].id
+                                        break
+                                    }
+                                }
+                            }, label: {
+                                Text("下一章節").frame(maxWidth: .infinity,minHeight: 30)
+                            }).buttonStyle(.borderedProminent).padding(5)
+                        }
+                    }
                 }.tabViewStyle(PageTabViewStyle(indexDisplayMode: .never)).onTapGesture {
                     if (showingButton) {
                         withAnimation {
@@ -186,27 +216,33 @@ struct ReaderView: View {
                     ImageCache.default.clearMemoryCache()
                     isPresented = false
                 }) {
-                    Image(systemName: "xmark.circle.fill")
-                        .resizable()
-                        .frame(width: 40, height: 40)
-                        .foregroundColor(.gray)
-                }.opacity(showingButton ? 1 : 0).padding(10)
+                    ExitButtonView().frame(width: 24,height: 24)
+                }.opacity(showingButton ? 1 : 0).padding(15)
         }.overlay(alignment:.bottomTrailing) {
                 Menu {
-                    Button{
-                        showingChapterPicker = true
-                    }label: {
-                        Label("選擇章節", systemImage: "list.bullet")
-                    }
                     Button {
                         showingReaderSettings = true
                     }label: {
                         Label("閱讀器設定", systemImage: "gear")
                     }
+                    Menu{
+                        Picker(selection: $pageSelection, label: Label("頁數", systemImage: "list.bullet")) {
+                            ForEach (Array(picList.enumerated().reversed()), id: \.element.id) {index,page in
+                                Text(String(index+1)).tag("\(index)_\(page.kid)")
+                            }
+                        }
+                    }label: {
+                        Label("頁數", systemImage: "book.pages")
+                    }
+                    Button{
+                        showingChapterPicker = true
+                    }label: {
+                        Label("選擇章節", systemImage: "list.bullet")
+                    }
                 } label: {
                     Image(systemName: "filemenu.and.selection")
                         .resizable()
-                        .frame(width: 32, height: 32)
+                        .frame(width: 28, height: 28)
                         .foregroundColor(.white)
                         .padding(5)
                         .background(.gray)
@@ -222,7 +258,8 @@ struct ReaderView: View {
                                             currentChapterIndex = index
                                             chapterIsBook = true
                                             showingChapterPicker = false
-                                        }.badge(specChapterId == chapter.id ? "目前章節" : "").onAppear{haveBook = true}
+                                        }.badge(specChapterId == chapter.id ? "目前章節" : "\(chapter.size)p")
+                                        .onAppear{haveBook = true}
                                     }
                                 }
                             } header: {
@@ -238,7 +275,7 @@ struct ReaderView: View {
                                             currentChapterIndex = index
                                             chapterIsBook = false
                                             showingChapterPicker = false
-                                        }.badge(specChapterId == chapter.id ? "目前章節" : "").onAppear{haveChapter = true}
+                                        }.badge(specChapterId == chapter.id ? "目前章節" : "\(chapter.size)p").onAppear{haveChapter = true}
                                     }
                                 }
                             } header: {
