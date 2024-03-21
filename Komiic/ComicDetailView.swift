@@ -20,6 +20,7 @@ struct ComicDetailView: View {
     @State private var selectedAuthor: KomiicAPI.ComicAuthor = KomiicAPI.ComicAuthor(id: "0", name: "")
     @State private var selectedCategory: KomiicAPI.ComicCategories = KomiicAPI.ComicCategories(id: "0", name: "")
     @State private var startReading = false
+    @State private var showAddToFolderSheet = false
     var body: some View {
         NavigationLink(destination:
                         AuthorView(selectedAuthor: selectedAuthor)
@@ -77,6 +78,14 @@ struct ComicDetailView: View {
                 }.buttonStyle(.borderedProminent).controlSize(.large).fullScreenCover(isPresented: $startReading, content: {
                     ReaderView(comicId: comicData.id, isPresented: $startReading)
                 })
+                Button {
+                    showAddToFolderSheet = true
+                } label: {
+                    Image(systemName: "plus.rectangle.on.folder").font(.title3).frame(maxHeight: .infinity).padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
+                }.buttonStyle(.bordered).sheet(isPresented: $showAddToFolderSheet, content: {
+                    AddToFolderSheet(comicId: comicData.id)
+                })
+
             }.padding(10)
             Divider()
             Spacer().frame(height: 20)

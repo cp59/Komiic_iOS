@@ -11,65 +11,15 @@ import KeychainSwift
 struct KomiicAPI {
     private let keychain = KeychainSwift()
     let apiUrl = "https://komiic.com"
-    func getChapterByComicId (comicId: String, completion:(@escaping ([Chapters]) -> Void)) {
-        let formatParameters = "{\"query\":\"query chapterByComicId($comicId: ID!) {\\n  chaptersByComicId(comicId: $comicId) {\\n    id\\n    serial\\n    type\\n    size\\n  }\\n}\",\"variables\":{\"comicId\":\"\(comicId)\"}}"
-        let postData = formatParameters.data(using: .utf8)
-        var urlRequest = URLRequest(url: URL(string: "\(apiUrl)/api/query")!)
-        urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        urlRequest.httpMethod = "POST"
-        urlRequest.httpBody = postData
-        let task = URLSession.shared.dataTask(with: urlRequest) {data, response, error in
-            guard let data = data else {
-                return completion([])
-            }
-            let respText = String(data: data, encoding: .utf8)!
-            if (respText.index(of: "[{") == nil) {
-                return completion([])
-            }
-            let startIndex = respText.index(of: "[{")!
-            let endIndex = respText.index(respText.endIndex, offsetBy: -2)
-            do {
-                let chapters = try JSONDecoder().decode([Chapters].self, from: Data(String(respText[startIndex..<endIndex]).utf8))
-                return completion(chapters)
-            } catch {
-                print(error)
-                return completion([])
-            }
-        }
-        task.resume()
-    }
-    func getImagesByChapterId (chapterId: String, completion:(@escaping ([ComicImages]) -> Void)) {
-        let formatParameters = "{\"query\":\"query imagesByChapterId($chapterId: ID!) {\\n  imagesByChapterId(chapterId: $chapterId) {\\n    id\\n    kid\\n    height\\n    width\\n  }\\n}\",\"variables\":{\"chapterId\":\"\(chapterId)\"}}"
-        let postData = formatParameters.data(using: .utf8)
-        var urlRequest = URLRequest(url: URL(string: "\(apiUrl)/api/query")!)
-        urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        urlRequest.httpMethod = "POST"
-        urlRequest.httpBody = postData
-        let task = URLSession.shared.dataTask(with: urlRequest) {data, response, error in
-            guard let data = data else {
-                return completion([])
-            }
-            let respText = String(data: data, encoding: .utf8)!
-            if (respText.index(of: "[{") == nil) {
-                return completion([])
-            }
-            let startIndex = respText.index(of: "[{")!
-            let endIndex = respText.index(respText.endIndex, offsetBy: -2)
-            do {
-                let chapters = try JSONDecoder().decode([ComicImages].self, from: Data(String(respText[startIndex..<endIndex]).utf8))
-                return completion(chapters)
-            } catch {
-                print(error)
-                return completion([])
-            }
-        }
-        task.resume()
-    }
-    func fetchList(parameters: String, page: Int = 0,completion:(@escaping ([ComicData]) -> Void)) {
+    func fetchList<T: Decodable>(of type: T.Type, parameters: String, page: Int = 0, completion: @escaping ([T]) -> Void) {
+        let token = keychain.get("token") ?? ""
         let formatParameters = parameters.replacingOccurrences(of: "[page]", with: String(page*20))
         let postData = formatParameters.data(using: .utf8)
         var urlRequest = URLRequest(url: URL(string: "\(apiUrl)/api/query")!)
         urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        if (!token.isEmpty) {
+            urlRequest.addValue("Bearer \(keychain.get("token")!)", forHTTPHeaderField: "authorization")
+        }
         urlRequest.httpMethod = "POST"
         urlRequest.httpBody = postData
         let task = URLSession.shared.dataTask(with: urlRequest) {data, response, error in
@@ -88,7 +38,7 @@ struct KomiicAPI {
                 endIndex = respText.index(respText.endIndex, offsetBy: -2)
             }
             do {
-                let comics = try JSONDecoder().decode([ComicData].self, from: Data(String(respText[startIndex..<endIndex]).utf8))
+                let comics = try JSONDecoder().decode([T].self, from: Data(String(respText[startIndex..<endIndex]).utf8))
                 return completion(comics)
             } catch {
                 print(error)
@@ -96,89 +46,40 @@ struct KomiicAPI {
             }
         }
         task.resume()
+    }
+    func getChapterByComicId (comicId: String, completion:(@escaping ([Chapters]) -> Void)) {
+        let formatParameters = "{\"query\":\"query chapterByComicId($comicId: ID!) {\\n  chaptersByComicId(comicId: $comicId) {\\n    id\\n    serial\\n    type\\n    size\\n  }\\n}\",\"variables\":{\"comicId\":\"\(comicId)\"}}"
+        fetchList(of: Chapters.self, parameters: formatParameters, completion: { resp in
+            return completion(resp)})
+    }
+    func getImagesByChapterId (chapterId: String, completion:(@escaping ([ComicImages]) -> Void)) {
+        let formatParameters = "{\"query\":\"query imagesByChapterId($chapterId: ID!) {\\n  imagesByChapterId(chapterId: $chapterId) {\\n    id\\n    kid\\n    height\\n    width\\n  }\\n}\",\"variables\":{\"chapterId\":\"\(chapterId)\"}}"
+        fetchList(of: ComicImages.self, parameters: formatParameters, completion: { resp in
+            return completion(resp)})
+    }
+    func fetchComicList(parameters: String, page: Int = 0,completion:(@escaping ([ComicData]) -> Void)) {
+        fetchList(of: ComicData.self, parameters: parameters,page: page , completion: { resp in
+            return completion(resp)})
     }
     func fetchComicHistory(page:Int = 0,completion:(@escaping ([ComicHistory]) -> Void)) {
         let formatParameters = "{\"query\":\"query readComicHistory($pagination: Pagination!) {\\n  readComicHistory(pagination: $pagination) {\\n    id\\n    comicId\\n    chapters {\\n      id\\n      chapterId\\n      page\\n    }\\n    startDate\\n    lastDate\\n    chapterType\\n  }\\n}\",\"variables\":{\"pagination\":{\"limit\":20,\"offset\":\(page*20),\"orderBy\":\"DATE_UPDATED\",\"asc\":true}}}"
-        let postData = formatParameters.data(using: .utf8)
-        var urlRequest = URLRequest(url: URL(string: "\(apiUrl)/api/query")!)
-        urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        urlRequest.httpMethod = "POST"
-        urlRequest.addValue("Bearer \(keychain.get("token")!)", forHTTPHeaderField: "authorization")
-        urlRequest.httpBody = postData
-        let task = URLSession.shared.dataTask(with: urlRequest) {data, response, error in
-            guard let data = data else {
-                return completion([])
-            }
-            let respText = String(data: data, encoding: .utf8)!
-            if (respText.index(of: "[{") == nil) {
-                return completion([])
-            }
-            let startIndex = respText.index(of: "[{")!
-            let endIndex = respText.index(respText.endIndex, offsetBy: -2)
-            do {
-                let comics = try JSONDecoder().decode([ComicHistory].self, from: Data(String(respText[startIndex..<endIndex]).utf8))
-                return completion(comics)
-            } catch {
-                print(error)
-                return completion([])
-            }
-        }
-        task.resume()
+        fetchList(of: ComicHistory.self, parameters: formatParameters,page: page , completion: { resp in
+            return completion(resp)})
     }
     func fetchFavoritesComic(parameters: String = RequestParameters().getFavoritesComic(),page:Int = 0,completion:(@escaping ([FavoritesComic]) -> Void)) {
         let formatParameters = parameters.replacingOccurrences(of: "[page]", with: String(page*20))
-        let postData = formatParameters.data(using: .utf8)
-        var urlRequest = URLRequest(url: URL(string: "\(apiUrl)/api/query")!)
-        urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        urlRequest.httpMethod = "POST"
-        urlRequest.addValue("Bearer \(keychain.get("token")!)", forHTTPHeaderField: "authorization")
-        urlRequest.httpBody = postData
-        let task = URLSession.shared.dataTask(with: urlRequest) {data, response, error in
-            guard let data = data else {
-                return completion([])
-            }
-            let respText = String(data: data, encoding: .utf8)!
-            if (respText.index(of: "[{") == nil) {
-                return completion([])
-            }
-            let startIndex = respText.index(of: "[{")!
-            let endIndex = respText.index(respText.endIndex, offsetBy: -2)
-            do {
-                let comics = try JSONDecoder().decode([FavoritesComic].self, from: Data(String(respText[startIndex..<endIndex]).utf8))
-                return completion(comics)
-            } catch {
-                print(error)
-                return completion([])
-            }
-        }
-        task.resume()
+        fetchList(of: FavoritesComic.self, parameters: formatParameters,page: page , completion: { resp in
+            return completion(resp)})
     }
     func fetchCategoryList(completion:(@escaping ([ComicCategories]) -> Void)) {
         let formatParameters = "{\"query\":\"query allCategory {\\n  allCategory {\\n    id\\n    name\\n  }\\n}\",\"variables\":{}}"
-        let postData = formatParameters.data(using: .utf8)
-        var urlRequest = URLRequest(url: URL(string: "\(apiUrl)/api/query")!)
-        urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        urlRequest.httpMethod = "POST"
-        urlRequest.httpBody = postData
-        let task = URLSession.shared.dataTask(with: urlRequest) {data, response, error in
-            guard let data = data else {
-                return completion([])
-            }
-            let respText = String(data: data, encoding: .utf8)!
-            if (respText.index(of: "[{") == nil) {
-                return completion([])
-            }
-            let startIndex = respText.index(of: "[{")!
-            let endIndex = respText.index(respText.endIndex, offsetBy: -2)
-            do {
-                let categories = try JSONDecoder().decode([ComicCategories].self, from: Data(String(respText[startIndex..<endIndex]).utf8))
-                return completion(categories)
-            } catch {
-                print(error)
-                return completion([])
-            }
-        }
-        task.resume()
+        fetchList(of: ComicCategories.self, parameters: formatParameters, completion: { resp in
+            return completion(resp)})
+    }
+    func fetchComicFolders(completion:(@escaping ([ComicFolder]) -> Void)) {
+        let formatParameters = "{\"query\":\"query myFolder {\\n  folders {\\n    id\\n    key\\n    name\\n    views\\n    comicCount\\n  }\\n}\",\"variables\":{}}"
+        fetchList(of: ComicFolder.self, parameters: formatParameters, completion: { resp in
+            return completion(resp)})
     }
     func login(email: String,password: String, completion:(@escaping (String) -> Void)) {
         let parameters = "{\"email\":\"\(email)\",\"password\":\"\(password)\"}"
@@ -270,6 +171,58 @@ struct KomiicAPI {
         }
         task.resume()
     }
+    func fetchFolderComics(parameters: String, page:Int = 0, completion:(@escaping (String) -> Void)) {
+        let formatParameters = parameters.replacingOccurrences(of: "[page]", with: String(page*20))
+        let postData = formatParameters.data(using: .utf8)
+        var request = URLRequest(url: URL(string: "https://komiic.com/api/query")!)
+        request.addValue("Bearer \(keychain.get("token")!)", forHTTPHeaderField: "authorization")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpMethod = "POST"
+        request.httpBody = postData
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data else {
+                print(String(describing: error))
+                return completion("")
+            }
+            let resp = String(data: data, encoding: .utf8)!
+            if (resp.contains("[]")) {
+                return completion("")
+            }
+            let startIndex = resp.index(of: "[\"")
+            let endIndex = resp.index(resp.endIndex, offsetBy: -3)
+            return completion(String(resp[startIndex!..<endIndex]))
+        }
+        task.resume()
+    }
+    func comicInAccountFolders(comicId: String, completion:(@escaping ([String]) -> Void)) {
+        let formatParameters = "{\"query\":\"query comicInAccountFolders($comicId: ID!) {\\n  comicInAccountFolders(comicId: $comicId)\\n}\",\"variables\":{\"comicId\":\"\(comicId)\"}}"
+        let postData = formatParameters.data(using: .utf8)
+        var request = URLRequest(url: URL(string: "https://komiic.com/api/query")!)
+        request.addValue("Bearer \(keychain.get("token")!)", forHTTPHeaderField: "authorization")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpMethod = "POST"
+        request.httpBody = postData
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data else {
+                print(String(describing: error))
+                return completion([])
+            }
+            let resp = String(data: data, encoding: .utf8)!
+            if (resp.contains("[]")) {
+                return completion([])
+            }
+            let startIndex = resp.index(of: "[\"")!
+            let endIndex = resp.index(resp.endIndex, offsetBy: -2)
+            do {
+                let comicInAccountFolders = try JSONDecoder().decode([String].self, from: Data(String(resp[startIndex..<endIndex]).utf8))
+                return completion(comicInAccountFolders)
+            } catch {
+                print(error)
+                return completion([])
+            }
+        }
+        task.resume()
+    }
     func addReadComicHistory(comicId: String, chapterId: String, page: Int) {
         let parameters = "{\"query\":\"mutation addReadComicHistory($comicId: ID!, $chapterId: ID!, $page: Int!) {\\n  addReadComicHistory(comicId: $comicId, chapterId: $chapterId, page: $page) {\\n    id\\n  }\\n}\",\"variables\":{\"comicId\":\"\(comicId)\",\"chapterId\":\"\(chapterId)\",\"page\":\(page)}}"
         let postData = parameters.data(using: .utf8)
@@ -280,7 +233,28 @@ struct KomiicAPI {
         request.httpBody = postData
         let task = URLSession.shared.dataTask(with: request) { data, response, error in }
         task.resume()
-
+    }
+    func removeComicToFolder(comicId: String, folderId: String) {
+        let parameters = "{\"query\":\"mutation removeComicToFolder($comicId: ID!, $folderId: ID!) {\\n  removeComicToFolder(comicId: $comicId, folderId: $folderId)\\n}\",\"variables\":{\"comicId\":\"\(comicId)\",\"folderId\":\"\(folderId)\"}}"
+        let postData = parameters.data(using: .utf8)
+        var request = URLRequest(url: URL(string: "https://komiic.com/api/query")!,timeoutInterval: Double.infinity)
+        request.addValue("Bearer \(keychain.get("token")!)", forHTTPHeaderField: "authorization")
+        request.addValue("application/json", forHTTPHeaderField: "content-type")
+        request.httpMethod = "POST"
+        request.httpBody = postData
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in }
+        task.resume()
+    }
+    func addComicToFolder(comicId: String, folderId: String) {
+        let parameters = "{\"query\":\"mutation addComicToFolder($comicId: ID!, $folderId: ID!) {\\n  addComicToFolder(comicId: $comicId, folderId: $folderId)\\n}\",\"variables\":{\"comicId\":\"\(comicId)\",\"folderId\":\"\(folderId)\"}}"
+        let postData = parameters.data(using: .utf8)
+        var request = URLRequest(url: URL(string: "https://komiic.com/api/query")!,timeoutInterval: Double.infinity)
+        request.addValue("Bearer \(keychain.get("token")!)", forHTTPHeaderField: "authorization")
+        request.addValue("application/json", forHTTPHeaderField: "content-type")
+        request.httpMethod = "POST"
+        request.httpBody = postData
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in }
+        task.resume()
     }
     struct RequestParameters {
         func getRecentUpdate () -> String{
@@ -303,6 +277,9 @@ struct KomiicAPI {
         }
         func getFavoritesComic (orderBy: String = "COMIC_DATE_UPDATED", status: String = "", readProgress: String = "ALL") -> String {
             return "{\"query\":\"query favoritesQuery($pagination: Pagination!) {\\n  getLatestUpdatedDateInFavorite\\n  favoritesV2(pagination: $pagination) {\\n    id\\n    comicId\\n  }\\n}\",\"variables\":{\"pagination\":{\"limit\":20,\"offset\":[page],\"orderBy\":\"\(orderBy)\",\"status\":\"\(status)\",\"asc\":true,\"readProgress\":\"\(readProgress)\"}}}"
+        }
+        func getFolderComicIds (folderId: String, orderBy: String = "DATE_UPDATED", status: String = "") -> String {
+            return "{\"query\":\"query folderComicIds($folderId: ID!, $pagination: Pagination!) {\\n  folderComicIds(folderId: $folderId, pagination: $pagination) {\\n    comicIds\\n  }\\n}\",\"variables\":{\"folderId\":\"\(folderId)\",\"pagination\":{\"limit\":20,\"offset\":[page],\"orderBy\":\"\(orderBy)\",\"status\":\"\(status)\",\"asc\":true}}}"
         }
     }
 
@@ -372,5 +349,12 @@ struct KomiicAPI {
     struct FavoritesComic: Decodable {
         let id: String
         let comicId: String
+    }
+    struct ComicFolder: Decodable {
+        let id: String
+        let key: String
+        let name: String
+        let views: Int
+        let comicCount: Int
     }
 }
