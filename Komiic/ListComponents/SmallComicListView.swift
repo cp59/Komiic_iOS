@@ -12,6 +12,7 @@ struct SmallComicListView: View {
     @State var comics: [KomiicAPI.ComicData] = []
     @State var isInit = false
     @State var refreshList = 0
+    var folder:KomiicAPI.ComicFolder = KomiicAPI.ComicFolder(id: "", key: "", name: "", views: 0, comicCount: 0)
     var listType:Int = 0
     let title:String
     let requestParameters:String
@@ -27,6 +28,10 @@ struct SmallComicListView: View {
                 NavigationLink(destination: FavoritesComicView(), label: {
                     Text("查看全部")
                 })
+            } else if (listType == 4) {
+                NavigationLink(destination: FolderComicView(folder: folder), label: {
+                    Text("查看全部")
+                })
             }
         }.padding(EdgeInsets(top: -15, leading: 20, bottom: -15, trailing: 20))
         ScrollView (.horizontal, showsIndicators: false){
@@ -39,7 +44,7 @@ struct SmallComicListView: View {
         .onAppear{
             if (!isInit) {
                 if (listType == 0) {
-                    komiicApi.fetchList(parameters: requestParameters,completion: {comicsResp in
+                    komiicApi.fetchComicList(parameters: requestParameters,completion: {comicsResp in
                         comics.append(contentsOf: comicsResp)
                         isInit = true})
                 } else if (listType == 3) {
@@ -50,8 +55,14 @@ struct SmallComicListView: View {
                             queryString += "\"\(comic.comicId)\""
                             queryString += (index == history.endIndex-1 ? "]" : ",")
                         }
-                        komiicApi.fetchList(parameters: "{\"query\":\"query comicByIds($comicIds: [ID]!) {\\n  comicByIds(comicIds: $comicIds) {\\n    id\\n    title\\n    status\\n    year\\n    imageUrl\\n    authors {\\n      id\\n      name\\n    }\\n    categories {\\n      id\\n      name\\n    }\\n    dateUpdated\\n    monthViews\\n    views\\n    favoriteCount\\n    lastBookUpdate\\n    lastChapterUpdate\\n  }\\n}\",\"variables\":{\"comicIds\":\(queryString)}}",completion: {resp in comics.append(contentsOf: resp)
+                        komiicApi.fetchComicList(parameters: "{\"query\":\"query comicByIds($comicIds: [ID]!) {\\n  comicByIds(comicIds: $comicIds) {\\n    id\\n    title\\n    status\\n    year\\n    imageUrl\\n    authors {\\n      id\\n      name\\n    }\\n    categories {\\n      id\\n      name\\n    }\\n    dateUpdated\\n    monthViews\\n    views\\n    favoriteCount\\n    lastBookUpdate\\n    lastChapterUpdate\\n  }\\n}\",\"variables\":{\"comicIds\":\(queryString)}}",completion: {resp in comics.append(contentsOf: resp)
                             isInit = true})
+                    })
+                } else if (listType == 4) {
+                    komiicApi.fetchFolderComics(parameters: requestParameters,completion: {folderComics in
+                        komiicApi.fetchComicList(parameters: "{\"query\":\"query comicByIds($comicIds: [ID]!) {\\n  comicByIds(comicIds: $comicIds) {\\n    id\\n    title\\n    status\\n    year\\n    imageUrl\\n    authors {\\n      id\\n      name\\n    }\\n    categories {\\n      id\\n      name\\n    }\\n    dateUpdated\\n    monthViews\\n    views\\n    favoriteCount\\n    lastBookUpdate\\n    lastChapterUpdate\\n  }\\n}\",\"variables\":{\"comicIds\":\(folderComics)}}",completion: {resp in comics.append(contentsOf: resp)
+                            isInit = true})
+                        
                     })
                 }
             }
