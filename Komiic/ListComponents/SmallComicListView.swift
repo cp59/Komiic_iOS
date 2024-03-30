@@ -16,6 +16,7 @@ struct SmallComicListView: View {
     let title:String
     let requestParameters:String
     var body: some View {
+        Spacer().frame(height: 10)
         HStack {
             Text(title).font(.title2).bold()
             Spacer()
@@ -32,7 +33,7 @@ struct SmallComicListView: View {
                     Text("查看全部")
                 })
             }
-        }.padding(EdgeInsets(top: 0, leading: 20, bottom: -15, trailing: 20)).onFirstAppear {
+        }.onFirstAppear {
             if (listType == 0) {
                 app.komiicApi.fetchComicList(parameters: requestParameters,completion: {comicsResp in
                     comics.append(contentsOf: comicsResp)
@@ -58,15 +59,14 @@ struct SmallComicListView: View {
             }
         }
         if (isLoading) {
-            ProgressView().frame(height: 220)
+            ProgressView().frame(height: 183)
         } else {
             ScrollView (.horizontal, showsIndicators: false){
                 LazyHStack {
-                    Spacer().frame(width: 20)
                     ForEach(comics, id: \.id) {comic in
                         SmallComicItemView(comic: comic)}
                 }
-            }.frame(height: 220)
+            }.frame(height: 183)
         }
     }
 }

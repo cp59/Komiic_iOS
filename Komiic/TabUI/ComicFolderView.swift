@@ -27,7 +27,7 @@ struct ComicFolderView: View {
                                 Divider()
                                 SmallComicListView(folder: folder, listType: 4, title: folder.name, requestParameters: KomiicAPI.RequestParameters().getFolderComicIds(folderId: folder.id))
                             }
-                        }.padding(10)
+                        }.padding(EdgeInsets(top: 5, leading: 20, bottom: 20, trailing: 10))
                         Spacer()
                     }.refreshable {
                         isLoading = true

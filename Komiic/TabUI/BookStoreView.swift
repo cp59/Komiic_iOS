@@ -23,7 +23,6 @@ struct BookStoreView: View {
                 } else if (!isSearching){
                     ScrollView {
                         VStack {
-                            Divider()
                             SmallComicListView(title: "最近更新", requestParameters: KomiicAPI.RequestParameters().getRecentUpdate())
                             Divider()
                             SmallComicListView(title: "本月最夯", requestParameters: KomiicAPI.RequestParameters().getMonthHotComics())
@@ -40,7 +39,7 @@ struct BookStoreView: View {
                                 }.frame(width: viewWidth).buttonStyle(.bordered)
                             }
                             Spacer()
-                        }
+                        }.padding(EdgeInsets(top: 0, leading: 20, bottom: 20, trailing: 10))
                     }
                     
                 }

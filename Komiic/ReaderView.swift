@@ -53,7 +53,7 @@ struct ReaderView: View {
                                     .placeholder { _ in
                                         VStack {
                                             Spacer()
-                                            ProgressView()
+                                            ProgressView().tint(.white)
                                             Spacer()
                                         }.frame(width:viewWidth).aspectRatio(CGSize(width: img.width, height: img.height), contentMode: .fill)
                                             .background(Color(UIColor.darkGray)).cornerRadius(10).padding(10).onAppear {imageViewReady = true}
@@ -136,7 +136,7 @@ struct ReaderView: View {
                                 .placeholder { progress in
                                     VStack {
                                         Spacer()
-                                        ProgressView()
+                                        ProgressView().tint(.white)
                                         Spacer()
                                     }.frame(width:viewWidth).aspectRatio(CGSize(width: img.width, height: img.height), contentMode: .fill)
                                         .background(Color(UIColor.darkGray)).cornerRadius(10).padding(10).onAppear {imageViewReady = true}
