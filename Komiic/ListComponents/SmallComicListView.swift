@@ -8,10 +8,9 @@
 import SwiftUI
 
 struct SmallComicListView: View {
-    private let komiicApi = KomiicAPI()
+    @EnvironmentObject var app:app
     @State var comics: [KomiicAPI.ComicData] = []
-    @State var isInit = false
-    @State var refreshList = 0
+    @State var isLoading = true
     var folder:KomiicAPI.ComicFolder = KomiicAPI.ComicFolder(id: "", key: "", name: "", views: 0, comicCount: 0)
     var listType:Int = 0
     let title:String
@@ -21,10 +20,10 @@ struct SmallComicListView: View {
             Text(title).font(.title2).bold()
             Spacer()
             if (listType == 0) {
-                NavigationLink(destination: ComicListView(title: title, requestParameters: requestParameters, refreshList: $refreshList), label: {
+                NavigationLink(destination: ComicListView(title: title, requestParameters: requestParameters), label: {
                     Text("查看全部")
                 })
-            } else if (listType == 3){ //favoritesComic
+            } else if (listType == 3){
                 NavigationLink(destination: FavoritesComicView(), label: {
                     Text("查看全部")
                 })
@@ -33,41 +32,42 @@ struct SmallComicListView: View {
                     Text("查看全部")
                 })
             }
-        }.padding(EdgeInsets(top: -15, leading: 20, bottom: -15, trailing: 20))
-        ScrollView (.horizontal, showsIndicators: false){
-            LazyHStack {
-                Spacer().frame(width: 20)
-                ForEach(comics, id: \.id) {comic in
-                    SmallComicItemView(comic: comic)}
-            }
-        }.frame(height: 240)
-        .onAppear{
-            if (!isInit) {
-                if (listType == 0) {
-                    komiicApi.fetchComicList(parameters: requestParameters,completion: {comicsResp in
-                        comics.append(contentsOf: comicsResp)
-                        isInit = true})
-                } else if (listType == 3) {
-                    isInit = true
-                    komiicApi.fetchFavoritesComic(completion: {history in
-                        var queryString = "["
-                        for (index,comic) in history.enumerated() {
-                            queryString += "\"\(comic.comicId)\""
-                            queryString += (index == history.endIndex-1 ? "]" : ",")
-                        }
-                        komiicApi.fetchComicList(parameters: "{\"query\":\"query comicByIds($comicIds: [ID]!) {\\n  comicByIds(comicIds: $comicIds) {\\n    id\\n    title\\n    status\\n    year\\n    imageUrl\\n    authors {\\n      id\\n      name\\n    }\\n    categories {\\n      id\\n      name\\n    }\\n    dateUpdated\\n    monthViews\\n    views\\n    favoriteCount\\n    lastBookUpdate\\n    lastChapterUpdate\\n  }\\n}\",\"variables\":{\"comicIds\":\(queryString)}}",completion: {resp in comics.append(contentsOf: resp)
-                            isInit = true})
-                    })
-                } else if (listType == 4) {
-                    komiicApi.fetchFolderComics(parameters: requestParameters,completion: {folderComics in
-                        komiicApi.fetchComicList(parameters: "{\"query\":\"query comicByIds($comicIds: [ID]!) {\\n  comicByIds(comicIds: $comicIds) {\\n    id\\n    title\\n    status\\n    year\\n    imageUrl\\n    authors {\\n      id\\n      name\\n    }\\n    categories {\\n      id\\n      name\\n    }\\n    dateUpdated\\n    monthViews\\n    views\\n    favoriteCount\\n    lastBookUpdate\\n    lastChapterUpdate\\n  }\\n}\",\"variables\":{\"comicIds\":\(folderComics)}}",completion: {resp in comics.append(contentsOf: resp)
-                            isInit = true})
-                        
-                    })
-                }
+        }.padding(EdgeInsets(top: 0, leading: 20, bottom: -15, trailing: 20)).onFirstAppear {
+            if (listType == 0) {
+                app.komiicApi.fetchComicList(parameters: requestParameters,completion: {comicsResp in
+                    comics.append(contentsOf: comicsResp)
+                    isLoading = false})
+            } else if (listType == 3) {
+                app.komiicApi.fetchFavoritesComic(completion: {history in
+                    var queryString = "["
+                    for (index,comic) in history.enumerated() {
+                        queryString += "\"\(comic.comicId)\""
+                        queryString += (index == history.endIndex-1 ? "]" : ",")
+                    }
+                    app.komiicApi.fetchComicList(parameters: "{\"query\":\"query comicByIds($comicIds: [ID]!) {\\n  comicByIds(comicIds: $comicIds) {\\n    id\\n    title\\n    status\\n    year\\n    imageUrl\\n    authors {\\n      id\\n      name\\n    }\\n    categories {\\n      id\\n      name\\n    }\\n    dateUpdated\\n    monthViews\\n    views\\n    favoriteCount\\n    lastBookUpdate\\n    lastChapterUpdate\\n  }\\n}\",\"variables\":{\"comicIds\":\(queryString)}}",completion: {resp in 
+                        comics.append(contentsOf: resp)
+                        isLoading = false})
+                })
+            } else if (listType == 4) {
+                app.komiicApi.fetchFolderComics(parameters: requestParameters,completion: {folderComics in
+                    app.komiicApi.fetchComicList(parameters: "{\"query\":\"query comicByIds($comicIds: [ID]!) {\\n  comicByIds(comicIds: $comicIds) {\\n    id\\n    title\\n    status\\n    year\\n    imageUrl\\n    authors {\\n      id\\n      name\\n    }\\n    categories {\\n      id\\n      name\\n    }\\n    dateUpdated\\n    monthViews\\n    views\\n    favoriteCount\\n    lastBookUpdate\\n    lastChapterUpdate\\n  }\\n}\",\"variables\":{\"comicIds\":\(folderComics)}}",completion: {resp in
+                        comics.append(contentsOf: resp)
+                        isLoading = false})
+                    
+                })
             }
         }
-
+        if (isLoading) {
+            ProgressView().frame(height: 220)
+        } else {
+            ScrollView (.horizontal, showsIndicators: false){
+                LazyHStack {
+                    Spacer().frame(width: 20)
+                    ForEach(comics, id: \.id) {comic in
+                        SmallComicItemView(comic: comic)}
+                }
+            }.frame(height: 220)
+        }
     }
 }
 
@@ -78,10 +78,6 @@ struct SmallComicItemView: View {
         if #available(iOS 16.0, *) {
             VStack {
                 ImageView(withURL: comic.imageUrl)
-                    .scaleEffect(1.8)
-                    .padding(EdgeInsets(top: 35, leading: 10, bottom: 35, trailing: 20))
-                    .cornerRadius(12)
-                Text(comic.title).truncationMode(.tail).lineLimit(1).frame(width: 130)
                 NavigationLink(destination: ComicDetailView(comicData: comic), isActive: $openDetailPage )
                 {EmptyView()}.frame(width: 0, height: 0)
             }.onTapGesture {
@@ -92,10 +88,6 @@ struct SmallComicItemView: View {
         } else {
             VStack {
                 ImageView(withURL: comic.imageUrl)
-                    .scaleEffect(1.8)
-                    .padding(EdgeInsets(top: 35, leading: 10, bottom: 35, trailing: 20))
-                    .cornerRadius(12)
-                Text(comic.title).truncationMode(.tail).lineLimit(1).frame(width: 130)
                 NavigationLink(destination: ComicDetailView(comicData: comic), isActive: $openDetailPage )
                 {EmptyView()}.frame(width: 0, height: 0)
             }.onTapGesture {

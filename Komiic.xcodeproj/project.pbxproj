@@ -27,6 +27,7 @@
 		50AD51B42BA568C200AB09E9 /* AllCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AD51B32BA568C200AB09E9 /* AllCategoryView.swift */; };
 		50B599D12B9DC17A00B9C4B9 /* ComicDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B599D02B9DC17A00B9C4B9 /* ComicDetailView.swift */; };
 		50B599D32B9DFB3A00B9C4B9 /* AuthorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B599D22B9DFB3A00B9C4B9 /* AuthorView.swift */; };
+		50C542E32BB8754000469D02 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C542E22BB8754000469D02 /* LoginView.swift */; };
 		50DE4F6E2BA0696D00645CA7 /* ReaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DE4F6D2BA0696D00645CA7 /* ReaderView.swift */; };
 		50FB6C582BA6EEA7006BA657 /* SwiftUISnackbar in Frameworks */ = {isa = PBXBuildFile; productRef = 50FB6C572BA6EEA7006BA657 /* SwiftUISnackbar */; };
 /* End PBXBuildFile section */
@@ -52,6 +53,7 @@
 		50AD51B32BA568C200AB09E9 /* AllCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllCategoryView.swift; sourceTree = "<group>"; };
 		50B599D02B9DC17A00B9C4B9 /* ComicDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicDetailView.swift; sourceTree = "<group>"; };
 		50B599D22B9DFB3A00B9C4B9 /* AuthorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorView.swift; sourceTree = "<group>"; };
+		50C542E22BB8754000469D02 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		50DE4F6D2BA0696D00645CA7 /* ReaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -88,19 +90,19 @@
 		5035664B2B9D64650059072E /* Komiic */ = {
 			isa = PBXGroup;
 			children = (
+				50C542E42BB8811900469D02 /* AccountUI */,
 				506503C02BAC8A6400EE3E7D /* ListView */,
 				506503BE2BAC89E800EE3E7D /* TabUI */,
 				506503BD2BAC89D000EE3E7D /* ListComponents */,
+				506503C12BAC8CEF00EE3E7D /* AddToFolderSheet.swift */,
 				5035664C2B9D64650059072E /* KomiicApp.swift */,
 				5035664E2B9D64650059072E /* ContentView.swift */,
 				5035665D2B9D7B250059072E /* KomiicAPI.swift */,
 				50B599D02B9DC17A00B9C4B9 /* ComicDetailView.swift */,
 				50DE4F6D2BA0696D00645CA7 /* ReaderView.swift */,
-				50356BDF2BA45B17009A4C6D /* UserView.swift */,
 				503566502B9D64660059072E /* Assets.xcassets */,
 				503566522B9D64660059072E /* Komiic.entitlements */,
 				503566532B9D64660059072E /* Preview Content */,
-				506503C12BAC8CEF00EE3E7D /* AddToFolderSheet.swift */,
 			);
 			path = Komiic;
 			sourceTree = "<group>";
@@ -142,6 +144,15 @@
 				501CB2172BAB2AA600F8CC34 /* FolderComicView.swift */,
 			);
 			path = ListView;
+			sourceTree = "<group>";
+		};
+		50C542E42BB8811900469D02 /* AccountUI */ = {
+			isa = PBXGroup;
+			children = (
+				50356BDF2BA45B17009A4C6D /* UserView.swift */,
+				50C542E22BB8754000469D02 /* LoginView.swift */,
+			);
+			path = AccountUI;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -236,6 +247,7 @@
 				506503C22BAC8CEF00EE3E7D /* AddToFolderSheet.swift in Sources */,
 				50AD51B42BA568C200AB09E9 /* AllCategoryView.swift in Sources */,
 				5039C88B2B9F0166000BE97F /* BookStoreView.swift in Sources */,
+				50C542E32BB8754000469D02 /* LoginView.swift in Sources */,
 				5035664D2B9D64650059072E /* KomiicApp.swift in Sources */,
 				50356BE02BA45B17009A4C6D /* UserView.swift in Sources */,
 				5039C88D2B9F4EDD000BE97F /* CategoryView.swift in Sources */,

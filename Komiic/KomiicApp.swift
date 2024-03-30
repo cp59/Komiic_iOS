@@ -6,12 +6,19 @@
 //
 
 import SwiftUI
+import KeychainSwift
+
+class app: ObservableObject {
+    @Published var komiicApi: KomiicAPI = KomiicAPI()
+    @State var isLogin = !(KeychainSwift().get("token") ?? "").isEmpty
+    @State var token = KeychainSwift().get("token") ?? ""
+}
 
 @main
   struct KomiicApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView().environmentObject(app())
         }
     }
 }
@@ -42,22 +49,25 @@ extension StringProtocol {
 struct ImageView: View {
     @ObservedObject var imageLoader:ImageLoader
     @State var image:UIImage = UIImage()
-
+    var width = 130
+    var height = 173
     func imageFromData(_ data:Data) -> UIImage {
         UIImage(data: data) ?? UIImage()
     }
 
-    init(withURL url:String) {
+    init(withURL url:String, width:Int = 130, height:Int = 173) {
         imageLoader = ImageLoader(urlString:url)
+        self.width = width
+        self.height = height
     }
 
     var body: some View {
         VStack {
-
             Image(uiImage: imageLoader.data != nil ? UIImage(data:imageLoader.data!)! : UIImage())
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(width:100, height:100)
+                .cornerRadius(12)
+                .frame(width:CGFloat(width),height: CGFloat(height))
         }
     }
 
@@ -106,4 +116,25 @@ struct ExitButtonView: View {
     }
 }
 
+public extension View {
+    func onFirstAppear(perform action: @escaping () -> Void) -> some View {
+        modifier(ViewFirstAppearModifier(perform: action))
+    }
+}
 
+struct ViewFirstAppearModifier: ViewModifier {
+    @State private var didAppearBefore = false
+    private let action: () -> Void
+
+    init(perform action: @escaping () -> Void) {
+        self.action = action
+    }
+
+    func body(content: Content) -> some View {
+        content.onAppear {
+            guard !didAppearBefore else { return }
+            didAppearBefore = true
+            action()
+        }
+    }
+}

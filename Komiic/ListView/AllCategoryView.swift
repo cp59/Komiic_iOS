@@ -9,9 +9,10 @@ import SwiftUI
 
 struct AllCategoryView: View {
     private let komiicApi = KomiicAPI()
+    private let sortList:[String: String] = ["DATE_UPDATED":"更新","VIEWS":"觀看數","FAVORITE_COUNT":"喜愛數"]
+    private let statusList:[String: String] = ["":"全部", "ONGOING":"連載", "END":"完結"]
     @State private var refreshList = 0
     @State private var isLoading = true
-    @State private var showingCategoryPicker = false
     @State private var sort: String = "DATE_UPDATED"
     @State private var categoryId = "0"
     @State private var status:String = ""
@@ -19,47 +20,35 @@ struct AllCategoryView: View {
     var body: some View {
         VStack {
             if (isLoading) {
-                ProgressView().scaleEffect(2)
+                ProgressView()
             } else {
                 ComicListView(title: "所有漫畫", requestParameters: KomiicAPI.RequestParameters().getComicsByCategory(categoryId: categoryId, orderBy: sort, status: status), refreshList: $refreshList).toolbar {
                     ToolbarItem(placement: .primaryAction) {
                         Menu {
                             Menu {
                                 Picker(selection: $sort, label: Label("排序方式", systemImage: "arrow.up.arrow.down")) {
-                                    Text("更新").tag("DATE_UPDATED")
-                                    Text("觀看數").tag("VIEWS")
-                                    Text("喜愛數").tag("FAVORITE_COUNT")
+                                    ForEach (Array(sortList.keys), id: \.self) {key in
+                                        Text(sortList[key]!).tag(key)
+                                    }
                                 }
                             } label: {
                                 Button(action: {}) {
                                     Text("排序方式")
-                                    if (sort == "DATE_UPDATED") {
-                                        Text("更新")
-                                    } else if (sort == "VIEWS") {
-                                        Text("觀看數")
-                                    } else if (sort == "FAVORITE_COUNT") {
-                                        Text("喜愛數")
-                                    }
+                                    Text(sortList[sort]!)
                                     Image(systemName: "arrow.up.arrow.down")
                                 }
                             }.onChange(of: sort) { _ in
                                 refreshList+=1}
                             Menu {
                                 Picker(selection: $status, label: Label("狀態", systemImage: "arrow.up.arrow.down")) {
-                                    Text("全部").tag("")
-                                    Text("連載").tag("ONGOING")
-                                    Text("完結").tag("END")
+                                    ForEach (Array(statusList.keys), id: \.self) {key in
+                                        Text(statusList[key]!).tag(key)
+                                    }
                                 }
                             } label: {
                                 Button(action: {}) {
                                     Text("狀態")
-                                    if (status == "") {
-                                        Text("全部")
-                                    } else if (status == "ONGOING") {
-                                        Text("連載")
-                                    } else if (status == "END") {
-                                        Text("完結")
-                                    }
+                                    Text(statusList[status]!)
                                     Image(systemName: "checkmark.square")
                                 }
                             }.onChange(of: status) { _ in
@@ -86,7 +75,7 @@ struct AllCategoryView: View {
                     }
                 }
             }
-        }.navigationTitle("所有漫畫").onAppear {
+        }.navigationTitle("所有漫畫").onFirstAppear {
             komiicApi.fetchCategoryList(completion: {resp in categoryList = resp
                 categoryList.insert(KomiicAPI.ComicCategories(id: "0", name: "全部類型"), at: 0)
             isLoading = false})

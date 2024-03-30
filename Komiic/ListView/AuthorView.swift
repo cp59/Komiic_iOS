@@ -9,9 +9,8 @@ import SwiftUI
 
 struct AuthorView: View {
     var selectedAuthor: KomiicAPI.ComicAuthor
-    @State var refreshList = 0
     var body: some View {
-        ComicListView(title: selectedAuthor.name, requestParameters: KomiicAPI.RequestParameters().getComicsByAuthorId(authorId: selectedAuthor.id), listType: 1, refreshList: $refreshList)
+        ComicListView(title: selectedAuthor.name, requestParameters: KomiicAPI.RequestParameters().getComicsByAuthorId(authorId: selectedAuthor.id), listType: 1)
     }
 }
 

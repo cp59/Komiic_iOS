@@ -8,10 +8,9 @@
 import SwiftUI
 
 struct CategoryView: View {
-    @State var refreshList = 0
     var selectedCategory:KomiicAPI.ComicCategories
     var body: some View {
-        ComicListView(title: selectedCategory.name, requestParameters: KomiicAPI.RequestParameters().getComicsByCategory(categoryId: selectedCategory.id), refreshList: $refreshList)
+        ComicListView(title: selectedCategory.name, requestParameters: KomiicAPI.RequestParameters().getComicsByCategory(categoryId: selectedCategory.id))
     }
 }
 

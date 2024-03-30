@@ -11,7 +11,7 @@ import KeychainSwift
 import SwiftUISnackbar
 
 struct ReaderView: View {
-    private let komiicApi = KomiicAPI()
+    @EnvironmentObject var app:app
     var comicId:String
     private let userDefaults = UserDefaults()
     @State private var chaptersList:[KomiicAPI.Chapters] = []
@@ -41,7 +41,7 @@ struct ReaderView: View {
     private let token = KeychainSwift().get("token") ?? ""
     var body: some View {
         GeometryReader {proxy in
-            HStack{}.onAppear{viewWidth=proxy.size.width}}.frame(height: 0)
+            HStack{}.onChange(of: proxy.size.width){_ in viewWidth=proxy.size.width}.onAppear{viewWidth=proxy.size.width}}.frame(height: 0)
         VStack {
             if (!useSecondReadMode) {
                 ScrollViewReader {scrollView in
@@ -50,28 +50,29 @@ struct ReaderView: View {
                             ForEach(Array(picList.enumerated()), id:\.element.id) { page,img in
                                 KFImage(URL(string:"https://komiic.com/api/image/\(img.kid)"))
                                     .requestModifier(modifier)
-                                    .placeholder { progress in
+                                    .placeholder { _ in
                                         VStack {
                                             Spacer()
-                                            ProgressView().scaleEffect(1.5)
+                                            ProgressView()
                                             Spacer()
                                         }.frame(width:viewWidth).aspectRatio(CGSize(width: img.width, height: img.height), contentMode: .fill)
                                             .background(Color(UIColor.darkGray)).cornerRadius(10).padding(10).onAppear {imageViewReady = true}
                                     }
                                     .onFailure{error in
-                                        komiicApi.reachedImageLimit(completion: {status in reachedImageLimit = status})
+                                        app.komiicApi.reachedImageLimit(completion: {status in reachedImageLimit = status})
                                     }
                                     .onSuccess { _ in
                                         currentPage = "\(page)_\(img.kid)"
                                         pageSelection = currentPage
-                                        if (!token.isEmpty) {
-                                            komiicApi.addReadComicHistory(comicId: comicId, chapterId: specChapterId, page: page)
+                                        if (app.isLogin) {
+                                            app.komiicApi.addReadComicHistory(comicId: comicId, chapterId: specChapterId, page: page)
                                         }
                                     }
                                     .diskCacheExpiration(.expired)
                                     .fade(duration: 0.25)
                                     .cancelOnDisappear(true)
                                     .resizable()
+                                    .padding(EdgeInsets(top: -2, leading: 5, bottom: -2, trailing: 5))
                                     .id("\(page)_\(img.kid)")
                                     .scaledToFill()
                             }.onAppear {
@@ -135,7 +136,7 @@ struct ReaderView: View {
                                 .placeholder { progress in
                                     VStack {
                                         Spacer()
-                                        ProgressView().scaleEffect(1.5)
+                                        ProgressView()
                                         Spacer()
                                     }.frame(width:viewWidth).aspectRatio(CGSize(width: img.width, height: img.height), contentMode: .fill)
                                         .background(Color(UIColor.darkGray)).cornerRadius(10).padding(10).onAppear {imageViewReady = true}
@@ -146,13 +147,13 @@ struct ReaderView: View {
                                 .onSuccess { _ in
                                     currentPage = "\(page)_\(img.kid)"
                                     pageSelection = currentPage
-                                    if (!token.isEmpty) {
-                                        komiicApi.addReadComicHistory(comicId: comicId, chapterId: specChapterId, page: page)
+                                    if (app.isLogin) {
+                                        app.komiicApi.addReadComicHistory(comicId: comicId, chapterId: specChapterId, page: page)
                                     }
                                 }
                                 .resizable()
                                 .tag("\(page)_\(img.kid)")
-                                .scaledToFill()
+                                .scaledToFit()
                         }.onAppear {
                             if (userDefaults.bool(forKey: "notFinishedReading")) {
                                 tabViewSelection = (userDefaults.string(forKey: "lastReadPage"))!
@@ -310,9 +311,9 @@ struct ReaderView: View {
         }
         .onAppear {
             useSecondReadMode = userDefaults.bool(forKey: "useSecondReadMode")
-            komiicApi.getChapterByComicId(comicId: comicId, completion: { chapters in
+            app.komiicApi.getChapterByComicId(comicId: comicId, completion: { chapters in
                 if (!userDefaults.bool(forKey: "notFinishedReading")) {
-                    komiicApi.fetchComicHistory(completion: {history in
+                    app.komiicApi.fetchComicHistory(completion: {history in
                         let comicHistory = history.filter {(x) -> Bool in
                             x.comicId == comicId
                         }.first
@@ -325,11 +326,12 @@ struct ReaderView: View {
                             }
                             var biggestId = 0
                             var lastReadPage = 0
-                            for chapter in comicHistory!.chapters {
+                            for (index,chapter) in comicHistory!.chapters.enumerated() {
                                 if (sameTypeChapterId.contains(chapter.chapterId)) {
                                     if (Int(chapter.chapterId)! > biggestId) {
                                         biggestId = Int(chapter.chapterId)!
                                         lastReadPage = chapter.page
+                                        currentChapterIndex = index
                                     }
                                 }
                             }
@@ -355,7 +357,7 @@ struct ReaderView: View {
         .onChange(of: specChapterId) { _ in
             picList.removeAll()
             imageViewReady = false
-            komiicApi.getImagesByChapterId(chapterId: specChapterId, completion: {imagesList in
+            app.komiicApi.getImagesByChapterId(chapterId: specChapterId, completion: {imagesList in
                 modifier = AnyModifier { request in
                     var r = request
                     r.addValue("https://komiic.com/comic/\(comicId)/chapter/\(specChapterId)/images/all", forHTTPHeaderField: "referer")

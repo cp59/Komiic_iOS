@@ -42,6 +42,7 @@ struct KomiicAPI {
                 return completion(comics)
             } catch {
                 print(error)
+                print(respText)
                 return completion([])
             }
         }

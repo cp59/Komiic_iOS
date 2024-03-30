@@ -9,7 +9,6 @@ import SwiftUI
 import Kingfisher
 
 struct ComicDetailView: View {
-    private let komiicApi = KomiicAPI()
     var comicData: KomiicAPI.ComicData;
     @State var categoriesText: String = ""
     @State var authorsText: String = ""
@@ -33,11 +32,18 @@ struct ComicDetailView: View {
             KFImage(URL(string: comicData.imageUrl))
                 .memoryCacheExpiration(.expired)
                 .diskCacheExpiration(.expired)
+                .placeholder { _ in
+                    VStack {
+                        Spacer()
+                        ProgressView()
+                        Spacer()
+                    }.frame(width: 233, height: 350).background(Color(UIColor.darkGray)).cornerRadius(10).padding(10)
+                }
                 .resizable()
-                .scaledToFit()
-                .frame(height: 350)
                 .cornerRadius(14)
-                .padding(EdgeInsets(top: -50, leading: 0, bottom: 0, trailing: 0))
+                .scaledToFit()
+                .frame(width: 233, height: 350)
+                .padding(EdgeInsets(top: -60, leading: 0, bottom: -10, trailing: 0))
             Text(comicData.title).font(.title).bold().multilineTextAlignment(.center).padding(5)
             Spacer().frame(height: 10)
             Button {

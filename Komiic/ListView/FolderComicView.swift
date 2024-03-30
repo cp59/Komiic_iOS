@@ -9,8 +9,7 @@ import SwiftUI
 
 struct FolderComicView: View {
     let folder: KomiicAPI.ComicFolder
-    @State private var refreshList = 0
     var body: some View {
-        ComicListView(title: folder.name, requestParameters: KomiicAPI.RequestParameters().getFolderComicIds(folderId: folder.id), listType: 4, refreshList: $refreshList)
+        ComicListView(title: folder.name, requestParameters: KomiicAPI.RequestParameters().getFolderComicIds(folderId: folder.id), listType: 4)
     }
 }

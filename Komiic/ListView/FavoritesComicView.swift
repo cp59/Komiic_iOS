@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct FavoritesComicView: View {
+    private let orderList:[String: String] = ["COMIC_DATE_UPDATED":"更新", "FAVORITE_ADDED":"加入"]
+    private let statusList:[String: String] = ["":"全部", "ONGOING":"連載", "END":"完結"]
+    private let readProgressList:[String: String] = ["ALL":"全部", "UNREAD":"未讀", "STARTED":"未讀完", "COMPLETED":"已讀完"]
     @State private var orderBy = "COMIC_DATE_UPDATED"
     @State private var status = ""
     @State private var readProgress = "ALL"
@@ -18,60 +21,42 @@ struct FavoritesComicView: View {
                 Menu {
                     Menu {
                         Picker(selection: $orderBy, label: Label("排序方式", systemImage: "arrow.up.arrow.down")) {
-                            Text("更新").tag("COMIC_DATE_UPDATED")
-                            Text("加入").tag("FAVORITE_ADDED")
+                            ForEach (Array(orderList.keys), id: \.self) {key in
+                                Text(orderList[key]!).tag(key)
+                            }
                         }
                     } label: {
                         Button(action: {}) {
                             Text("排序方式")
-                            if (orderBy == "COMIC_DATE_UPDATED") {
-                                Text("更新")
-                            } else if (orderBy == "FAVORITE_ADDED") {
-                                Text("加入")
-                            }
+                            Text(orderList[orderBy]!)
                             Image(systemName: "arrow.up.arrow.down")
                         }
                     }.onChange(of: orderBy) { _ in
                         refreshList+=1}
                     Menu {
                         Picker(selection: $status, label: Label("狀態", systemImage: "arrow.up.arrow.down")) {
-                            Text("全部").tag("")
-                            Text("連載").tag("ONGOING")
-                            Text("完結").tag("END")
+                            ForEach (Array(statusList.keys), id: \.self) {key in
+                                Text(statusList[key]!).tag(key)
+                            }
                         }
                     } label: {
                         Button(action: {}) {
                             Text("狀態")
-                            if (status == "") {
-                                Text("全部")
-                            } else if (status == "ONGOING") {
-                                Text("連載")
-                            } else if (status == "END") {
-                                Text("完結")
-                            }
+                            Text(statusList[status]!)
                             Image(systemName: "checkmark.square")
                         }
                     }.onChange(of: status) { _ in
                         refreshList+=1}
                     Menu {
                         Picker(selection: $readProgress, label: Label("狀態", systemImage: "arrow.up.arrow.down")) {
-                            Text("全部").tag("ALL")
-                            Text("未讀").tag("UNREAD")
-                            Text("未讀完").tag("STARTED")
-                            Text("已讀完").tag("COMPLETED")
+                            ForEach (Array(readProgressList.keys), id: \.self) {key in
+                                Text(readProgressList[key]!).tag(key)
+                            }
                         }
                     } label: {
                         Button(action: {}) {
                             Text("狀態")
-                            if (readProgress == "ALL") {
-                                Text("全部")
-                            } else if (readProgress == "UNREAD") {
-                                Text("未讀")
-                            } else if (readProgress == "STARTED") {
-                                Text("未讀完")
-                            } else if (readProgress == "COMPLETED") {
-                                Text("已讀完")
-                            }
+                            Text(readProgressList[readProgress]!)
                             Image(systemName: "checkmark.square")
                         }
                     }.onChange(of: readProgress) { _ in

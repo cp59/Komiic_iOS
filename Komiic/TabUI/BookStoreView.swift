@@ -17,33 +17,38 @@ struct BookStoreView: View {
         NavigationView {
             VStack {
                 GeometryReader {proxy in
-                    HStack{}.onAppear{viewWidth=(proxy.size.width-32.0)/2}}.frame(height: 0)
+                    HStack{}.onChange(of: proxy.size.width){_ in viewWidth=(proxy.size.width-32.0)/2}.onAppear {viewWidth=(proxy.size.width-32.0)/2}}.frame(height: 0)
                 if (isSearching) {
                     ComicListView(title: "", requestParameters: KomiicAPI.RequestParameters().searchComic(keyword: searchText), listType: 1, refreshList: $refreshSearch)
                 } else if (!isSearching){
                     ScrollView {
-                        Spacer().frame(height: 20)
-                        SmallComicListView(title: "最近更新", requestParameters: KomiicAPI.RequestParameters().getRecentUpdate())
-                        SmallComicListView(title: "本月最夯", requestParameters: KomiicAPI.RequestParameters().getMonthHotComics())
-                        SmallComicListView(title: "歷年熱門", requestParameters: KomiicAPI.RequestParameters().getHotComics())
-                        HStack {
-                            NavigationLink(destination: AllCategoryView()) {
-                                HStack {
-                                    Text("所有漫畫").foregroundStyle(.blue)
-                                    Spacer()
-                                    Image(systemName: "books.vertical").font(.system(size: 40))
-                                }.frame(height: 70).padding(2)
-                            }.frame(width: viewWidth).buttonStyle(.bordered)
+                        VStack {
+                            Divider()
+                            SmallComicListView(title: "最近更新", requestParameters: KomiicAPI.RequestParameters().getRecentUpdate())
+                            Divider()
+                            SmallComicListView(title: "本月最夯", requestParameters: KomiicAPI.RequestParameters().getMonthHotComics())
+                            Divider()
+                            SmallComicListView(title: "歷年熱門", requestParameters: KomiicAPI.RequestParameters().getHotComics())
+                            Divider()
+                            HStack {
+                                NavigationLink(destination: AllCategoryView()) {
+                                    HStack {
+                                        Text("所有漫畫").foregroundStyle(.blue)
+                                        Spacer()
+                                        Image(systemName: "books.vertical").font(.system(size: 40))
+                                    }.frame(height: 70).padding(2)
+                                }.frame(width: viewWidth).buttonStyle(.bordered)
+                            }
+                            Spacer()
                         }
-                        Spacer()
                     }
                     
                 }
-            }   .navigationTitle("書店")
-                .searchable(text: $searchText, prompt: "搜尋漫畫").onSubmit (of: .search){
-                
+            }
+            .navigationTitle("書店")
+            .searchable(text: $searchText, prompt: "搜尋漫畫").onSubmit (of: .search){
                 refreshSearch += 1
-                }.onChange(of: searchText) {value in
+            }.onChange(of: searchText) {value in
                     isSearching = !value.isEmpty}
             
         }.navigationViewStyle(StackNavigationViewStyle())

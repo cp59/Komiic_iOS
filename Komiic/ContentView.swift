@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject var app:app
     private let userDefaults = UserDefaults()
     @State private var showNotFinishedReadingAlert = false
     @State private var startReading = false
@@ -30,9 +31,16 @@ struct ContentView: View {
                 Image(systemName: "person.crop.circle")
                 Text("我的帳號")
             }
-        }.onAppear {
+        }.onFirstAppear {
             if (userDefaults.bool(forKey: "notFinishedReading")) {
                 showNotFinishedReadingAlert = true
+            }
+            if (app.isLogin) {
+                app.komiicApi.getAccountInfo(completion: {accountInfo in
+                    if (accountInfo.id == "tokenExpired") {
+                        app.isLogin = false
+                    }
+                })
             }
         }.alert(isPresented: $showNotFinishedReadingAlert) {
             Alert(
