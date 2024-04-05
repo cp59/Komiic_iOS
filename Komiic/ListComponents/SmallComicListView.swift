@@ -74,24 +74,19 @@ struct SmallComicListView: View {
 struct SmallComicItemView: View {
     var comic: KomiicAPI.ComicData
     @State private var openDetailPage = false
+    @Namespace var animation
     var body: some View {
-        if #available(iOS 16.0, *) {
-            VStack {
-                ImageView(withURL: comic.imageUrl)
-                NavigationLink(destination: ComicDetailView(comicData: comic), isActive: $openDetailPage )
-                {EmptyView()}.frame(width: 0, height: 0)
-            }.onTapGesture {
-                openDetailPage = true
-            }.contextMenu {} preview: {
-                ComicDetailView(comicData: comic)
-            }
-        } else {
-            VStack {
-                ImageView(withURL: comic.imageUrl)
-                NavigationLink(destination: ComicDetailView(comicData: comic), isActive: $openDetailPage )
-                {EmptyView()}.frame(width: 0, height: 0)
-            }.onTapGesture {
-                openDetailPage = true
+        ZStack {
+            if (openDetailPage) {
+                
+            } else {
+                VStack {
+                    ImageView(withURL: comic.imageUrl)
+                    //NavigationLink(destination: ComicDetailView(comicData: comic), isActive: $openDetailPage )
+                    //{EmptyView()}.frame(width: 0, height: 0)
+                }.onTapGesture {
+                    openDetailPage = true
+                }
             }
         }
         

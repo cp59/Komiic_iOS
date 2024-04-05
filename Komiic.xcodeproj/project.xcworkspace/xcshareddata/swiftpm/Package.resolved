@@ -1,6 +1,15 @@
 {
-  "originHash" : "7893e7b207fd478cf40a2dcf74c810c61f035156a8adfb1f3c50852d089ad7aa",
+  "originHash" : "bb41bd9428ad470cfdee04c55906565ab72c878c34953a9bee9207d7c9f0c411",
   "pins" : [
+    {
+      "identity" : "customalert",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/divadretlaw/CustomAlert",
+      "state" : {
+        "revision" : "27d082181f54e3e73b0d6b52dfdd8b8d332ed5a6",
+        "version" : "3.5.0"
+      }
+    },
     {
       "identity" : "keychain-swift",
       "kind" : "remoteSourceControl",
@@ -26,6 +35,33 @@
       "state" : {
         "branch" : "main",
         "revision" : "ff5132c91e3a3855af679e648b95c8ab60c5eeb1"
+      }
+    },
+    {
+      "identity" : "windowkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/divadretlaw/WindowKit",
+      "state" : {
+        "revision" : "155ea4e6c772146cd575c1db226fdd1974857a49",
+        "version" : "2.1.1"
+      }
+    },
+    {
+      "identity" : "windowreader",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/divadretlaw/WindowReader",
+      "state" : {
+        "revision" : "7e1f994df0ed26a7d7a139f1fce2537d2c931059",
+        "version" : "2.0.0"
+      }
+    },
+    {
+      "identity" : "windowscenereader",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/divadretlaw/WindowSceneReader",
+      "state" : {
+        "revision" : "0779fbf801a723570f90158aa5e618ff885b6c47",
+        "version" : "3.0.0"
       }
     }
   ],

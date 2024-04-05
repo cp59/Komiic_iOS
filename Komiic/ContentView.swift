@@ -14,6 +14,10 @@ struct ContentView: View {
     @State private var startReading = false
     var body: some View {
         TabView {
+            OfflineComicView().tabItem {
+                Image(systemName: "arrow.down.circle.fill")
+                Text("離線下載")
+            }
             ComicFolderView().tabItem {
                 Image(systemName: "books.vertical.fill")
                 Text("書櫃")
@@ -23,10 +27,10 @@ struct ContentView: View {
                 Text("最近閱讀")
             }
             BookStoreView()
-            .tabItem {
-                Image(systemName: "bag.fill")
-                Text("書店")
-            }
+                .tabItem {
+                    Image(systemName: "bag.fill")
+                    Text("書店")
+                }
             UserView().tabItem {
                 Image(systemName: "person.crop.circle")
                 Text("我的帳號")

@@ -47,7 +47,7 @@ struct KomiicAPI {
             }
         }
         task.resume()
-    }
+    }   
     func getChapterByComicId (comicId: String, completion:(@escaping ([Chapters]) -> Void)) {
         let formatParameters = "{\"query\":\"query chapterByComicId($comicId: ID!) {\\n  chaptersByComicId(comicId: $comicId) {\\n    id\\n    serial\\n    type\\n    size\\n  }\\n}\",\"variables\":{\"comicId\":\"\(comicId)\"}}"
         fetchList(of: Chapters.self, parameters: formatParameters, completion: { resp in
@@ -316,7 +316,7 @@ struct KomiicAPI {
         let type: String
         let size: Int
     }
-    struct ComicImages: Decodable {
+    struct ComicImages: Codable {
         let id: String
         let kid: String
         let height: Int

@@ -9,6 +9,7 @@ import SwiftUI
 import Kingfisher
 
 struct ComicDetailView: View {
+    @EnvironmentObject var app:app
     var comicData: KomiicAPI.ComicData;
     @State var categoriesText: String = ""
     @State var authorsText: String = ""
@@ -20,17 +21,20 @@ struct ComicDetailView: View {
     @State private var selectedCategory: KomiicAPI.ComicCategories = KomiicAPI.ComicCategories(id: "0", name: "")
     @State private var startReading = false
     @State private var showAddToFolderSheet = false
+    @State private var showDownloadView = false
+    let animation:Namespace.ID
     var body: some View {
         NavigationLink(destination:
                         AuthorView(selectedAuthor: selectedAuthor)
                        , isActive: $openAuthorPage ){EmptyView()}
         NavigationLink(destination:
                         CategoryView(selectedCategory: selectedCategory)
-, isActive: $openCategoryPage )
-        {EmptyView()}
+                       , isActive: $openCategoryPage ){EmptyView()}
+        NavigationLink(destination:
+                        ComicDownloadView(comic: comicData)
+                       , isActive: $showDownloadView ){EmptyView()}
         ScrollView {
             KFImage(URL(string: comicData.imageUrl))
-                .memoryCacheExpiration(.expired)
                 .diskCacheExpiration(.expired)
                 .placeholder { _ in
                     VStack {
@@ -41,9 +45,9 @@ struct ComicDetailView: View {
                 }
                 .resizable()
                 .cornerRadius(14)
+                .matchedGeometryEffect(id: "comicImage_\(comicData.id)", in: animation)
                 .scaledToFit()
                 .frame(width: 233, height: 350)
-                .padding(EdgeInsets(top: -60, leading: 0, bottom: -10, trailing: 0))
             Text(comicData.title).font(.title).bold().multilineTextAlignment(.center).padding(5)
             Spacer().frame(height: 10)
             Button {
@@ -73,9 +77,9 @@ struct ComicDetailView: View {
                     }
                 }
                 Button("取消", role: .cancel) {}
-                } message: {
-                    Text("點選任一作者名稱來查看他的其他作品")
-                }
+            } message: {
+                Text("點選任一作者名稱來查看他的其他作品")
+            }
             HStack {
                 Button(action: {
                     startReading = true
@@ -91,7 +95,13 @@ struct ComicDetailView: View {
                 }.buttonStyle(.bordered).sheet(isPresented: $showAddToFolderSheet, content: {
                     AddToFolderSheet(comicId: comicData.id)
                 })
-
+                Button {
+                    showDownloadView = true
+                } label: {
+                    Image(systemName: "arrow.down.circle").font(.title3).frame(maxHeight: .infinity).padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
+                }.buttonStyle(.bordered).sheet(isPresented: $showAddToFolderSheet, content: {
+                    AddToFolderSheet(comicId: comicData.id)
+                })
             }.padding(10)
             Divider()
             Spacer().frame(height: 20)
@@ -146,9 +156,9 @@ struct ComicDetailView: View {
                                 }
                             }
                             Button("取消", role: .cancel) {}
-                            } message: {
-                                Text("點選任一類型來查看其他包含此類型的作品")
-                            }
+                        } message: {
+                            Text("點選任一類型來查看其他包含此類型的作品")
+                        }
                     }
                     Divider()
                     VStack {
@@ -161,7 +171,10 @@ struct ComicDetailView: View {
             Spacer().frame(height: 20)
             Divider()
             Spacer()
-        }
+        }.frame(height: UIScreen.main.bounds.height-200).background {
+            Color(.secondarySystemBackground)
+                .matchedGeometryEffect(id: "comicBackground_\(comicData.id)", in: animation)
+        }.cornerRadius(12).padding(10)
     }
 }
 

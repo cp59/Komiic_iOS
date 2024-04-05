@@ -13,7 +13,9 @@ import SwiftUISnackbar
 struct ReaderView: View {
     @EnvironmentObject var app:app
     var comicId:String
+    var offlineResource = false
     private let userDefaults = UserDefaults()
+    @State private var chapterPath:URL?
     @State private var chaptersList:[KomiicAPI.Chapters] = []
     @State private var specChapterId:String = ""
     @State private var isLoading = true
@@ -35,8 +37,14 @@ struct ReaderView: View {
     @State private var haveLastReadRecord = false
     @State private var tabViewSelection = ""
     @State private var pageSelection = ""
+    @State private var currentChapterHaveOfflineResource = false
     @State var modifier = AnyModifier { request in
         return request
+    }
+    init (comicId: String,isPresented: Binding<Bool>, offlineResource:Bool = false) {
+        self.comicId = comicId
+        _isPresented = isPresented
+        self.offlineResource = offlineResource
     }
     private let token = KeychainSwift().get("token") ?? ""
     var body: some View {
@@ -48,33 +56,53 @@ struct ReaderView: View {
                     ScrollView {
                         LazyVStack {
                             ForEach(Array(picList.enumerated()), id:\.element.id) { page,img in
-                                KFImage(URL(string:"https://komiic.com/api/image/\(img.kid)"))
-                                    .requestModifier(modifier)
-                                    .placeholder { _ in
-                                        VStack {
-                                            Spacer()
-                                            ProgressView().tint(.white)
-                                            Spacer()
-                                        }.frame(width:viewWidth).aspectRatio(CGSize(width: img.width, height: img.height), contentMode: .fill)
-                                            .background(Color(UIColor.darkGray)).cornerRadius(10).padding(10).onAppear {imageViewReady = true}
-                                    }
-                                    .onFailure{error in
-                                        app.komiicApi.reachedImageLimit(completion: {status in reachedImageLimit = status})
-                                    }
-                                    .onSuccess { _ in
-                                        currentPage = "\(page)_\(img.kid)"
-                                        pageSelection = currentPage
-                                        if (app.isLogin) {
-                                            app.komiicApi.addReadComicHistory(comicId: comicId, chapterId: specChapterId, page: page)
+                                if (!currentChapterHaveOfflineResource) {
+                                    KFImage(URL(string:"https://komiic.com/api/image/\(img.kid)"))
+                                        .requestModifier(modifier)
+                                        .placeholder { _ in
+                                            VStack {
+                                                Spacer()
+                                                ProgressView().tint(.white)
+                                                Spacer()
+                                            }.frame(width:viewWidth).aspectRatio(CGSize(width: img.width, height: img.height), contentMode: .fill)
+                                                .background(Color(UIColor.darkGray)).cornerRadius(10).padding(10).onAppear {imageViewReady = true}
                                         }
-                                    }
-                                    .diskCacheExpiration(.expired)
-                                    .fade(duration: 0.25)
-                                    .cancelOnDisappear(true)
-                                    .resizable()
-                                    .padding(EdgeInsets(top: -2, leading: 5, bottom: -2, trailing: 5))
-                                    .id("\(page)_\(img.kid)")
-                                    .scaledToFill()
+                                        .onFailure{error in
+                                            app.komiicApi.reachedImageLimit(completion: {status in reachedImageLimit = status})
+                                        }
+                                        .onSuccess { _ in
+                                            currentPage = "\(page)_\(img.kid)"
+                                            pageSelection = currentPage
+                                            if (app.isLogin) {
+                                                app.komiicApi.addReadComicHistory(comicId: comicId, chapterId: specChapterId, page: page)
+                                            }
+                                        }
+                                        .diskCacheExpiration(.expired)
+                                        .fade(duration: 0.25)
+                                        .cancelOnDisappear(true)
+                                        .resizable()
+                                        .padding(EdgeInsets(top: -2, leading: 5, bottom: -2, trailing: 5))
+                                        .id("\(page)_\(img.kid)")
+                                        .scaledToFill()
+                                } else {
+                                    KFImage(source: .provider(LocalFileImageDataProvider(fileURL: chapterPath!.appendingPathComponent("images").appendingPathComponent("\(img.kid).jpeg"))))
+                                        .requestModifier(modifier)
+                                        .placeholder { _ in
+                                            VStack {
+                                                Spacer()
+                                                ProgressView().tint(.white)
+                                                Spacer()
+                                            }.frame(width:viewWidth).aspectRatio(CGSize(width: img.width, height: img.height), contentMode: .fill)
+                                                .background(Color(UIColor.darkGray)).cornerRadius(10).padding(10).onAppear {imageViewReady = true}
+                                        }
+                                        .diskCacheExpiration(.expired)
+                                        .fade(duration: 0.25)
+                                        .cancelOnDisappear(true)
+                                        .resizable()
+                                        .padding(EdgeInsets(top: -2, leading: 5, bottom: -2, trailing: 5))
+                                        .id("\(page)_\(img.kid)")
+                                        .scaledToFill()
+                                }
                             }.onAppear {
                                 if (userDefaults.bool(forKey: "notFinishedReading")) {
                                     scrollView.scrollTo(userDefaults.string(forKey: "lastReadPage"))
@@ -90,7 +118,7 @@ struct ReaderView: View {
                                     scrollView.scrollTo(pageSelection)
                                 }
                             }
-                            if (imageViewReady) {
+                            if (imageViewReady && !offlineResource) {
                                 if (chaptersList.filter({$0.type.hasPrefix(chapterIsBook ? "b" : "c")}).last?.id == specChapterId) {
                                     Text("此為最後章節")
                                 } else {
@@ -131,9 +159,38 @@ struct ReaderView: View {
             } else {
                 TabView (selection: $tabViewSelection){
                     ForEach(Array(picList.enumerated()), id:\.element.id) { page,img in
+                        if (!currentChapterHaveOfflineResource) {
                             KFImage(URL(string:"https://komiic.com/api/image/\(img.kid)"))
                                 .requestModifier(modifier)
-                                .placeholder { progress in
+                                .placeholder { _ in
+                                    VStack {
+                                        Spacer()
+                                        ProgressView().tint(.white)
+                                        Spacer()
+                                    }.frame(width:viewWidth).aspectRatio(CGSize(width: img.width, height: img.height), contentMode: .fill)
+                                        .background(Color(UIColor.darkGray)).cornerRadius(10).padding(10).onAppear {imageViewReady = true}
+                                }
+                                .onFailure{error in
+                                    app.komiicApi.reachedImageLimit(completion: {status in reachedImageLimit = status})
+                                }
+                                .onSuccess { _ in
+                                    currentPage = "\(page)_\(img.kid)"
+                                    pageSelection = currentPage
+                                    if (app.isLogin) {
+                                        app.komiicApi.addReadComicHistory(comicId: comicId, chapterId: specChapterId, page: page)
+                                    }
+                                }
+                                .diskCacheExpiration(.expired)
+                                .fade(duration: 0.25)
+                                .cancelOnDisappear(true)
+                                .resizable()
+                                .padding(EdgeInsets(top: -2, leading: 5, bottom: -2, trailing: 5))
+                                .id("\(page)_\(img.kid)")
+                                .scaledToFit()
+                        } else {
+                            KFImage(source: .provider(LocalFileImageDataProvider(fileURL: chapterPath!.appendingPathComponent("images").appendingPathComponent("\(img.kid).jpeg"))))
+                                .requestModifier(modifier)
+                                .placeholder { _ in
                                     VStack {
                                         Spacer()
                                         ProgressView().tint(.white)
@@ -144,16 +201,11 @@ struct ReaderView: View {
                                 .diskCacheExpiration(.expired)
                                 .fade(duration: 0.25)
                                 .cancelOnDisappear(true)
-                                .onSuccess { _ in
-                                    currentPage = "\(page)_\(img.kid)"
-                                    pageSelection = currentPage
-                                    if (app.isLogin) {
-                                        app.komiicApi.addReadComicHistory(comicId: comicId, chapterId: specChapterId, page: page)
-                                    }
-                                }
                                 .resizable()
-                                .tag("\(page)_\(img.kid)")
+                                .padding(EdgeInsets(top: -2, leading: 5, bottom: -2, trailing: 5))
+                                .id("\(page)_\(img.kid)")
                                 .scaledToFit()
+                        }
                         }.onAppear {
                             if (userDefaults.bool(forKey: "notFinishedReading")) {
                                 tabViewSelection = (userDefaults.string(forKey: "lastReadPage"))!
@@ -170,7 +222,7 @@ struct ReaderView: View {
                                 tabViewSelection = pageSelection
                             }
                         })
-                    if (imageViewReady) {
+                    if (imageViewReady && !offlineResource) {
                         if (chaptersList.filter({$0.type.hasPrefix(chapterIsBook ? "b" : "c")}).last?.id == specChapterId) {
                             Text("此為最後章節")
                         } else {
@@ -213,12 +265,10 @@ struct ReaderView: View {
             userDefaults.setValue(specChapterId, forKey: "lastReadChapterId")
             userDefaults.setValue(currentPage, forKey: "lastReadPage")
         }).overlay(alignment:.topTrailing) {
-                Button (action: {
-                    ImageCache.default.clearMemoryCache()
-                    isPresented = false
-                }) {
-                    ExitButtonView().frame(width: 24,height: 24)
-                }.opacity(showingButton ? 1 : 0).padding(15)
+            ExitButtonView().frame(width: 24,height: 24).opacity(showingButton ? 1 : 0).padding(15).onTapGesture {
+                ImageCache.default.clearMemoryCache()
+                isPresented = false
+            }
         }.overlay(alignment:.bottomTrailing) {
                 Menu {
                     Button {
@@ -248,19 +298,25 @@ struct ReaderView: View {
                         .padding(5)
                         .background(.gray)
                         .cornerRadius(8)
-                }.opacity(showingButton ? 1 : 0).padding(10).sheet(isPresented: $showingChapterPicker, content: {
+                }.opacity(showingButton ? 1 : 0).padding(10).sheet(isPresented: $showingChapterPicker, content: { [chaptersList] in
+                    let comicPath = app.docURL.appendingPathComponent(comicId)
                     NavigationView {
-                        List() {
+                        List {
+                            if (offlineResource) {
+                                Text("目前為離線模式，只允許閱讀已下載的章節，若要返回線上模式，請從書櫃或書庫閱讀此漫畫。").font(.caption)
+                            }
                             Section {
                                 ForEach(Array(chaptersList.enumerated()),id: \.element.id) { index,chapter in
+                                    let currentChapterBadge = (specChapterId == chapter.id ? "目前章節" : "\(chapter.size)p")
+                                    let downloadedBadge = (FileManager.default.fileExists(atPath: comicPath.appendingPathComponent(chapter.id).path) ? "(已下載)" : "")
                                     if (chapter.type == "book") {
                                         Button(chapter.serial+"卷") {
                                             specChapterId = chapter.id
                                             currentChapterIndex = index
                                             chapterIsBook = true
                                             showingChapterPicker = false
-                                        }.badge(specChapterId == chapter.id ? "目前章節" : "\(chapter.size)p")
-                                        .onAppear{haveBook = true}
+                                        }.badge("\(currentChapterBadge) \(downloadedBadge)")
+                                        .onAppear{haveBook = true}.disabled(offlineResource && !FileManager.default.fileExists(atPath: comicPath.appendingPathComponent(chapter.id).path))
                                     }
                                 }
                             } header: {
@@ -270,13 +326,15 @@ struct ReaderView: View {
                             }
                             Section {
                                 ForEach(Array(chaptersList.enumerated()),id: \.element.id) { index,chapter in
+                                    let currentChapterBadge = (specChapterId == chapter.id ? "目前章節" : "\(chapter.size)p")
+                                    let downloadedBadge = (FileManager.default.fileExists(atPath: comicPath.appendingPathComponent(chapter.id).path) ? "(已下載)" : "")
                                     if (chapter.type == "chapter") {
                                         Button(chapter.serial+"話") {
                                             specChapterId = chapter.id
                                             currentChapterIndex = index
                                             chapterIsBook = false
                                             showingChapterPicker = false
-                                        }.badge(specChapterId == chapter.id ? "目前章節" : "\(chapter.size)p").onAppear{haveChapter = true}
+                                        }.badge("\(currentChapterBadge) \(downloadedBadge)").onAppear{haveChapter = true}.disabled(offlineResource && !FileManager.default.fileExists(atPath: comicPath.appendingPathComponent(chapter.id).path))
                                     }
                                 }
                             } header: {
@@ -286,6 +344,9 @@ struct ReaderView: View {
                             }
                         }.navigationTitle("選擇章節").navigationBarItems(trailing:
                             Button (action: {
+                                if (specChapterId == "") {
+                                    isPresented = false
+                                }
                                 showingChapterPicker = false
                             }) {
                                 ExitButtonView()
@@ -312,65 +373,78 @@ struct ReaderView: View {
         .onAppear {
             useSecondReadMode = userDefaults.bool(forKey: "useSecondReadMode")
             app.komiicApi.getChapterByComicId(comicId: comicId, completion: { chapters in
-                if (!userDefaults.bool(forKey: "notFinishedReading")) {
-                    app.komiicApi.fetchComicHistory(completion: {history in
-                        let comicHistory = history.filter {(x) -> Bool in
-                            x.comicId == comicId
-                        }.first
-                        if ((comicHistory) != nil) {
-                            let sameTypeChapter = chaptersList.filter {(x) -> Bool in
-                                x.type == comicHistory!.chapterType}
-                            var sameTypeChapterId:[String] = []
-                            for chapter in sameTypeChapter {
-                                sameTypeChapterId.append(chapter.id)
-                            }
-                            var biggestId = 0
-                            var lastReadPage = 0
-                            for (index,chapter) in comicHistory!.chapters.enumerated() {
-                                if (sameTypeChapterId.contains(chapter.chapterId)) {
-                                    if (Int(chapter.chapterId)! > biggestId) {
-                                        biggestId = Int(chapter.chapterId)!
-                                        lastReadPage = chapter.page
-                                        currentChapterIndex = index
+                if (!offlineResource) {
+                    if (!userDefaults.bool(forKey: "notFinishedReading")) {
+                        app.komiicApi.fetchComicHistory(completion: {history in
+                            let comicHistory = history.filter {(x) -> Bool in
+                                x.comicId == comicId
+                            }.first
+                            if ((comicHistory) != nil) {
+                                let sameTypeChapter = chaptersList.filter {(x) -> Bool in
+                                    x.type == comicHistory!.chapterType}
+                                var sameTypeChapterId:[String] = []
+                                for chapter in sameTypeChapter {
+                                    sameTypeChapterId.append(chapter.id)
+                                }
+                                var biggestId = 0
+                                var lastReadPage = 0
+                                for (index,chapter) in comicHistory!.chapters.enumerated() {
+                                    if (sameTypeChapterId.contains(chapter.chapterId)) {
+                                        if (Int(chapter.chapterId)! > biggestId) {
+                                            biggestId = Int(chapter.chapterId)!
+                                            lastReadPage = chapter.page
+                                            currentChapterIndex = index
+                                        }
                                     }
                                 }
-                            }
-                            if (biggestId == 0) {
+                                if (biggestId == 0) {
+                                    let firstChapter = chapters.first!
+                                    specChapterId.append(firstChapter.id)
+                                } else {
+                                    self.lastReadPage = lastReadPage
+                                    specChapterId.append(String(biggestId))
+                                }
+                            } else {
                                 let firstChapter = chapters.first!
                                 specChapterId.append(firstChapter.id)
-                            } else {
-                                self.lastReadPage = lastReadPage
-                                specChapterId.append(String(biggestId))
                             }
-                        } else {
-                            let firstChapter = chapters.first!
-                            specChapterId.append(firstChapter.id)
-                        }
-                    })
-                } else {
-                    specChapterId = userDefaults.string(forKey: "lastReadChapterId")!
+                        })
+                    } else {
+                        specChapterId = userDefaults.string(forKey: "lastReadChapterId")!
+                    }
                 }
                 chaptersList.append(contentsOf: chapters)
-                
+                showingChapterPicker = true
             })
         }
         .onChange(of: specChapterId) { _ in
             picList.removeAll()
             imageViewReady = false
-            app.komiicApi.getImagesByChapterId(chapterId: specChapterId, completion: {imagesList in
-                modifier = AnyModifier { request in
-                    var r = request
-                    r.addValue("https://komiic.com/comic/\(comicId)/chapter/\(specChapterId)/images/all", forHTTPHeaderField: "referer")
-                    if (!token.isEmpty) {
-                        r.addValue("Bearer \(token)", forHTTPHeaderField: "authorization")
+            chapterPath = app.docURL.appendingPathComponent(comicId).appendingPathComponent(specChapterId)
+            if (FileManager.default.fileExists(atPath: chapterPath!.path)) {
+                currentChapterHaveOfflineResource = true
+                do {
+                    picList = try JSONDecoder().decode([KomiicAPI.ComicImages].self, from: Data(contentsOf: chapterPath!.appendingPathComponent("imgList.json")))
+                } catch {
+                    print(error)
+                }
+            } else {
+                currentChapterHaveOfflineResource = false
+                app.komiicApi.getImagesByChapterId(chapterId: specChapterId, completion: {imagesList in
+                    modifier = AnyModifier { request in
+                        var r = request
+                        r.addValue("https://komiic.com/comic/\(comicId)/chapter/\(specChapterId)/images/all", forHTTPHeaderField: "referer")
+                        if (!token.isEmpty) {
+                            r.addValue("Bearer \(token)", forHTTPHeaderField: "authorization")
+                        }
+                        return r
                     }
-                    return r
-                }
-                picList.append(contentsOf: imagesList)
-                if (lastReadPage != -1) {
-                    haveLastReadRecord = true
-                }
-            })
+                    picList = imagesList
+                    if (lastReadPage != -1) {
+                        haveLastReadRecord = true
+                    }
+                })
+            }
         }.alert(isPresented: $reachedImageLimit) {
             Alert(
                 title: Text("已達到當前圖片讀取量限制"),

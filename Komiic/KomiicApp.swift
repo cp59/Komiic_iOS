@@ -9,14 +9,16 @@ import SwiftUI
 import KeychainSwift
 
 class app: ObservableObject {
-    @Published var komiicApi: KomiicAPI = KomiicAPI()
-    @State var isLogin = !(KeychainSwift().get("token") ?? "").isEmpty
-    @State var token = KeychainSwift().get("token") ?? ""
+    let komiicApi: KomiicAPI = KomiicAPI()
+    @Published var isLogin: Bool = !(KeychainSwift().get("token") ?? "").isEmpty
+    @Published var token: String = KeychainSwift().get("token") ?? ""
+    let docURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
 }
 
 @main
   struct KomiicApp: App {
-    var body: some Scene {
+      @Namespace var animation
+      var body: some Scene {
         WindowGroup {
             ContentView().environmentObject(app())
         }
