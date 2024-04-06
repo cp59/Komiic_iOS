@@ -14,10 +14,15 @@ struct ComicFolderView: View {
     var body: some View {
         NavigationView {
             VStack {
-                if (isLoading) {
-                    ProgressView()
-                } else if (!app.isLogin) {
+                if (!app.isLogin) {
                     LoginView()
+                } else if (isLoading) {
+                    ProgressView().onFirstAppear {
+                        app.komiicApi.fetchComicFolders(completion: {folders in
+                            comicFolders.append(contentsOf: folders)
+                            isLoading = false
+                        })
+                    }
                 } else {
                     ScrollView {
                         VStack {
@@ -36,16 +41,10 @@ struct ComicFolderView: View {
                             comicFolders.append(contentsOf: folders)
                             isLoading = false
                         })
-
                     }
                 }
             }.navigationTitle("書櫃")
-        }.navigationViewStyle(StackNavigationViewStyle()).onFirstAppear {
-            app.komiicApi.fetchComicFolders(completion: {folders in
-                comicFolders.append(contentsOf: folders)
-                isLoading = false
-            })
-        }
+        }.navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

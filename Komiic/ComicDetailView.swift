@@ -22,7 +22,6 @@ struct ComicDetailView: View {
     @State private var startReading = false
     @State private var showAddToFolderSheet = false
     @State private var showDownloadView = false
-    let animation:Namespace.ID
     var body: some View {
         NavigationLink(destination:
                         AuthorView(selectedAuthor: selectedAuthor)
@@ -45,7 +44,6 @@ struct ComicDetailView: View {
                 }
                 .resizable()
                 .cornerRadius(14)
-                .matchedGeometryEffect(id: "comicImage_\(comicData.id)", in: animation)
                 .scaledToFit()
                 .frame(width: 233, height: 350)
             Text(comicData.title).font(.title).bold().multilineTextAlignment(.center).padding(5)
@@ -86,7 +84,7 @@ struct ComicDetailView: View {
                 }) {
                     Label("開始閱讀", systemImage: "book.pages").font(.title3).frame(maxWidth: .infinity)
                 }.buttonStyle(.borderedProminent).controlSize(.large).fullScreenCover(isPresented: $startReading, content: {
-                    ReaderView(comicId: comicData.id, isPresented: $startReading)
+                    ReaderView(comicId: comicData.id, isPresented: $startReading).ignoresSafeArea()
                 })
                 Button {
                     showAddToFolderSheet = true
@@ -171,10 +169,7 @@ struct ComicDetailView: View {
             Spacer().frame(height: 20)
             Divider()
             Spacer()
-        }.frame(height: UIScreen.main.bounds.height-200).background {
-            Color(.secondarySystemBackground)
-                .matchedGeometryEffect(id: "comicBackground_\(comicData.id)", in: animation)
-        }.cornerRadius(12).padding(10)
+        }
     }
 }
 

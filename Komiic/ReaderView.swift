@@ -18,7 +18,6 @@ struct ReaderView: View {
     @State private var chapterPath:URL?
     @State private var chaptersList:[KomiicAPI.Chapters] = []
     @State private var specChapterId:String = ""
-    @State private var isLoading = true
     @Binding var isPresented:Bool
     @State var picList:[KomiicAPI.ComicImages] = []
     @State private var showingButton = false
@@ -30,42 +29,43 @@ struct ReaderView: View {
     @State private var useSecondReadMode = false
     @State private var currentChapterIndex = 0
     @State private var chapterIsBook = false
-    @State private var imageViewReady = false
     @State private var reachedImageLimit = false
     @State private var currentPage = ""
     @State private var lastReadPage = -1
     @State private var haveLastReadRecord = false
-    @State private var tabViewSelection = ""
     @State private var pageSelection = ""
     @State private var currentChapterHaveOfflineResource = false
-    @State var modifier = AnyModifier { request in
-        return request
-    }
+    @State private var imgRequestModifier = AnyModifier {r in return r}
+    @State private var useFullScreen = false
+    private let safeAreaTopHeight = UIApplication.shared.keyWindow!.safeAreaInsets.top
     init (comicId: String,isPresented: Binding<Bool>, offlineResource:Bool = false) {
         self.comicId = comicId
         _isPresented = isPresented
         self.offlineResource = offlineResource
+        useSecondReadMode = userDefaults.bool(forKey: "useSecondReadMode")
+        useFullScreen = userDefaults.bool(forKey: "useFullScreen")
     }
     private let token = KeychainSwift().get("token") ?? ""
     var body: some View {
         GeometryReader {proxy in
             HStack{}.onChange(of: proxy.size.width){_ in viewWidth=proxy.size.width}.onAppear{viewWidth=proxy.size.width}}.frame(height: 0)
-        VStack {
+        ZStack (alignment: .top){
             if (!useSecondReadMode) {
                 ScrollViewReader {scrollView in
                     ScrollView {
                         LazyVStack {
+                            Spacer().frame(height: safeAreaTopHeight)
                             ForEach(Array(picList.enumerated()), id:\.element.id) { page,img in
                                 if (!currentChapterHaveOfflineResource) {
                                     KFImage(URL(string:"https://komiic.com/api/image/\(img.kid)"))
-                                        .requestModifier(modifier)
+                                        .requestModifier(imgRequestModifier)
                                         .placeholder { _ in
                                             VStack {
                                                 Spacer()
                                                 ProgressView().tint(.white)
                                                 Spacer()
                                             }.frame(width:viewWidth).aspectRatio(CGSize(width: img.width, height: img.height), contentMode: .fill)
-                                                .background(Color(UIColor.darkGray)).cornerRadius(10).padding(10).onAppear {imageViewReady = true}
+                                                .background(Color(UIColor.darkGray)).cornerRadius(10).padding(10)
                                         }
                                         .onFailure{error in
                                             app.komiicApi.reachedImageLimit(completion: {status in reachedImageLimit = status})
@@ -81,25 +81,29 @@ struct ReaderView: View {
                                         .fade(duration: 0.25)
                                         .cancelOnDisappear(true)
                                         .resizable()
-                                        .padding(EdgeInsets(top: -2, leading: 5, bottom: -2, trailing: 5))
+                                        .padding(EdgeInsets(top: -2, leading: 0, bottom: -2, trailing: 0))
                                         .id("\(page)_\(img.kid)")
                                         .scaledToFill()
                                 } else {
                                     KFImage(source: .provider(LocalFileImageDataProvider(fileURL: chapterPath!.appendingPathComponent("images").appendingPathComponent("\(img.kid).jpeg"))))
-                                        .requestModifier(modifier)
+                                        .requestModifier(imgRequestModifier)
                                         .placeholder { _ in
                                             VStack {
                                                 Spacer()
                                                 ProgressView().tint(.white)
                                                 Spacer()
                                             }.frame(width:viewWidth).aspectRatio(CGSize(width: img.width, height: img.height), contentMode: .fill)
-                                                .background(Color(UIColor.darkGray)).cornerRadius(10).padding(10).onAppear {imageViewReady = true}
+                                                .background(Color(UIColor.darkGray)).cornerRadius(10).padding(10)
+                                        }
+                                        .onSuccess { _ in
+                                            currentPage = "\(page)_\(img.kid)"
+                                            pageSelection = currentPage
                                         }
                                         .diskCacheExpiration(.expired)
                                         .fade(duration: 0.25)
                                         .cancelOnDisappear(true)
                                         .resizable()
-                                        .padding(EdgeInsets(top: -2, leading: 5, bottom: -2, trailing: 5))
+                                        .padding(EdgeInsets(top: -2, leading: 0, bottom: -2, trailing: 0))
                                         .id("\(page)_\(img.kid)")
                                         .scaledToFill()
                                 }
@@ -108,6 +112,7 @@ struct ReaderView: View {
                                     scrollView.scrollTo(userDefaults.string(forKey: "lastReadPage"))
                                     userDefaults.set(false, forKey: "notFinishedReading")
                                 }
+                                scrollView.scrollTo(pageSelection)
                             }.onChange(of: haveLastReadRecord) { _ in
                                 if (lastReadPage != -1) {
                                     scrollView.scrollTo("\(lastReadPage)_\(picList[lastReadPage].kid)")
@@ -118,7 +123,7 @@ struct ReaderView: View {
                                     scrollView.scrollTo(pageSelection)
                                 }
                             }
-                            if (imageViewReady && !offlineResource) {
+                            if (!currentPage.isEmpty && !offlineResource) {
                                 if (chaptersList.filter({$0.type.hasPrefix(chapterIsBook ? "b" : "c")}).last?.id == specChapterId) {
                                     Text("此為最後章節")
                                 } else {
@@ -140,42 +145,26 @@ struct ReaderView: View {
                             Spacer()
                         }
                     }
-                }.onTapGesture {
-                    if (showingButton) {
-                        withAnimation {
-                            showingButton = false
-                        }
-                    } else {
-                        withAnimation {
-                            showingButton = true
-                        }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
-                            withAnimation {
-                                showingButton = false
-                            }
-                        }
-                    }
                 }
             } else {
-                TabView (selection: $tabViewSelection){
+                TabView (selection: $pageSelection){
                     ForEach(Array(picList.enumerated()), id:\.element.id) { page,img in
                         if (!currentChapterHaveOfflineResource) {
                             KFImage(URL(string:"https://komiic.com/api/image/\(img.kid)"))
-                                .requestModifier(modifier)
+                                .requestModifier(imgRequestModifier)
                                 .placeholder { _ in
                                     VStack {
                                         Spacer()
                                         ProgressView().tint(.white)
                                         Spacer()
                                     }.frame(width:viewWidth).aspectRatio(CGSize(width: img.width, height: img.height), contentMode: .fill)
-                                        .background(Color(UIColor.darkGray)).cornerRadius(10).padding(10).onAppear {imageViewReady = true}
+                                        .background(Color(UIColor.darkGray)).cornerRadius(10).padding(10)
                                 }
                                 .onFailure{error in
                                     app.komiicApi.reachedImageLimit(completion: {status in reachedImageLimit = status})
                                 }
                                 .onSuccess { _ in
                                     currentPage = "\(page)_\(img.kid)"
-                                    pageSelection = currentPage
                                     if (app.isLogin) {
                                         app.komiicApi.addReadComicHistory(comicId: comicId, chapterId: specChapterId, page: page)
                                     }
@@ -184,45 +173,43 @@ struct ReaderView: View {
                                 .fade(duration: 0.25)
                                 .cancelOnDisappear(true)
                                 .resizable()
-                                .padding(EdgeInsets(top: -2, leading: 5, bottom: -2, trailing: 5))
-                                .id("\(page)_\(img.kid)")
+                                .padding(EdgeInsets(top: -2, leading: 0, bottom: -2, trailing: 0))
+                                .tag("\(page)_\(img.kid)")
                                 .scaledToFit()
                         } else {
                             KFImage(source: .provider(LocalFileImageDataProvider(fileURL: chapterPath!.appendingPathComponent("images").appendingPathComponent("\(img.kid).jpeg"))))
-                                .requestModifier(modifier)
+                                .requestModifier(imgRequestModifier)
                                 .placeholder { _ in
                                     VStack {
                                         Spacer()
                                         ProgressView().tint(.white)
                                         Spacer()
                                     }.frame(width:viewWidth).aspectRatio(CGSize(width: img.width, height: img.height), contentMode: .fill)
-                                        .background(Color(UIColor.darkGray)).cornerRadius(10).padding(10).onAppear {imageViewReady = true}
+                                        .background(Color(UIColor.darkGray)).cornerRadius(10).padding(10)
+                                }
+                                .onSuccess { _ in
+                                    currentPage = "\(page)_\(img.kid)"
                                 }
                                 .diskCacheExpiration(.expired)
                                 .fade(duration: 0.25)
                                 .cancelOnDisappear(true)
                                 .resizable()
-                                .padding(EdgeInsets(top: -2, leading: 5, bottom: -2, trailing: 5))
-                                .id("\(page)_\(img.kid)")
+                                .padding(EdgeInsets(top: -2, leading: 0, bottom: -2, trailing: 0))
+                                .tag("\(page)_\(img.kid)")
                                 .scaledToFit()
                         }
                         }.onAppear {
                             if (userDefaults.bool(forKey: "notFinishedReading")) {
-                                tabViewSelection = (userDefaults.string(forKey: "lastReadPage"))!
+                                pageSelection = (userDefaults.string(forKey: "lastReadPage"))!
                                 userDefaults.set(false, forKey: "notFinishedReading")
                             }
                         }.onChange(of: haveLastReadRecord) { _ in
                             if (lastReadPage != -1) {
-                                tabViewSelection = ("\(lastReadPage)_\(picList[lastReadPage].kid)")
+                                pageSelection = ("\(lastReadPage)_\(picList[lastReadPage].kid)")
                                 lastReadPage = -1
                             }
                         }
-                        .onChange(of: pageSelection, perform: { value in
-                            if (pageSelection != currentPage) {
-                                tabViewSelection = pageSelection
-                            }
-                        })
-                    if (imageViewReady && !offlineResource) {
+                    if (!currentPage.isEmpty && !offlineResource) {
                         if (chaptersList.filter({$0.type.hasPrefix(chapterIsBook ? "b" : "c")}).last?.id == specChapterId) {
                             Text("此為最後章節")
                         } else {
@@ -241,20 +228,25 @@ struct ReaderView: View {
                             }).buttonStyle(.borderedProminent).padding(5)
                         }
                     }
-                }.tabViewStyle(PageTabViewStyle(indexDisplayMode: .never)).onTapGesture {
-                    if (showingButton) {
-                        withAnimation {
-                            showingButton = false
-                        }
-                    } else {
-                        withAnimation {
-                            showingButton = true
-                        }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
-                            withAnimation {
-                                showingButton = false
-                            }
-                        }
+                }.tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+            }
+            if (showingButton || !useFullScreen) {
+                HStack {
+                    Spacer()
+                }.background(.black).frame(height: safeAreaTopHeight+30)
+            }
+        }.onTapGesture {
+            if (showingButton) {
+                withAnimation {
+                    showingButton = false
+                }
+            } else {
+                withAnimation {
+                    showingButton = true
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+                    withAnimation {
+                        showingButton = false
                     }
                 }
             }
@@ -265,7 +257,7 @@ struct ReaderView: View {
             userDefaults.setValue(specChapterId, forKey: "lastReadChapterId")
             userDefaults.setValue(currentPage, forKey: "lastReadPage")
         }).overlay(alignment:.topTrailing) {
-            ExitButtonView().frame(width: 24,height: 24).opacity(showingButton ? 1 : 0).padding(15).onTapGesture {
+            ExitButtonView().frame(width: 20,height: 20).opacity(showingButton ? 1 : 0).padding(EdgeInsets(top: safeAreaTopHeight+5, leading: 15, bottom: 15, trailing: 15)).onTapGesture {
                 ImageCache.default.clearMemoryCache()
                 isPresented = false
             }
@@ -356,10 +348,13 @@ struct ReaderView: View {
                     
                 }).sheet(isPresented: $showingReaderSettings, content: {
                     NavigationView {
-                        List() {
+                        List {
                             Toggle(isOn: $useSecondReadMode, label: {
                                 Text("使用翻頁模式")
                             }).onChange(of: useSecondReadMode) { _ in userDefaults.setValue(useSecondReadMode, forKey: "useSecondReadMode")}
+                            Toggle(isOn: $useFullScreen, label: {
+                                Text("使用全螢幕顯示")
+                            }).onChange(of: useFullScreen) { _ in userDefaults.setValue(useFullScreen, forKey: "useFullScreen")}
                         }.navigationTitle("閱讀器設定").navigationBarItems(trailing:
                             Button (action: {
                                 showingReaderSettings = false
@@ -371,7 +366,14 @@ struct ReaderView: View {
                 })
         }
         .onAppear {
-            useSecondReadMode = userDefaults.bool(forKey: "useSecondReadMode")
+            imgRequestModifier = AnyModifier {request in
+                var r = request
+                r.addValue("https://komiic.com/comic/\(comicId)/chapter/\(specChapterId)/images/all", forHTTPHeaderField: "referer")
+                if (app.isLogin) {
+                    r.addValue("Bearer \(app.token)", forHTTPHeaderField: "authorization")
+                }
+                return r
+            }
             app.komiicApi.getChapterByComicId(comicId: comicId, completion: { chapters in
                 if (!offlineResource) {
                     if (!userDefaults.bool(forKey: "notFinishedReading")) {
@@ -399,10 +401,10 @@ struct ReaderView: View {
                                 }
                                 if (biggestId == 0) {
                                     let firstChapter = chapters.first!
-                                    specChapterId.append(firstChapter.id)
+                                    specChapterId = firstChapter.id
                                 } else {
                                     self.lastReadPage = lastReadPage
-                                    specChapterId.append(String(biggestId))
+                                    specChapterId = String(biggestId)
                                 }
                             } else {
                                 let firstChapter = chapters.first!
@@ -414,12 +416,15 @@ struct ReaderView: View {
                     }
                 }
                 chaptersList.append(contentsOf: chapters)
-                showingChapterPicker = true
+                if (offlineResource) {
+                    showingChapterPicker = true
+                }
             })
         }
         .onChange(of: specChapterId) { _ in
             picList.removeAll()
-            imageViewReady = false
+            currentPage = ""
+            pageSelection = ""
             chapterPath = app.docURL.appendingPathComponent(comicId).appendingPathComponent(specChapterId)
             if (FileManager.default.fileExists(atPath: chapterPath!.path)) {
                 currentChapterHaveOfflineResource = true
@@ -431,14 +436,6 @@ struct ReaderView: View {
             } else {
                 currentChapterHaveOfflineResource = false
                 app.komiicApi.getImagesByChapterId(chapterId: specChapterId, completion: {imagesList in
-                    modifier = AnyModifier { request in
-                        var r = request
-                        r.addValue("https://komiic.com/comic/\(comicId)/chapter/\(specChapterId)/images/all", forHTTPHeaderField: "referer")
-                        if (!token.isEmpty) {
-                            r.addValue("Bearer \(token)", forHTTPHeaderField: "authorization")
-                        }
-                        return r
-                    }
                     picList = imagesList
                     if (lastReadPage != -1) {
                         haveLastReadRecord = true
@@ -454,7 +451,7 @@ struct ReaderView: View {
                     action: {isPresented = false}
                 )
             )
-        }
+        }.statusBarHidden(!showingButton && useFullScreen)
     }
 }
 
