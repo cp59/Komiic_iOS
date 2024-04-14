@@ -12,7 +12,6 @@ struct BookStoreView: View {
     @State var refreshSearch = 0
     @State var isSearching = false
     @State var viewWidth = CGFloat(0)
-    private let isLogin = !(KeychainSwift().get("token") ?? "").isEmpty
     var body: some View {
         NavigationView {
             VStack {

@@ -8,16 +8,20 @@
 import SwiftUI
 
 struct OfflineComicView: View {
-    @EnvironmentObject var app:app
+    @EnvironmentObject var app:AppEnvironment
     @State private var showingManageSheet = false
     @State private var comicList:[OfflineComicData] = []
+    @State private var refreshList = 0
     var body: some View {
         NavigationView {
-            ComicListView(title: "離線下載", requestParameters: "", listType: 5).toolbar {
+            ComicListView(title: "離線下載", requestParameters: "", listType: 5, refreshList: $refreshList).toolbar {
                 Button("管理") {
                     showingManageSheet = true
                 }
-            }.onFirstAppear {
+            }.refreshable {
+                refreshList += 1
+            }
+            .onFirstAppear {
                 do {
                     var tempComicList:[OfflineComicData] = []
                     let directoryContents = try FileManager.default.contentsOfDirectory(at: app.docURL, includingPropertiesForKeys: nil)

@@ -10,11 +10,11 @@ import KeychainSwift
 
 struct UserView: View {
     private let komiicApi = KomiicAPI()
-    @State private var accountInfo =  KomiicAPI.AccountInfo(id: "", email: "", nickname: "", dateCreated: "", nextChapterMode: "", totalDonateAmount: 0, monthDonateAmount: 0)
+    @State private var accountInfo:KomiicAPI.AccountInfo?
     @State private var imageLimitInfo =  KomiicAPI.ImageLimit(limit: 0, usage: 0, resetInSeconds: "0")
     @State private var showLogoutAlert = false
     private let keychain = KeychainSwift()
-    @EnvironmentObject var app:app
+    @EnvironmentObject var app:AppEnvironment
     var body: some View {
         VStack {
             if (app.isLogin) {
@@ -27,8 +27,8 @@ struct UserView: View {
                                 HStack {
                                     Image(systemName: "person.crop.circle").font(.system(size: 40))
                                     VStack (alignment: .leading){
-                                        Text(accountInfo.nickname).font(.title2)
-                                        Text(accountInfo.email).font(.subheadline)
+                                        Text(accountInfo!.nickname).font(.title2)
+                                        Text(accountInfo!.email).font(.subheadline)
                                     }
                                     Spacer()
                                 }
@@ -40,9 +40,9 @@ struct UserView: View {
                                 Text("成為贊助帳號來解鎖最高1萬張的圖片讀取量限制")
                             }
                             Section {
-                                Text("帳號創建日期").badge(ISO8601DateFormatter().date(from: accountInfo.dateCreated)!.timeAgoDisplay())
-                                Text("已贊助").badge("$\(accountInfo.totalDonateAmount)")
-                                Text("本月已贊助").badge("$\(accountInfo.monthDonateAmount)")
+                                Text("帳號創建日期").badge(ISO8601DateFormatter().date(from: accountInfo!.dateCreated)!.timeAgoDisplay())
+                                Text("已贊助").badge("$\(accountInfo!.totalDonateAmount)")
+                                Text("本月已贊助").badge("$\(accountInfo!.monthDonateAmount)")
                             }
                             Section {
                                 Link("贊助Komiic.com", destination: URL(string: "https://donate.komiic.com/")!)

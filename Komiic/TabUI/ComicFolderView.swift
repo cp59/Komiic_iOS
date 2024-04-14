@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ComicFolderView: View {
-    @EnvironmentObject var app: app
+    @EnvironmentObject var app:AppEnvironment
     @State private var comicFolders:[KomiicAPI.ComicFolder] = []
     @State private var isLoading = true
     var body: some View {

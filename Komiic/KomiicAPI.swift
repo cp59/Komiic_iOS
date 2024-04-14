@@ -48,6 +48,33 @@ struct KomiicAPI {
         }
         task.resume()
     }   
+    func fetchRecommendComicById (comicId: String, completion:(@escaping (String) -> Void)) {
+        let formatParameters = "{\"query\":\"query recommendComicById($comicId: ID!) {\\n  recommendComicById(comicId: $comicId)\\n}\",\"variables\":{\"comicId\":\"\(comicId)\"}}"
+        let postData = formatParameters.data(using: .utf8)
+        var request = URLRequest(url: URL(string: "https://komiic.com/api/query")!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpMethod = "POST"
+        request.httpBody = postData
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data else {
+                print(String(describing: error))
+                return completion("")
+            }
+            let resp = String(data: data, encoding: .utf8)!
+            if (resp.contains("[]")) {
+                return completion("")
+            }
+            let startIndex = resp.index(of: "[\"")
+            let endIndex = resp.index(resp.endIndex, offsetBy: -2)
+            return completion(String(resp[startIndex!..<endIndex]))
+        }
+        task.resume()
+    }
+    func getMessagesByComicId (comicId: String,page: Int = 0 , completion:(@escaping ([ComicMessage]) -> Void)) {
+        let formatParameters = "{\"query\":\"query getMessagesByComicId($comicId: ID!, $pagination: Pagination!) {\\n  getMessagesByComicId(comicId: $comicId, pagination: $pagination) {\\n    id\\n    account {\\n      nickname\\n    }\\n    message\\n    replyTo {\\n      id\\n      message\\n      account {\\n        nickname\\n      }\\n    }\\n    upCount\\n    downCount\\n    dateUpdated\\n    dateCreated\\n  }\\n}\",\"variables\":{\"comicId\":\"\(comicId)\",\"pagination\":{\"limit\":100,\"offset\":\(page*100),\"orderBy\":\"DATE_UPDATED\",\"asc\":true}}}"
+        fetchList(of: ComicMessage.self, parameters: formatParameters, completion: { resp in
+            return completion(resp)})
+    }
     func getChapterByComicId (comicId: String, completion:(@escaping ([Chapters]) -> Void)) {
         let formatParameters = "{\"query\":\"query chapterByComicId($comicId: ID!) {\\n  chaptersByComicId(comicId: $comicId) {\\n    id\\n    serial\\n    type\\n    size\\n  }\\n}\",\"variables\":{\"comicId\":\"\(comicId)\"}}"
         fetchList(of: Chapters.self, parameters: formatParameters, completion: { resp in
@@ -122,7 +149,7 @@ struct KomiicAPI {
 
     }
     func getAccountInfo(completion:(@escaping (AccountInfo) -> Void)) {
-        let parameters = "{\"query\":\"query accountQuery {\\n  account {\\n    id\\n    email\\n    nickname\\n    dateCreated\\n    totalDonateAmount\\n    monthDonateAmount\\n    nextChapterMode\\n  }\\n}\",\"variables\":{}}"
+        let parameters = "{\"query\":\"query accountQuery {\\n  account {\\n    id\\n    email\\n    nickname\\n    dateCreated\\n    totalDonateAmount\\n    monthDonateAmount\\n    nextChapterMode\\n    \\n favoriteComicIds\\n}\\n}\",\"variables\":{}}"
         let postData = parameters.data(using: .utf8)
         var request = URLRequest(url: URL(string: "https://komiic.com/api/query")!)
         request.addValue("Bearer \(keychain.get("token")!)", forHTTPHeaderField: "authorization")
@@ -132,7 +159,7 @@ struct KomiicAPI {
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             guard let data = data else {
                 print(String(describing: error))
-                return completion(AccountInfo(id: "", email: "", nickname: "", dateCreated: "", nextChapterMode: "", totalDonateAmount: 0, monthDonateAmount: 0))
+                return completion(AccountInfo(id: "", email: "", nickname: "", dateCreated: "", nextChapterMode: "", totalDonateAmount: 0, monthDonateAmount: 0, favoriteComicIds: []))
             }
             let resp = String(data: data, encoding: .utf8)!
             let startIndex = resp.index(resp.startIndex, offsetBy: 19)
@@ -141,7 +168,8 @@ struct KomiicAPI {
                 let accountInfo = try JSONDecoder().decode(AccountInfo.self, from: Data(String(resp[startIndex..<endIndex]).utf8))
                 return completion(accountInfo)
             } catch {
-                return completion(AccountInfo(id: "tokenExpired", email: "", nickname: "", dateCreated: "", nextChapterMode: "", totalDonateAmount: 0, monthDonateAmount: 0))
+                print(error)
+                return completion(AccountInfo(id: "tokenExpired", email: "", nickname: "", dateCreated: "", nextChapterMode: "", totalDonateAmount: 0, monthDonateAmount: 0, favoriteComicIds: []))
             }
         }
         task.resume()
@@ -257,6 +285,28 @@ struct KomiicAPI {
         let task = URLSession.shared.dataTask(with: request) { data, response, error in }
         task.resume()
     }
+    func addFavorite(comicId: String) {
+        let parameters = "{\"query\":\"mutation addFavorite($comicId: ID!) {\\n  addFavorite(comicId: $comicId) {\\n    id\\n    comicId\\n    dateAdded\\n    lastAccess\\n    bookReadProgress\\n    chapterReadProgress\\n    __typename\\n  }\\n}\",\"variables\":{\"comicId\":\"\(comicId)\"}}"
+        let postData = parameters.data(using: .utf8)
+        var request = URLRequest(url: URL(string: "https://komiic.com/api/query")!,timeoutInterval: Double.infinity)
+        request.addValue("Bearer \(keychain.get("token")!)", forHTTPHeaderField: "authorization")
+        request.addValue("application/json", forHTTPHeaderField: "content-type")
+        request.httpMethod = "POST"
+        request.httpBody = postData
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in }
+        task.resume()
+    }
+    func removeFavorite(comicId: String) {
+        let parameters = "{\"query\":\"mutation removeFavorite($comicId: ID!) {\\n  removeFavorite(comicId: $comicId)\\n}\",\"variables\":{\"comicId\":\"\(comicId)\"}}"
+        let postData = parameters.data(using: .utf8)
+        var request = URLRequest(url: URL(string: "https://komiic.com/api/query")!,timeoutInterval: Double.infinity)
+        request.addValue("Bearer \(keychain.get("token")!)", forHTTPHeaderField: "authorization")
+        request.addValue("application/json", forHTTPHeaderField: "content-type")
+        request.httpMethod = "POST"
+        request.httpBody = postData
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in }
+        task.resume()
+    }
     struct RequestParameters {
         func getRecentUpdate () -> String{
             return "{\"query\":\"query recentUpdate($pagination: Pagination!) {\\n  recentUpdate(pagination: $pagination) {\\n    id\\n    title\\n    status\\n    year\\n    imageUrl\\n    authors {\\n      id\\n      name\\n      \\n    }\\n    categories {\\n      id\\n      name\\n      \\n    }\\n    dateUpdated\\n    monthViews\\n    views\\n    favoriteCount\\n    lastBookUpdate\\n    lastChapterUpdate\\n    \\n  }\\n}\",\"variables\":{\"pagination\":{\"limit\":20,\"offset\":[page],\"orderBy\":\"DATE_UPDATED\",\"status\":\"\",\"asc\":true}}}"
@@ -330,6 +380,7 @@ struct KomiicAPI {
         let nextChapterMode: String
         let totalDonateAmount: Int
         let monthDonateAmount: Int
+        let favoriteComicIds: [String]
     }
     struct ImageLimit: Decodable {
         let limit: Int
@@ -357,5 +408,23 @@ struct KomiicAPI {
         let name: String
         let views: Int
         let comicCount: Int
+    }
+    struct ComicMessageAccount: Decodable {
+        let nickname: String
+    }
+    struct ComicMessageReplyTo: Decodable {
+        let id: String
+        let account: ComicMessageAccount
+        let message: String
+    }
+    struct ComicMessage: Decodable {
+        let id: String
+        let account: ComicMessageAccount
+        let message: String
+        let replyTo: ComicMessageReplyTo?
+        let upCount: Int
+        let downCount: Int
+        let dateUpdated: String
+        let dateCreated: String
     }
 }

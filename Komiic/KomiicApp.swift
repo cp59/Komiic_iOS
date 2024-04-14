@@ -8,7 +8,7 @@
 import SwiftUI
 import KeychainSwift
 
-class app: ObservableObject {
+class AppEnvironment: ObservableObject {
     let komiicApi: KomiicAPI = KomiicAPI()
     @Published var isLogin: Bool = !(KeychainSwift().get("token") ?? "").isEmpty
     @Published var token: String = KeychainSwift().get("token") ?? ""
@@ -17,10 +17,10 @@ class app: ObservableObject {
 
 @main
   struct KomiicApp: App {
-      @Namespace var animation
+      @StateObject var app = AppEnvironment()
       var body: some Scene {
         WindowGroup {
-            ContentView().environmentObject(app())
+            ContentView().environmentObject(app)
         }
     }
 }

@@ -6,18 +6,15 @@
 //
 
 import SwiftUI
+import KeychainSwift
 
 struct ContentView: View {
-    @EnvironmentObject var app:app
+    @EnvironmentObject var app:AppEnvironment
     private let userDefaults = UserDefaults()
     @State private var showNotFinishedReadingAlert = false
     @State private var startReading = false
     var body: some View {
         TabView {
-            OfflineComicView().tabItem {
-                Image(systemName: "arrow.down.circle.fill")
-                Text("離線下載")
-            }
             ComicFolderView().tabItem {
                 Image(systemName: "books.vertical.fill")
                 Text("書櫃")
@@ -31,6 +28,10 @@ struct ContentView: View {
                     Image(systemName: "bag.fill")
                     Text("書店")
                 }
+            OfflineComicView().tabItem {
+                Image(systemName: "arrow.down.circle.fill")
+                Text("離線下載")
+            }
             UserView().tabItem {
                 Image(systemName: "person.crop.circle")
                 Text("我的帳號")
@@ -42,7 +43,14 @@ struct ContentView: View {
             if (app.isLogin) {
                 app.komiicApi.getAccountInfo(completion: {accountInfo in
                     if (accountInfo.id == "tokenExpired") {
-                        app.isLogin = false
+                        let keychain = KeychainSwift()
+                        app.komiicApi.login(email: keychain.get("email")!, password: keychain.get("password")!, completion: {token in
+                            if (token.isEmpty) {
+                                app.isLogin = false
+                            } else {
+                                app.token = token
+                            }
+                        })
                     }
                 })
             }

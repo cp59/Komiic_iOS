@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SmallComicListView: View {
-    @EnvironmentObject var app:app
+    @EnvironmentObject var app:AppEnvironment
     @State var comics: [KomiicAPI.ComicData] = []
     @State var isLoading = true
     var folder:KomiicAPI.ComicFolder = KomiicAPI.ComicFolder(id: "", key: "", name: "", views: 0, comicCount: 0)
@@ -24,6 +24,10 @@ struct SmallComicListView: View {
                 NavigationLink(destination: ComicListView(title: title, requestParameters: requestParameters), label: {
                     Text("查看全部")
                 })
+            } else if (listType == 1) {
+                NavigationLink(destination: ComicListView(title: title, requestParameters: requestParameters, listType: 1), label: {
+                    Text("查看全部")
+                })
             } else if (listType == 3){
                 NavigationLink(destination: FavoritesComicView(), label: {
                     Text("查看全部")
@@ -34,7 +38,7 @@ struct SmallComicListView: View {
                 })
             }
         }.onFirstAppear {
-            if (listType == 0) {
+            if (listType == 0 || listType == 1) {
                 app.komiicApi.fetchComicList(parameters: requestParameters,completion: {comicsResp in
                     comics.append(contentsOf: comicsResp)
                     isLoading = false})
@@ -55,6 +59,12 @@ struct SmallComicListView: View {
                         comics.append(contentsOf: resp)
                         isLoading = false})
                     
+                })
+            } else if (listType == 6) {
+                app.komiicApi.fetchRecommendComicById(comicId: requestParameters, completion: {comicList in
+                    app.komiicApi.fetchComicList(parameters: "{\"query\":\"query comicByIds($comicIds: [ID]!) {\\n  comicByIds(comicIds: $comicIds) {\\n    id\\n    title\\n    status\\n    year\\n    imageUrl\\n    authors {\\n      id\\n      name\\n    }\\n    categories {\\n      id\\n      name\\n    }\\n    dateUpdated\\n    monthViews\\n    views\\n    favoriteCount\\n    lastBookUpdate\\n    lastChapterUpdate\\n  }\\n}\",\"variables\":{\"comicIds\":\(comicList)}}",completion: {resp in
+                        comics.append(contentsOf: resp)
+                        isLoading = false})
                 })
             }
         }

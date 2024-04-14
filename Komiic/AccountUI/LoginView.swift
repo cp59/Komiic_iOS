@@ -14,7 +14,7 @@ struct LoginView: View {
     @State private var username = ""
     @State private var password = ""
     @State private var logging = false
-    @EnvironmentObject var app:app
+    @EnvironmentObject var app:AppEnvironment
     private let keychain = KeychainSwift()
     var body: some View {
         VStack {
@@ -48,8 +48,10 @@ struct LoginView: View {
                                             showLoginFailedAlert = true
                                         } else {
                                             keychain.set(token, forKey: "token")
-                                            app.isLogin = true
+                                            keychain.set(username, forKey: "email")
+                                            keychain.set(password, forKey: "password")
                                             app.token = token
+                                            app.isLogin = true
                                             showingLoginSheet = false
                                         }
                                     })

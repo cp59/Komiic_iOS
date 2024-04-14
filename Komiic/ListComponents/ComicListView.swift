@@ -9,7 +9,7 @@ import SwiftUI
 import Kingfisher
 
 struct ComicListView: View {
-    @EnvironmentObject var app: app
+    @EnvironmentObject var app:AppEnvironment
     var title:String
     let requestParameters:String
     var listType: Int = 0
@@ -103,7 +103,6 @@ struct ComicListView: View {
     }
     var body: some View {
         ScrollView {
-
             LazyVGrid (columns: [GridItem(.adaptive(minimum: 160))]) {
                 ForEach(comics, id: \.id) {comic in
                     ComicItemView(comic: comic, loadLocalImage: listType == 5).onAppear {
@@ -166,55 +165,114 @@ struct ComicItemView: View {
     @State private var openDetailPage = false
     @State private var startOfflineReading = false
     var body: some View {
-        VStack {
-            NavigationLink(destination:
-                            ComicDetailView(comicData: comic)
-               , isActive: $openDetailPage ){EmptyView()}
-            if (!loadLocalImage) {
-                KFImage(URL(string: comic.imageUrl))
-                    .diskCacheExpiration(.expired)
-                    .placeholder { _ in
-                        VStack {
-                            Spacer()
-                            ProgressView()
-                            Spacer()
-                        }.frame(width: 160, height: 213).background(Color(UIColor.darkGray)).cornerRadius(10).padding(10)
-                    }
-                    .resizable()
-                    .cancelOnDisappear(true)
-                    .cornerRadius(14)
-                    .scaledToFit()
-                    .frame(width: 160, height: 213)
-                    .onTapGesture {
-                        openDetailPage = true
-                    }
-            } else {
-                KFImage(source: .provider(LocalFileImageDataProvider(fileURL: URL(fileURLWithPath: comic.imageUrl))))
-                    .diskCacheExpiration(.expired)
-                    .placeholder { _ in
-                        VStack {
-                            Spacer()
-                            ProgressView()
-                            Spacer()
-                        }.frame(width: 160, height: 213).background(Color(UIColor.darkGray)).cornerRadius(10).padding(10)
-                    }
-                    .resizable()
-                    .cancelOnDisappear(true)
-                    .cornerRadius(14)
-                    .scaledToFit()
-                    .frame(width: 160, height: 213)
-                    .fullScreenCover(isPresented: $startOfflineReading, content: {
-                        ReaderView(comicId: comic.id, isPresented: $startOfflineReading, offlineResource: true).ignoresSafeArea()
-                    })
-                    .onTapGesture {
-                        startOfflineReading = true
-                    }
+        if #available(iOS 16.0, *) {
+            VStack {
+                NavigationLink(destination:
+                                ComicDetailView(comicData: comic)
+                               , isActive: $openDetailPage ){EmptyView()}
+                if (!loadLocalImage) {
+                    KFImage(URL(string: comic.imageUrl))
+                        .diskCacheExpiration(.expired)
+                        .placeholder { _ in
+                            VStack {
+                                Spacer()
+                                ProgressView()
+                                Spacer()
+                            }.frame(width: 160, height: 213).background(Color(UIColor.darkGray)).cornerRadius(10).padding(10)
+                        }
+                        .resizable()
+                        .cancelOnDisappear(true)
+                        .cornerRadius(14)
+                        .scaledToFit()
+                        .frame(width: 160, height: 213)
+                        .onTapGesture {
+                            openDetailPage = true
+                        }
+                } else {
+                    KFImage(source: .provider(LocalFileImageDataProvider(fileURL: URL(fileURLWithPath: comic.imageUrl))))
+                        .diskCacheExpiration(.expired)
+                        .placeholder { _ in
+                            VStack {
+                                Spacer()
+                                ProgressView()
+                                Spacer()
+                            }.frame(width: 160, height: 213).background(Color(UIColor.darkGray)).cornerRadius(10).padding(10)
+                        }
+                        .resizable()
+                        .cancelOnDisappear(true)
+                        .cornerRadius(14)
+                        .scaledToFit()
+                        .frame(width: 160, height: 213)
+                        .fullScreenCover(isPresented: $startOfflineReading, content: {
+                            ReaderView(comicId: comic.id, isPresented: $startOfflineReading, offlineResource: true).ignoresSafeArea()
+                        })
+                        .onTapGesture {
+                            startOfflineReading = true
+                        }
+                }
+                Text(comic.title).font(.headline).truncationMode(.tail).lineLimit(1).frame(width: 160,alignment: .leading)
+                if (!loadLocalImage) {
+                    Text("\(comic.views)次點閱").font(.footnote).frame(width: 160,alignment: .leading)
+                }
+                Spacer()
+            }.padding(5).contextMenu {
+                ShareLink(item: URL(string: "https://komiic.com/comic/\(comic.id)")!)
+            } preview: {
+                ComicContextMenuPreview(comicData: comic).onTapGesture {
+                    openDetailPage = true
+                }
             }
-            Text(comic.title).font(.headline).truncationMode(.tail).lineLimit(1).frame(width: 160,alignment: .leading)
-            if (!loadLocalImage) {
-                Text("\(comic.views)次點閱").font(.footnote).frame(width: 160,alignment: .leading)
-            }
-            Spacer()
+        } else {
+            VStack {
+                NavigationLink(destination:
+                                ComicDetailView(comicData: comic)
+                               , isActive: $openDetailPage ){EmptyView()}
+                if (!loadLocalImage) {
+                    KFImage(URL(string: comic.imageUrl))
+                        .diskCacheExpiration(.expired)
+                        .placeholder { _ in
+                            VStack {
+                                Spacer()
+                                ProgressView()
+                                Spacer()
+                            }.frame(width: 160, height: 213).background(Color(UIColor.darkGray)).cornerRadius(10).padding(10)
+                        }
+                        .resizable()
+                        .cancelOnDisappear(true)
+                        .cornerRadius(14)
+                        .scaledToFit()
+                        .frame(width: 160, height: 213)
+                        .onTapGesture {
+                            openDetailPage = true
+                        }
+                } else {
+                    KFImage(source: .provider(LocalFileImageDataProvider(fileURL: URL(fileURLWithPath: comic.imageUrl))))
+                        .diskCacheExpiration(.expired)
+                        .placeholder { _ in
+                            VStack {
+                                Spacer()
+                                ProgressView()
+                                Spacer()
+                            }.frame(width: 160, height: 213).background(Color(UIColor.darkGray)).cornerRadius(10).padding(10)
+                        }
+                        .resizable()
+                        .cancelOnDisappear(true)
+                        .cornerRadius(14)
+                        .scaledToFit()
+                        .frame(width: 160, height: 213)
+                        .fullScreenCover(isPresented: $startOfflineReading, content: {
+                            ReaderView(comicId: comic.id, isPresented: $startOfflineReading, offlineResource: true).ignoresSafeArea()
+                        })
+                        .onTapGesture {
+                            startOfflineReading = true
+                        }
+                }
+                Text(comic.title).font(.headline).truncationMode(.tail).lineLimit(1).frame(width: 160,alignment: .leading)
+                if (!loadLocalImage) {
+                    Text("\(comic.views)次點閱").font(.footnote).frame(width: 160,alignment: .leading)
+                }
+                Spacer()
+            }.padding(5)
         }
     }
 }

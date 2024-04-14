@@ -11,7 +11,7 @@ import KeychainSwift
 import SwiftUISnackbar
 
 struct ReaderView: View {
-    @EnvironmentObject var app:app
+    @EnvironmentObject var app:AppEnvironment
     var comicId:String
     var offlineResource = false
     private let userDefaults = UserDefaults()
@@ -26,7 +26,7 @@ struct ReaderView: View {
     @State private var viewWidth = CGFloat(0)
     @State private var haveBook = false
     @State private var haveChapter = false
-    @State private var useSecondReadMode = false
+    @State private var useSecondReadMode:Bool
     @State private var currentChapterIndex = 0
     @State private var chapterIsBook = false
     @State private var reachedImageLimit = false
@@ -36,7 +36,7 @@ struct ReaderView: View {
     @State private var pageSelection = ""
     @State private var currentChapterHaveOfflineResource = false
     @State private var imgRequestModifier = AnyModifier {r in return r}
-    @State private var useFullScreen = false
+    @State private var useFullScreen:Bool
     private let safeAreaTopHeight = UIApplication.shared.keyWindow!.safeAreaInsets.top
     init (comicId: String,isPresented: Binding<Bool>, offlineResource:Bool = false) {
         self.comicId = comicId
@@ -86,6 +86,7 @@ struct ReaderView: View {
                                         .scaledToFill()
                                 } else {
                                     KFImage(source: .provider(LocalFileImageDataProvider(fileURL: chapterPath!.appendingPathComponent("images").appendingPathComponent("\(img.kid).jpeg"))))
+                                        .targetCache(ImageCache(name: img.kid))
                                         .requestModifier(imgRequestModifier)
                                         .placeholder { _ in
                                             VStack {
@@ -103,6 +104,21 @@ struct ReaderView: View {
                                         .fade(duration: 0.25)
                                         .cancelOnDisappear(true)
                                         .resizable()
+                                        .contextMenu {
+                                            Button {
+                                                ImageCache.default.retrieveImage(forKey: img.kid) {result in
+                                                    switch result {
+                                                    case .success(let value):
+                                                        print(value.cacheType)
+                                                        UIImageWriteToSavedPhotosAlbum(value.image!, nil, nil, nil)
+                                                    case .failure(let error):
+                                                        print(error)
+                                                    }
+                                                }
+                                            } label: {
+                                                Label("放大", systemImage: "arrow.up.left.and.down.right.magnifyingglass")
+                                            }
+                                        }
                                         .padding(EdgeInsets(top: -2, leading: 0, bottom: -2, trailing: 0))
                                         .id("\(page)_\(img.kid)")
                                         .scaledToFill()
@@ -430,6 +446,7 @@ struct ReaderView: View {
                 currentChapterHaveOfflineResource = true
                 do {
                     picList = try JSONDecoder().decode([KomiicAPI.ComicImages].self, from: Data(contentsOf: chapterPath!.appendingPathComponent("imgList.json")))
+                    pageSelection = "0_\(picList.first!.kid)"
                 } catch {
                     print(error)
                 }
