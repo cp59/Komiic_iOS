@@ -1,0 +1,5 @@
+query recentUpdate($pagination: Pagination!) {
+  recentUpdate(pagination: $pagination) {
+    ...ComicFrag
+  }
+}

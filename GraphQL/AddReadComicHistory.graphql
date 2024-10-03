@@ -1,0 +1,16 @@
+mutation addReadComicHistory($comicId: ID!, $chapterId: ID!, $page: Int!) {
+  addReadComicHistory(comicId: $comicId, chapterId: $chapterId, page: $page) {
+    id
+    comicId
+    chapters {
+      id
+      chapterId
+      page
+      __typename
+    }
+    startDate
+    lastDate
+    chapterType
+    __typename
+  }
+}

@@ -1,0 +1,11 @@
+query chapterByComicId($comicId: ID!) {
+  chaptersByComicId(comicId: $comicId) {
+    id
+    serial
+    type
+    dateCreated
+    dateUpdated
+    size
+    __typename
+  }
+}

@@ -1,0 +1,8 @@
+query imagesByChapterId($chapterId: ID!) {
+  imagesByChapterId(chapterId: $chapterId) {
+    id
+    kid
+    height
+    width
+  }
+}

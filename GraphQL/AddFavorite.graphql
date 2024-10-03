@@ -1,0 +1,11 @@
+mutation addFavorite($comicId: ID!) {
+  addFavorite(comicId: $comicId) {
+    id
+    comicId
+    dateAdded
+    lastAccess
+    bookReadProgress
+    chapterReadProgress
+    __typename
+  }
+}

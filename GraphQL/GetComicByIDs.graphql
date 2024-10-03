@@ -1,0 +1,5 @@
+query comicByIds($comicIds: [ID]!) {
+  comicByIds(comicIds: $comicIds) {
+    ...ComicFrag
+  }
+}

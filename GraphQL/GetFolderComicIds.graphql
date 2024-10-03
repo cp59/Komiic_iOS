@@ -1,0 +1,8 @@
+query folderComicIds($folderId: ID!, $pagination: Pagination!) {
+  folderComicIds(folderId: $folderId, pagination: $pagination) {
+    folderId
+    key
+    comicIds
+    __typename
+  }
+}

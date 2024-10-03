@@ -1,0 +1,5 @@
+query comicsByAuthor($authorId: ID!) {
+  getComicsByAuthor(authorId: $authorId) {
+    ...ComicFrag
+  }
+}

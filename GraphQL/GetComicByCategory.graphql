@@ -1,0 +1,5 @@
+query comicByCategory($categoryId: ID!, $pagination: Pagination!) {
+  comicByCategory(categoryId: $categoryId, pagination: $pagination) {
+    ...ComicFrag
+  }
+}

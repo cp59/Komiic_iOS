@@ -1,0 +1,16 @@
+query readComicHistory($pagination: Pagination!) {
+  readComicHistory(pagination: $pagination) {
+    id
+    comicId
+    chapters {
+      id
+      chapterId
+      page
+      __typename
+    }
+    startDate
+    lastDate
+    chapterType
+    __typename
+  }
+}

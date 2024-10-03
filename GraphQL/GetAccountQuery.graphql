@@ -1,0 +1,17 @@
+query accountQuery {
+  account {
+    id
+    email
+    nickname
+    dateCreated
+    favoriteComicIds
+    profileText
+    profileTextColor
+    profileBackgroundColor
+    totalDonateAmount
+    monthDonateAmount
+    profileImageUrl
+    nextChapterMode
+    __typename
+  }
+}

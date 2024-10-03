@@ -1,0 +1,12 @@
+query myFolder {
+  folders {
+    id
+    key
+    name
+    views
+    comicCount
+    dateCreated
+    dateUpdated
+    __typename
+  }
+}

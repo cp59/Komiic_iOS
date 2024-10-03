@@ -1,0 +1,3 @@
+mutation addComicToFolder($comicId: ID!, $folderId: ID!) {
+  addComicToFolder(comicId: $comicId, folderId: $folderId)
+}

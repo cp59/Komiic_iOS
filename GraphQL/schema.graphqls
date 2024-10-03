@@ -1,0 +1,336 @@
+"""
+A directive used by the Apollo iOS client to annotate operations or fragments that should be used exclusively for generating local cache mutations instead of as standard operations.
+"""
+directive @apollo_client_ios_localCacheMutation on QUERY | MUTATION | SUBSCRIPTION | FRAGMENT_DEFINITION
+
+"""
+A directive used by the Apollo iOS code generation engine to generate custom import statements in operation or fragment definition files. An import statement to import a module with the name provided in the `module` argument will be added to the generated definition file.
+"""
+directive @import(
+  """The name of the module to import."""
+  module: String!
+) repeatable on QUERY | MUTATION | SUBSCRIPTION | FRAGMENT_DEFINITION
+
+"""
+Directs the executor to defer this fragment when the `if` argument is true or undefined.
+"""
+directive @defer(
+  """Deferred when true or undefined."""
+  if: Boolean
+
+  """Unique name"""
+  label: String
+) on FRAGMENT_SPREAD | INLINE_FRAGMENT
+
+type Account {
+  id: ID!
+  email: String!
+  nickname: String!
+  dateCreated: Time
+  favoriteComicIds: [ID]!
+  profileText: String
+  profileTextColor: String
+  profileBackgroundColor: String
+  totalDonateAmount: Int!
+  monthDonateAmount: Int!
+  profileImageUrl: String
+  nextChapterMode: String
+}
+
+type Author {
+  id: ID!
+  name: String!
+  enName: String
+  chName: String
+  wikiLink: String
+  comicCount: Int
+  views: Int
+}
+
+type Bookmark {
+  id: ID!
+  chapterId: ID!
+  imageKid: String!
+  title: String!
+}
+
+input BugFeedback {
+  feedbackType: BugFeedbackType!
+  detail: String
+}
+
+enum BugFeedbackType {
+  SLOWNESS
+  COMIC
+  PAGE
+  OTHER
+}
+
+type Category {
+  id: ID!
+  name: String!
+}
+
+type Chapter {
+  id: ID!
+  serial: String!
+  type: String!
+  size: Int!
+  dateCreated: Time
+  dateUpdated: Time
+}
+
+type Comic {
+  id: ID!
+  title: String!
+  status: String!
+  year: Int!
+  categories: [Category]!
+  imageUrl: String!
+  authors: [Author]!
+  adult: Boolean
+  dateCreated: Time
+  dateUpdated: Time
+  views: Int
+  monthViews: Int
+  favoriteCount: Int!
+  lastBookUpdate: String
+  lastChapterUpdate: String
+}
+
+type ComicBookmark {
+  comicId: ID!
+  bookmarks: [Bookmark!]!
+}
+
+type ComicLastRead {
+  page: Int!
+  chapterId: ID!
+  serial: String!
+}
+
+type ComicLastReadObj {
+  comicId: ID!
+  book: ComicLastRead
+  chapter: ComicLastRead
+}
+
+type ComicsAndAuthors {
+  comics: [Comic]
+  authors: [Author]
+}
+
+input EditAccountRequest {
+  editType: EditAccountType!
+  value: String!
+}
+
+enum EditAccountType {
+  NICKNAME
+  EMAIL
+}
+
+type Favorite {
+  id: ID!
+  comicId: ID!
+  dateAdded: Time!
+  lastAccess: Time!
+}
+
+type FavoriteV2 {
+  id: ID!
+  comicId: ID!
+  dateAdded: Time!
+  lastAccess: Time!
+  bookReadProgress: ReadProgressType
+  chapterReadProgress: ReadProgressType
+}
+
+input FeedbackRequest {
+  feedbackType: FeedbackType!
+  email: String
+  detail: String
+  bugFeedback: [BugFeedback]
+}
+
+enum FeedbackType {
+  SUGGESTION
+  BUG
+  RECOMMEND
+}
+
+type Folder {
+  id: ID!
+  key: String!
+  account: Account!
+  name: String!
+  views: Int
+  comicCount: Int!
+  dateCreated: Time
+  dateUpdated: Time
+}
+
+type FolderComicIds {
+  folderId: ID!
+  key: String!
+  comicIds: [ID]!
+}
+
+type Image {
+  id: ID!
+  width: Int!
+  height: Int!
+  kid: String!
+  dateCreated: Time
+  dateUpdated: Time
+}
+
+type ImageLimit {
+  usage: Int!
+  limit: Int!
+  resetInSeconds: String!
+}
+
+type Message {
+  id: ID!
+  comicId: ID!
+  account: Account!
+  message: String!
+  replyTo: Message
+  upCount: Int
+  downCount: Int
+  dateCreated: Time
+  dateUpdated: Time
+}
+
+type MessageVote {
+  messageId: ID!
+  up: Boolean!
+}
+
+type Mutation {
+  addFeedback(request: FeedbackRequest!): Boolean!
+  registerAccountV2(request: RegisterAccountRequest!): Boolean!
+  registerAccount(request: RegisterAccountRequest!): Boolean!
+  deleteAccount: Boolean!
+  editAccount(request: EditAccountRequest!): Account!
+  sendResetPasswordEmailV2(email: String!, recaptchaToken: String!): Boolean!
+  sendResetPasswordEmail(email: String!, recaptchaToken: String!): Boolean!
+  resetPassword(token: String!, newPassword: String!): Boolean!
+  addReadComicHistory(comicId: ID!, chapterId: ID!, page: Int!): ReadComicHistory!
+  deleteReadComicHistory(comicId: ID!): Boolean!
+  addFavorite(comicId: ID!): FavoriteV2!
+  removeFavorite(comicId: ID!): Boolean!
+  addBookmark(comicId: ID!, imageKid: String!, title: String!): Bookmark!
+  removeBookmark(bookmarkId: ID!): Boolean!
+  createFolder(name: String!): Folder!
+  removeFolder(folderId: ID!): Boolean!
+  addComicToFolder(comicId: ID!, folderId: ID!): Boolean!
+  removeComicToFolder(comicId: ID!, folderId: ID!): Boolean!
+  updateFolderName(folderId: ID!, name: String!): Boolean!
+  addMessageToComic(comicId: ID!, replyToId: ID!, message: String!): Message!
+  voteMessage(messageId: ID!, up: Boolean!): Boolean!
+  deleteMessage(messageId: ID!): Boolean!
+  updateProfileImage(text: String!, textColor: String!, backgroundColor: String!): Boolean!
+  setNextChapterMode(mode: String!): Boolean!
+}
+
+enum OrderBy {
+  DATE_UPDATED
+  DATE_CREATED
+  VIEWS
+  MONTH_VIEWS
+  ID
+  COMIC_DATE_UPDATED
+  FAVORITE_ADDED
+  FAVORITE_COUNT
+}
+
+input Pagination {
+  limit: Int!
+  offset: Int!
+  orderBy: OrderBy!
+  asc: Boolean!
+  status: String
+  readProgress: ReadProgressType
+}
+
+type Query {
+  comicById(comicId: ID!): Comic
+  chaptersByComicId(comicId: ID!): [Chapter]!
+  chapterById(comicId: ID!, chapterId: ID!): Chapter
+  imagesByChapterId(chapterId: ID!): [Image]!
+  recentUpdate(pagination: Pagination!): [Comic]
+  comicByCategory(categoryId: ID!, pagination: Pagination!): [Comic]!
+  allCategory: [Category]!
+  comicByIds(comicIds: [ID]!): [Comic]!
+  hotComics(pagination: Pagination!): [Comic]!
+  searchComics(pagination: Pagination!, keyword: String!): [Comic]!
+  searchComicsAndAuthors(keyword: String!): ComicsAndAuthors!
+  recommendComicById(comicId: ID!): [ID]!
+  account: Account!
+  validateResetPasswordToken(token: String!): Boolean!
+  getLatestUpdatedDateInFavorite: Time!
+  readComicHistory(pagination: Pagination!): [ReadComicHistory]!
+  readComicHistoryById(comicId: ID!): ReadComicHistory
+  lastReadByComicIds(comicIds: [ID]!): [ComicLastReadObj]!
+  favorites(pagination: Pagination!): [Favorite]!
+  favoritesV2(pagination: Pagination!): [FavoriteV2]!
+  authors(pagination: Pagination!): [Author]!
+  authorById(authorId: ID!): Author!
+  getComicsByAuthor(authorId: ID!): [Comic]!
+  getComicBookmarks: [ComicBookmark]!
+  folders: [Folder]!
+  folder(folderKey: String!): Folder!
+  folderComicIds(folderId: ID!, pagination: Pagination!): FolderComicIds!
+  comicInAccountFolders(comicId: ID!): [ID]!
+  getMessagesByComicId(comicId: ID!, pagination: Pagination!): [Message]!
+  messageCountByComicId(comicId: ID!): Int!
+  messageVotesByComicId(comicId: ID!): [MessageVote]!
+  messageChan(messageId: ID!): [Message]!
+  lastMessageByComicId(comicId: ID!): Message
+  getImageLimit: ImageLimit!
+  reachedImageLimit: Boolean!
+}
+
+type ReadChapterHistory {
+  id: ID!
+  chapterId: ID!
+  page: Int!
+}
+
+type ReadComicHistory {
+  id: ID!
+  comicId: ID!
+  chapters: [ReadChapterHistory]!
+  startDate: Time
+  lastDate: Time
+  chapterType: String
+}
+
+enum ReadProgressType {
+  COMPLETED
+  STARTED
+  UNREAD
+  ALL
+}
+
+input RegisterAccountRequest {
+  email: String!
+  password: String!
+  recaptchaToken: String!
+  nickname: String
+}
+
+"""
+GraphQL schema example
+
+https://gqlgen.com/getting-started/
+"""
+scalar Time
+
+type Token {
+  accessToken: String!
+  refreshToken: String!
+  accessExpires: Int!
+}

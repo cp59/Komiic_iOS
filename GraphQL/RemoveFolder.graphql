@@ -1,0 +1,3 @@
+mutation removeFolder($folderId: ID!) {
+  removeFolder(folderId: $folderId)
+}

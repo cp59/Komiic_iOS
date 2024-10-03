@@ -1,0 +1,5 @@
+query hotComics($pagination: Pagination!) {
+  hotComics(pagination: $pagination) {
+    ...ComicFrag
+  }
+}

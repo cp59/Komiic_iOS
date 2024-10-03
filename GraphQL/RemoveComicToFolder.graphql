@@ -1,0 +1,3 @@
+mutation removeComicToFolder($comicId: ID!, $folderId: ID!) {
+  removeComicToFolder(comicId: $comicId, folderId: $folderId)
+}

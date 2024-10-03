@@ -1,0 +1,3 @@
+mutation removeFavorite($comicId: ID!) {
+  removeFavorite(comicId: $comicId)
+}

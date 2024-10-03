@@ -1,0 +1,3 @@
+mutation updateFolderName($folderId: ID!, $name: String!) {
+  updateFolderName(folderId: $folderId, name: $name)
+}

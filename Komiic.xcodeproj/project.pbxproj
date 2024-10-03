@@ -3,412 +3,379 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		500C7BAA2BA3032800F7C4F4 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 500C7BA92BA3032800F7C4F4 /* Kingfisher */; };
-		501CB2182BAB2AA600F8CC34 /* FolderComicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501CB2172BAB2AA600F8CC34 /* FolderComicView.swift */; };
-		502F05E12BBEBF9A001816E0 /* ComicDownloadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502F05E02BBEBF9A001816E0 /* ComicDownloadView.swift */; };
-		502F05E42BBEC3E5001816E0 /* CustomAlert in Frameworks */ = {isa = PBXBuildFile; productRef = 502F05E32BBEC3E5001816E0 /* CustomAlert */; };
-		502F05E62BBEFB77001816E0 /* OfflineComicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502F05E52BBEFB77001816E0 /* OfflineComicView.swift */; };
-		5035664D2B9D64650059072E /* KomiicApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5035664C2B9D64650059072E /* KomiicApp.swift */; };
-		5035664F2B9D64650059072E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5035664E2B9D64650059072E /* ContentView.swift */; };
-		503566512B9D64660059072E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 503566502B9D64660059072E /* Assets.xcassets */; };
-		503566552B9D64660059072E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 503566542B9D64660059072E /* Preview Assets.xcassets */; };
-		5035665C2B9D7A0A0059072E /* ComicListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5035665B2B9D7A0A0059072E /* ComicListView.swift */; };
-		5035665E2B9D7B250059072E /* KomiicAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5035665D2B9D7B250059072E /* KomiicAPI.swift */; };
-		50356BE02BA45B17009A4C6D /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50356BDF2BA45B17009A4C6D /* UserView.swift */; };
-		50356BE32BA46A2F009A4C6D /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 50356BE22BA46A2F009A4C6D /* KeychainSwift */; };
-		50356BE52BA490C4009A4C6D /* SmallComicListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50356BE42BA490C4009A4C6D /* SmallComicListView.swift */; };
-		50392F3C2BA9C95700E88ABE /* ComicHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50392F3B2BA9C95700E88ABE /* ComicHistoryView.swift */; };
-		5039C88B2B9F0166000BE97F /* BookStoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5039C88A2B9F0166000BE97F /* BookStoreView.swift */; };
-		5039C88D2B9F4EDD000BE97F /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5039C88C2B9F4EDD000BE97F /* CategoryView.swift */; };
-		506503C22BAC8CEF00EE3E7D /* AddToFolderSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506503C12BAC8CEF00EE3E7D /* AddToFolderSheet.swift */; };
-		50A116712BA9E611007E2396 /* ComicFolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A116702BA9E611007E2396 /* ComicFolderView.swift */; };
-		50A116732BA9E945007E2396 /* FavoritesComicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A116722BA9E945007E2396 /* FavoritesComicView.swift */; };
-		50AD51B42BA568C200AB09E9 /* AllCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AD51B32BA568C200AB09E9 /* AllCategoryView.swift */; };
-		50B599D12B9DC17A00B9C4B9 /* ComicDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B599D02B9DC17A00B9C4B9 /* ComicDetailView.swift */; };
-		50B599D32B9DFB3A00B9C4B9 /* AuthorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B599D22B9DFB3A00B9C4B9 /* AuthorView.swift */; };
-		50C542E32BB8754000469D02 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C542E22BB8754000469D02 /* LoginView.swift */; };
-		50DE4F6E2BA0696D00645CA7 /* ReaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DE4F6D2BA0696D00645CA7 /* ReaderView.swift */; };
-		50EE239B2BCBBC840003939F /* ComicContextMenuPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50EE239A2BCBBC840003939F /* ComicContextMenuPreview.swift */; };
-		50EE23A32BCBC7810003939F /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50EE23A22BCBC7810003939F /* WidgetKit.framework */; };
-		50EE23A52BCBC7810003939F /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50EE23A42BCBC7810003939F /* SwiftUI.framework */; };
-		50EE23A82BCBC7810003939F /* ComicWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50EE23A72BCBC7810003939F /* ComicWidgetBundle.swift */; };
-		50EE23AA2BCBC7810003939F /* ComicWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50EE23A92BCBC7810003939F /* ComicWidget.swift */; };
-		50EE23AC2BCBC7810003939F /* AppIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50EE23AB2BCBC7810003939F /* AppIntent.swift */; };
-		50EE23AE2BCBC7830003939F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 50EE23AD2BCBC7830003939F /* Assets.xcassets */; };
-		50EE23B22BCBC7830003939F /* ComicWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 50EE23A02BCBC7810003939F /* ComicWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		50EE23B92BCBCDE00003939F /* ComicMessagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50EE23B82BCBCDE00003939F /* ComicMessagesView.swift */; };
-		50FB6C582BA6EEA7006BA657 /* SwiftUISnackbar in Frameworks */ = {isa = PBXBuildFile; productRef = 50FB6C572BA6EEA7006BA657 /* SwiftUISnackbar */; };
+		68002C052C67C6B9001F44E0 /* BookDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68002C042C67C6B9001F44E0 /* BookDetailView.swift */; };
+		6811ADB62C57EBB70054E430 /* GetFolderComicIds.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 6811ADB52C57EBB70054E430 /* GetFolderComicIds.graphql */; };
+		6815E61B2CA93E4600881642 /* GetImagesByChapterID.graphql in Sources */ = {isa = PBXBuildFile; fileRef = 6815E61A2CA93E4000881642 /* GetImagesByChapterID.graphql */; };
+		6815E61D2CA94F5C00881642 /* GetLastReadByComicId.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 6815E61C2CA94F5300881642 /* GetLastReadByComicId.graphql */; };
+		6815E61F2CA956BA00881642 /* AddReadComicHistory.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 6815E61E2CA956AA00881642 /* AddReadComicHistory.graphql */; };
+		681DB01B2C8DA4EB00A84B4B /* RemoveFavorite.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 681DB01A2C8DA4EB00A84B4B /* RemoveFavorite.graphql */; };
+		681DB01D2C8DAFDF00A84B4B /* FavoritesQuery.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 681DB01C2C8DAFC900A84B4B /* FavoritesQuery.graphql */; };
+		681DB01F2C8DB66200A84B4B /* AllCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 681DB01E2C8DB66200A84B4B /* AllCategoryView.swift */; };
+		682169BD2C5683920026F389 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682169BC2C5683920026F389 /* HomeView.swift */; };
+		682169C02C5686280026F389 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 682169BF2C5686280026F389 /* KeychainSwift */; };
+		682169C22C5688340026F389 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682169C12C5688340026F389 /* LoginView.swift */; };
+		682169C42C5697320026F389 /* GetMyFolder.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 682169C32C5697320026F389 /* GetMyFolder.graphql */; };
+		688FE8F42CAE6ADB0027E56E /* GetComicsByAuthor.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 688FE8F32CAE6AC60027E56E /* GetComicsByAuthor.graphql */; };
+		6890B58C2C8D788100371261 /* GetImageLimit.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 6890B58B2C8D786F00371261 /* GetImageLimit.graphql */; };
+		6890B58E2C8D94C300371261 /* FolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6890B58D2C8D94C300371261 /* FolderView.swift */; };
+		6890B5902C8D987500371261 /* UpdateFolderName.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 6890B58F2C8D986900371261 /* UpdateFolderName.graphql */; };
+		6890B5922C8D9B0800371261 /* RemoveFolder.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 6890B5912C8D9AF300371261 /* RemoveFolder.graphql */; };
+		6890B5952C8D9D5200371261 /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = 6890B5942C8D9D5200371261 /* AlertToast */; };
+		6890B5972C8DA12500371261 /* AddToFolderSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6890B5962C8DA12500371261 /* AddToFolderSheet.swift */; };
+		6890B59A2C8DA20300371261 /* GetComicInAccountFolders.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 6890B5992C8DA1FA00371261 /* GetComicInAccountFolders.graphql */; };
+		6890B59C2C8DA3C000371261 /* AddComicToFolder.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 6890B59B2C8DA3B600371261 /* AddComicToFolder.graphql */; };
+		6890B59E2C8DA3E400371261 /* RemoveComicToFolder.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 6890B59D2C8DA3D700371261 /* RemoveComicToFolder.graphql */; };
+		6890B5A02C8DA4A100371261 /* AddFavorite.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 6890B59F2C8DA49300371261 /* AddFavorite.graphql */; };
+		68B858B12C5635D00098CBBB /* ComicListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68B858B02C5635D00098CBBB /* ComicListView.swift */; };
+		68B858B42C56369F0098CBBB /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 68B858B32C56369F0098CBBB /* Kingfisher */; };
+		68B858B62C563CC00098CBBB /* GetHotComics.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 68B858B52C563CC00098CBBB /* GetHotComics.graphql */; };
+		68B858B82C563D6B0098CBBB /* GetReadComicHistory.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 68B858B72C563D6B0098CBBB /* GetReadComicHistory.graphql */; };
+		68B858BA2C563DB90098CBBB /* GetComicByIDs.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 68B858B92C563DB90098CBBB /* GetComicByIDs.graphql */; };
+		68B858BC2C563DFB0098CBBB /* GetAllCategory.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 68B858BB2C563DFB0098CBBB /* GetAllCategory.graphql */; };
+		68B858BE2C563E270098CBBB /* GetComicByCategory.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 68B858BD2C563E270098CBBB /* GetComicByCategory.graphql */; };
+		68B858C02C564A270098CBBB /* ComicFragment.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 68B858BF2C564A270098CBBB /* ComicFragment.graphql */; };
+		68E609652C590A3800A6234E /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68E609642C590A3800A6234E /* UserView.swift */; };
+		68E609672C590AA100A6234E /* GetAccountQuery.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 68E609662C590AA000A6234E /* GetAccountQuery.graphql */; };
+		68E6096A2C591F8E00A6234E /* BookLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68E609692C591F8E00A6234E /* BookLibraryView.swift */; };
+		68E6096C2C592AFB00A6234E /* SmallComicListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68E6096B2C592AFB00A6234E /* SmallComicListView.swift */; };
+		68E6096E2C592D3400A6234E /* BookStoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68E6096D2C592D3400A6234E /* BookStoreView.swift */; };
+		68F42FF32C56216A0075917A /* KomiicApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68F42FF22C56216A0075917A /* KomiicApp.swift */; };
+		68F42FF52C56216A0075917A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68F42FF42C56216A0075917A /* ContentView.swift */; };
+		68F42FF72C56216B0075917A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 68F42FF62C56216B0075917A /* Assets.xcassets */; };
+		68F42FFB2C56216B0075917A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 68F42FFA2C56216B0075917A /* Preview Assets.xcassets */; };
+		68F4300D2C5625ED0075917A /* schema.json in Resources */ = {isa = PBXBuildFile; fileRef = 68F4300C2C5625ED0075917A /* schema.json */; };
+		68F430142C5629970075917A /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = 68F430132C5629970075917A /* Apollo */; };
+		68F430162C562A720075917A /* apollo-codegen-config.json in Resources */ = {isa = PBXBuildFile; fileRef = 68F430152C562A720075917A /* apollo-codegen-config.json */; };
+		68F430192C562B300075917A /* KomiicAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 68F430182C562B300075917A /* KomiicAPI */; };
+		68F4301B2C562C140075917A /* KomiicAPI in Resources */ = {isa = PBXBuildFile; fileRef = 68F4301A2C562C140075917A /* KomiicAPI */; };
+		68F4301F2C562C200075917A /* GetRecentUpdate.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 68F4301C2C562C200075917A /* GetRecentUpdate.graphql */; };
+		68F430202C562C200075917A /* schema.graphqls in Resources */ = {isa = PBXBuildFile; fileRef = 68F4301D2C562C200075917A /* schema.graphqls */; };
+		68F430222C562C7A0075917A /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68F430212C562C7A0075917A /* APIManager.swift */; };
+		68FA39B82CA0205C0075F779 /* GetChapterByComicIdQuery.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 68FA39B72CA020420075F779 /* GetChapterByComicIdQuery.graphql */; };
+		68FA39BA2CA020A60075F779 /* ReaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68FA39B92CA020A60075F779 /* ReaderView.swift */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		501734A42BCBDBBC00BCC459 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 503566412B9D64650059072E /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 50EE239F2BCBC7810003939F;
-			remoteInfo = ComicWidgetExtension;
-		};
-/* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		50EE23B62BCBC7830003939F /* Embed Foundation Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
-			files = (
-				50EE23B22BCBC7830003939F /* ComicWidgetExtension.appex in Embed Foundation Extensions */,
-			);
-			name = "Embed Foundation Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
-		501CB2172BAB2AA600F8CC34 /* FolderComicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderComicView.swift; sourceTree = "<group>"; };
-		502F05E02BBEBF9A001816E0 /* ComicDownloadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicDownloadView.swift; sourceTree = "<group>"; };
-		502F05E52BBEFB77001816E0 /* OfflineComicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineComicView.swift; sourceTree = "<group>"; };
-		503566492B9D64650059072E /* Komiic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Komiic.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		5035664C2B9D64650059072E /* KomiicApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KomiicApp.swift; sourceTree = "<group>"; };
-		5035664E2B9D64650059072E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		503566502B9D64660059072E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		503566522B9D64660059072E /* Komiic.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Komiic.entitlements; sourceTree = "<group>"; };
-		503566542B9D64660059072E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		5035665B2B9D7A0A0059072E /* ComicListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicListView.swift; sourceTree = "<group>"; };
-		5035665D2B9D7B250059072E /* KomiicAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KomiicAPI.swift; sourceTree = "<group>"; };
-		50356BDF2BA45B17009A4C6D /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
-		50356BE42BA490C4009A4C6D /* SmallComicListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallComicListView.swift; sourceTree = "<group>"; };
-		50392F3B2BA9C95700E88ABE /* ComicHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicHistoryView.swift; sourceTree = "<group>"; };
-		5039C88A2B9F0166000BE97F /* BookStoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookStoreView.swift; sourceTree = "<group>"; };
-		5039C88C2B9F4EDD000BE97F /* CategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
-		506503C12BAC8CEF00EE3E7D /* AddToFolderSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToFolderSheet.swift; sourceTree = "<group>"; };
-		50A116702BA9E611007E2396 /* ComicFolderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicFolderView.swift; sourceTree = "<group>"; };
-		50A116722BA9E945007E2396 /* FavoritesComicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesComicView.swift; sourceTree = "<group>"; };
-		50AD51B32BA568C200AB09E9 /* AllCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllCategoryView.swift; sourceTree = "<group>"; };
-		50B599D02B9DC17A00B9C4B9 /* ComicDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicDetailView.swift; sourceTree = "<group>"; };
-		50B599D22B9DFB3A00B9C4B9 /* AuthorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorView.swift; sourceTree = "<group>"; };
-		50C542E22BB8754000469D02 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
-		50DE4F6D2BA0696D00645CA7 /* ReaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderView.swift; sourceTree = "<group>"; };
-		50EE239A2BCBBC840003939F /* ComicContextMenuPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicContextMenuPreview.swift; sourceTree = "<group>"; };
-		50EE23A02BCBC7810003939F /* ComicWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ComicWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		50EE23A22BCBC7810003939F /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
-		50EE23A42BCBC7810003939F /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
-		50EE23A72BCBC7810003939F /* ComicWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicWidgetBundle.swift; sourceTree = "<group>"; };
-		50EE23A92BCBC7810003939F /* ComicWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicWidget.swift; sourceTree = "<group>"; };
-		50EE23AB2BCBC7810003939F /* AppIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIntent.swift; sourceTree = "<group>"; };
-		50EE23AD2BCBC7830003939F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		50EE23AF2BCBC7830003939F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		50EE23B82BCBCDE00003939F /* ComicMessagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicMessagesView.swift; sourceTree = "<group>"; };
+		68002C042C67C6B9001F44E0 /* BookDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailView.swift; sourceTree = "<group>"; };
+		6811ADB52C57EBB70054E430 /* GetFolderComicIds.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = GetFolderComicIds.graphql; sourceTree = "<group>"; };
+		6815E61A2CA93E4000881642 /* GetImagesByChapterID.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = GetImagesByChapterID.graphql; sourceTree = "<group>"; };
+		6815E61C2CA94F5300881642 /* GetLastReadByComicId.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = GetLastReadByComicId.graphql; sourceTree = "<group>"; };
+		6815E61E2CA956AA00881642 /* AddReadComicHistory.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = AddReadComicHistory.graphql; sourceTree = "<group>"; };
+		681DB01A2C8DA4EB00A84B4B /* RemoveFavorite.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = RemoveFavorite.graphql; sourceTree = "<group>"; };
+		681DB01C2C8DAFC900A84B4B /* FavoritesQuery.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = FavoritesQuery.graphql; sourceTree = "<group>"; };
+		681DB01E2C8DB66200A84B4B /* AllCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllCategoryView.swift; sourceTree = "<group>"; };
+		682169BC2C5683920026F389 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		682169C12C5688340026F389 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		682169C32C5697320026F389 /* GetMyFolder.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = GetMyFolder.graphql; sourceTree = "<group>"; };
+		688FE8F32CAE6AC60027E56E /* GetComicsByAuthor.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = GetComicsByAuthor.graphql; sourceTree = "<group>"; };
+		6890B58B2C8D786F00371261 /* GetImageLimit.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = GetImageLimit.graphql; sourceTree = "<group>"; };
+		6890B58D2C8D94C300371261 /* FolderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderView.swift; sourceTree = "<group>"; };
+		6890B58F2C8D986900371261 /* UpdateFolderName.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = UpdateFolderName.graphql; sourceTree = "<group>"; };
+		6890B5912C8D9AF300371261 /* RemoveFolder.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = RemoveFolder.graphql; sourceTree = "<group>"; };
+		6890B5962C8DA12500371261 /* AddToFolderSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToFolderSheet.swift; sourceTree = "<group>"; };
+		6890B5992C8DA1FA00371261 /* GetComicInAccountFolders.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = GetComicInAccountFolders.graphql; sourceTree = "<group>"; };
+		6890B59B2C8DA3B600371261 /* AddComicToFolder.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = AddComicToFolder.graphql; sourceTree = "<group>"; };
+		6890B59D2C8DA3D700371261 /* RemoveComicToFolder.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = RemoveComicToFolder.graphql; sourceTree = "<group>"; };
+		6890B59F2C8DA49300371261 /* AddFavorite.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = AddFavorite.graphql; sourceTree = "<group>"; };
+		68B858B02C5635D00098CBBB /* ComicListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicListView.swift; sourceTree = "<group>"; };
+		68B858B52C563CC00098CBBB /* GetHotComics.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = GetHotComics.graphql; sourceTree = "<group>"; };
+		68B858B72C563D6B0098CBBB /* GetReadComicHistory.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = GetReadComicHistory.graphql; sourceTree = "<group>"; };
+		68B858B92C563DB90098CBBB /* GetComicByIDs.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = GetComicByIDs.graphql; sourceTree = "<group>"; };
+		68B858BB2C563DFB0098CBBB /* GetAllCategory.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = GetAllCategory.graphql; sourceTree = "<group>"; };
+		68B858BD2C563E270098CBBB /* GetComicByCategory.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = GetComicByCategory.graphql; sourceTree = "<group>"; };
+		68B858BF2C564A270098CBBB /* ComicFragment.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = ComicFragment.graphql; sourceTree = "<group>"; };
+		68E609642C590A3800A6234E /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
+		68E609662C590AA000A6234E /* GetAccountQuery.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = GetAccountQuery.graphql; sourceTree = "<group>"; };
+		68E609692C591F8E00A6234E /* BookLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookLibraryView.swift; sourceTree = "<group>"; };
+		68E6096B2C592AFB00A6234E /* SmallComicListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallComicListView.swift; sourceTree = "<group>"; };
+		68E6096D2C592D3400A6234E /* BookStoreView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookStoreView.swift; sourceTree = "<group>"; };
+		68F42FEF2C56216A0075917A /* Komiic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Komiic.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		68F42FF22C56216A0075917A /* KomiicApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KomiicApp.swift; sourceTree = "<group>"; };
+		68F42FF42C56216A0075917A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		68F42FF62C56216B0075917A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		68F42FF82C56216B0075917A /* Komiic.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Komiic.entitlements; sourceTree = "<group>"; };
+		68F42FFA2C56216B0075917A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		68F4300C2C5625ED0075917A /* schema.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = schema.json; sourceTree = "<group>"; };
+		68F430152C562A720075917A /* apollo-codegen-config.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "apollo-codegen-config.json"; sourceTree = "<group>"; };
+		68F4301A2C562C140075917A /* KomiicAPI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = KomiicAPI; sourceTree = "<group>"; };
+		68F4301C2C562C200075917A /* GetRecentUpdate.graphql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GetRecentUpdate.graphql; sourceTree = "<group>"; };
+		68F4301D2C562C200075917A /* schema.graphqls */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = schema.graphqls; sourceTree = "<group>"; };
+		68F430212C562C7A0075917A /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
+		68FA39B72CA020420075F779 /* GetChapterByComicIdQuery.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = GetChapterByComicIdQuery.graphql; sourceTree = "<group>"; };
+		68FA39B92CA020A60075F779 /* ReaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		503566462B9D64650059072E /* Frameworks */ = {
+		68F42FEC2C56216A0075917A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				50356BE32BA46A2F009A4C6D /* KeychainSwift in Frameworks */,
-				50FB6C582BA6EEA7006BA657 /* SwiftUISnackbar in Frameworks */,
-				502F05E42BBEC3E5001816E0 /* CustomAlert in Frameworks */,
-				500C7BAA2BA3032800F7C4F4 /* Kingfisher in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		50EE239D2BCBC7810003939F /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				50EE23A52BCBC7810003939F /* SwiftUI.framework in Frameworks */,
-				50EE23A32BCBC7810003939F /* WidgetKit.framework in Frameworks */,
+				68B858B42C56369F0098CBBB /* Kingfisher in Frameworks */,
+				68F430142C5629970075917A /* Apollo in Frameworks */,
+				682169C02C5686280026F389 /* KeychainSwift in Frameworks */,
+				6890B5952C8D9D5200371261 /* AlertToast in Frameworks */,
+				68F430192C562B300075917A /* KomiicAPI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		503566402B9D64650059072E = {
+		682169BB2C5683850026F389 /* Tab */ = {
 			isa = PBXGroup;
 			children = (
-				5035664B2B9D64650059072E /* Komiic */,
-				50EE23A62BCBC7810003939F /* ComicWidget */,
-				50EE23A12BCBC7810003939F /* Frameworks */,
-				5035664A2B9D64650059072E /* Products */,
+				68E6096D2C592D3400A6234E /* BookStoreView.swift */,
+				682169BC2C5683920026F389 /* HomeView.swift */,
+				68E609692C591F8E00A6234E /* BookLibraryView.swift */,
 			);
+			path = Tab;
 			sourceTree = "<group>";
 		};
-		5035664A2B9D64650059072E /* Products */ = {
+		6890B5982C8DA13000371261 /* InfoView */ = {
 			isa = PBXGroup;
 			children = (
-				503566492B9D64650059072E /* Komiic.app */,
-				50EE23A02BCBC7810003939F /* ComicWidgetExtension.appex */,
+				6890B5962C8DA12500371261 /* AddToFolderSheet.swift */,
+				68002C042C67C6B9001F44E0 /* BookDetailView.swift */,
 			);
-			name = Products;
+			path = InfoView;
 			sourceTree = "<group>";
 		};
-		5035664B2B9D64650059072E /* Komiic */ = {
+		68B858AF2C5635420098CBBB /* ListComponents */ = {
 			isa = PBXGroup;
 			children = (
-				50C542E42BB8811900469D02 /* AccountUI */,
-				506503C02BAC8A6400EE3E7D /* ListView */,
-				506503BE2BAC89E800EE3E7D /* TabUI */,
-				506503BD2BAC89D000EE3E7D /* ListComponents */,
-				50EE23B72BCBCD620003939F /* InfoView */,
-				5035664C2B9D64650059072E /* KomiicApp.swift */,
-				5035664E2B9D64650059072E /* ContentView.swift */,
-				5035665D2B9D7B250059072E /* KomiicAPI.swift */,
-				50DE4F6D2BA0696D00645CA7 /* ReaderView.swift */,
-				503566502B9D64660059072E /* Assets.xcassets */,
-				503566522B9D64660059072E /* Komiic.entitlements */,
-				503566532B9D64660059072E /* Preview Content */,
-			);
-			path = Komiic;
-			sourceTree = "<group>";
-		};
-		503566532B9D64660059072E /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				503566542B9D64660059072E /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
-			sourceTree = "<group>";
-		};
-		506503BD2BAC89D000EE3E7D /* ListComponents */ = {
-			isa = PBXGroup;
-			children = (
-				50EE239A2BCBBC840003939F /* ComicContextMenuPreview.swift */,
-				5035665B2B9D7A0A0059072E /* ComicListView.swift */,
-				50356BE42BA490C4009A4C6D /* SmallComicListView.swift */,
+				68B858B02C5635D00098CBBB /* ComicListView.swift */,
+				68E6096B2C592AFB00A6234E /* SmallComicListView.swift */,
 			);
 			path = ListComponents;
 			sourceTree = "<group>";
 		};
-		506503BE2BAC89E800EE3E7D /* TabUI */ = {
+		68E609682C59108400A6234E /* AccountUI */ = {
 			isa = PBXGroup;
 			children = (
-				502F05E52BBEFB77001816E0 /* OfflineComicView.swift */,
-				5039C88A2B9F0166000BE97F /* BookStoreView.swift */,
-				50392F3B2BA9C95700E88ABE /* ComicHistoryView.swift */,
-				50A116702BA9E611007E2396 /* ComicFolderView.swift */,
-			);
-			path = TabUI;
-			sourceTree = "<group>";
-		};
-		506503C02BAC8A6400EE3E7D /* ListView */ = {
-			isa = PBXGroup;
-			children = (
-				50B599D22B9DFB3A00B9C4B9 /* AuthorView.swift */,
-				5039C88C2B9F4EDD000BE97F /* CategoryView.swift */,
-				50AD51B32BA568C200AB09E9 /* AllCategoryView.swift */,
-				50A116722BA9E945007E2396 /* FavoritesComicView.swift */,
-				501CB2172BAB2AA600F8CC34 /* FolderComicView.swift */,
-			);
-			path = ListView;
-			sourceTree = "<group>";
-		};
-		50C542E42BB8811900469D02 /* AccountUI */ = {
-			isa = PBXGroup;
-			children = (
-				50356BDF2BA45B17009A4C6D /* UserView.swift */,
-				50C542E22BB8754000469D02 /* LoginView.swift */,
+				682169C12C5688340026F389 /* LoginView.swift */,
+				68E609642C590A3800A6234E /* UserView.swift */,
 			);
 			path = AccountUI;
 			sourceTree = "<group>";
 		};
-		50EE23A12BCBC7810003939F /* Frameworks */ = {
+		68F42FE62C56216A0075917A = {
 			isa = PBXGroup;
 			children = (
-				50EE23A22BCBC7810003939F /* WidgetKit.framework */,
-				50EE23A42BCBC7810003939F /* SwiftUI.framework */,
+				68F4301E2C562C200075917A /* GraphQL */,
+				68F4301A2C562C140075917A /* KomiicAPI */,
+				68F430152C562A720075917A /* apollo-codegen-config.json */,
+				68F42FF12C56216A0075917A /* Komiic */,
+				68F42FF02C56216A0075917A /* Products */,
 			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		50EE23A62BCBC7810003939F /* ComicWidget */ = {
+		68F42FF02C56216A0075917A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				50EE23A72BCBC7810003939F /* ComicWidgetBundle.swift */,
-				50EE23A92BCBC7810003939F /* ComicWidget.swift */,
-				50EE23AB2BCBC7810003939F /* AppIntent.swift */,
-				50EE23AD2BCBC7830003939F /* Assets.xcassets */,
-				50EE23AF2BCBC7830003939F /* Info.plist */,
+				68F42FEF2C56216A0075917A /* Komiic.app */,
 			);
-			path = ComicWidget;
+			name = Products;
 			sourceTree = "<group>";
 		};
-		50EE23B72BCBCD620003939F /* InfoView */ = {
+		68F42FF12C56216A0075917A /* Komiic */ = {
 			isa = PBXGroup;
 			children = (
-				506503C12BAC8CEF00EE3E7D /* AddToFolderSheet.swift */,
-				50B599D02B9DC17A00B9C4B9 /* ComicDetailView.swift */,
-				502F05E02BBEBF9A001816E0 /* ComicDownloadView.swift */,
-				50EE23B82BCBCDE00003939F /* ComicMessagesView.swift */,
+				68E609682C59108400A6234E /* AccountUI */,
+				682169BB2C5683850026F389 /* Tab */,
+				68B858AF2C5635420098CBBB /* ListComponents */,
+				68F42FF22C56216A0075917A /* KomiicApp.swift */,
+				6890B5982C8DA13000371261 /* InfoView */,
+				68F42FF42C56216A0075917A /* ContentView.swift */,
+				681DB01E2C8DB66200A84B4B /* AllCategoryView.swift */,
+				68F4300C2C5625ED0075917A /* schema.json */,
+				68F430212C562C7A0075917A /* APIManager.swift */,
+				6890B58D2C8D94C300371261 /* FolderView.swift */,
+				68F42FF62C56216B0075917A /* Assets.xcassets */,
+				68F42FF82C56216B0075917A /* Komiic.entitlements */,
+				68F42FF92C56216B0075917A /* Preview Content */,
+				68FA39B92CA020A60075F779 /* ReaderView.swift */,
 			);
-			path = InfoView;
+			path = Komiic;
+			sourceTree = "<group>";
+		};
+		68F42FF92C56216B0075917A /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				68F42FFA2C56216B0075917A /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		68F4301E2C562C200075917A /* GraphQL */ = {
+			isa = PBXGroup;
+			children = (
+				688FE8F32CAE6AC60027E56E /* GetComicsByAuthor.graphql */,
+				6815E61E2CA956AA00881642 /* AddReadComicHistory.graphql */,
+				6815E61C2CA94F5300881642 /* GetLastReadByComicId.graphql */,
+				6815E61A2CA93E4000881642 /* GetImagesByChapterID.graphql */,
+				68FA39B72CA020420075F779 /* GetChapterByComicIdQuery.graphql */,
+				681DB01C2C8DAFC900A84B4B /* FavoritesQuery.graphql */,
+				6890B59F2C8DA49300371261 /* AddFavorite.graphql */,
+				681DB01A2C8DA4EB00A84B4B /* RemoveFavorite.graphql */,
+				6890B59D2C8DA3D700371261 /* RemoveComicToFolder.graphql */,
+				6890B59B2C8DA3B600371261 /* AddComicToFolder.graphql */,
+				6890B5992C8DA1FA00371261 /* GetComicInAccountFolders.graphql */,
+				6890B5912C8D9AF300371261 /* RemoveFolder.graphql */,
+				6890B58F2C8D986900371261 /* UpdateFolderName.graphql */,
+				6890B58B2C8D786F00371261 /* GetImageLimit.graphql */,
+				68F4301C2C562C200075917A /* GetRecentUpdate.graphql */,
+				68B858B52C563CC00098CBBB /* GetHotComics.graphql */,
+				68B858B72C563D6B0098CBBB /* GetReadComicHistory.graphql */,
+				68F4301D2C562C200075917A /* schema.graphqls */,
+				68B858B92C563DB90098CBBB /* GetComicByIDs.graphql */,
+				68B858BB2C563DFB0098CBBB /* GetAllCategory.graphql */,
+				68B858BD2C563E270098CBBB /* GetComicByCategory.graphql */,
+				68B858BF2C564A270098CBBB /* ComicFragment.graphql */,
+				682169C32C5697320026F389 /* GetMyFolder.graphql */,
+				6811ADB52C57EBB70054E430 /* GetFolderComicIds.graphql */,
+				68E609662C590AA000A6234E /* GetAccountQuery.graphql */,
+			);
+			path = GraphQL;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		503566482B9D64650059072E /* Komiic */ = {
+		68F42FEE2C56216A0075917A /* Komiic */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 503566582B9D64660059072E /* Build configuration list for PBXNativeTarget "Komiic" */;
+			buildConfigurationList = 68F42FFE2C56216B0075917A /* Build configuration list for PBXNativeTarget "Komiic" */;
 			buildPhases = (
-				503566452B9D64650059072E /* Sources */,
-				503566462B9D64650059072E /* Frameworks */,
-				503566472B9D64650059072E /* Resources */,
-				50EE23B62BCBC7830003939F /* Embed Foundation Extensions */,
+				68F42FEB2C56216A0075917A /* Sources */,
+				68F42FEC2C56216A0075917A /* Frameworks */,
+				68F42FED2C56216A0075917A /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				501734A52BCBDBBC00BCC459 /* PBXTargetDependency */,
 			);
 			name = Komiic;
 			packageProductDependencies = (
-				500C7BA92BA3032800F7C4F4 /* Kingfisher */,
-				50356BE22BA46A2F009A4C6D /* KeychainSwift */,
-				50FB6C572BA6EEA7006BA657 /* SwiftUISnackbar */,
-				502F05E32BBEC3E5001816E0 /* CustomAlert */,
+				68F430132C5629970075917A /* Apollo */,
+				68F430182C562B300075917A /* KomiicAPI */,
+				68B858B32C56369F0098CBBB /* Kingfisher */,
+				682169BF2C5686280026F389 /* KeychainSwift */,
+				6890B5942C8D9D5200371261 /* AlertToast */,
 			);
 			productName = Komiic;
-			productReference = 503566492B9D64650059072E /* Komiic.app */;
+			productReference = 68F42FEF2C56216A0075917A /* Komiic.app */;
 			productType = "com.apple.product-type.application";
-		};
-		50EE239F2BCBC7810003939F /* ComicWidgetExtension */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 50EE23B32BCBC7830003939F /* Build configuration list for PBXNativeTarget "ComicWidgetExtension" */;
-			buildPhases = (
-				50EE239C2BCBC7810003939F /* Sources */,
-				50EE239D2BCBC7810003939F /* Frameworks */,
-				50EE239E2BCBC7810003939F /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = ComicWidgetExtension;
-			productName = ComicWidgetExtension;
-			productReference = 50EE23A02BCBC7810003939F /* ComicWidgetExtension.appex */;
-			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		503566412B9D64650059072E /* Project object */ = {
+		68F42FE72C56216A0075917A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1530;
-				LastUpgradeCheck = 1530;
+				LastSwiftUpdateCheck = 1540;
+				LastUpgradeCheck = 1540;
 				TargetAttributes = {
-					503566482B9D64650059072E = {
-						CreatedOnToolsVersion = 15.3;
-					};
-					50EE239F2BCBC7810003939F = {
-						CreatedOnToolsVersion = 15.3;
+					68F42FEE2C56216A0075917A = {
+						CreatedOnToolsVersion = 15.4;
 					};
 				};
 			};
-			buildConfigurationList = 503566442B9D64650059072E /* Build configuration list for PBXProject "Komiic" */;
+			buildConfigurationList = 68F42FEA2C56216A0075917A /* Build configuration list for PBXProject "Komiic" */;
 			compatibilityVersion = "Xcode 14.0";
-			developmentRegion = "zh-Hant";
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				en,
 				Base,
-				"zh-Hant",
 			);
-			mainGroup = 503566402B9D64650059072E;
+			mainGroup = 68F42FE62C56216A0075917A;
 			packageReferences = (
-				500C7BA82BA3032800F7C4F4 /* XCRemoteSwiftPackageReference "Kingfisher" */,
-				50356BE12BA46A2F009A4C6D /* XCRemoteSwiftPackageReference "keychain-swift" */,
-				50FB6C562BA6EEA6006BA657 /* XCRemoteSwiftPackageReference "SwiftUISnackbar" */,
-				502F05E22BBEC3E5001816E0 /* XCRemoteSwiftPackageReference "CustomAlert" */,
+				68F430122C5629970075917A /* XCRemoteSwiftPackageReference "apollo-ios" */,
+				68F430172C562B300075917A /* XCLocalSwiftPackageReference "KomiicAPI" */,
+				68B858B22C56369F0098CBBB /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				682169BE2C5686280026F389 /* XCRemoteSwiftPackageReference "keychain-swift" */,
+				6890B5932C8D9D5200371261 /* XCRemoteSwiftPackageReference "AlertToast" */,
 			);
-			productRefGroup = 5035664A2B9D64650059072E /* Products */;
+			productRefGroup = 68F42FF02C56216A0075917A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				503566482B9D64650059072E /* Komiic */,
-				50EE239F2BCBC7810003939F /* ComicWidgetExtension */,
+				68F42FEE2C56216A0075917A /* Komiic */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		503566472B9D64650059072E /* Resources */ = {
+		68F42FED2C56216A0075917A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				503566552B9D64660059072E /* Preview Assets.xcassets in Resources */,
-				503566512B9D64660059072E /* Assets.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		50EE239E2BCBC7810003939F /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				50EE23AE2BCBC7830003939F /* Assets.xcassets in Resources */,
+				68B858BC2C563DFB0098CBBB /* GetAllCategory.graphql in Resources */,
+				681DB01B2C8DA4EB00A84B4B /* RemoveFavorite.graphql in Resources */,
+				68B858B82C563D6B0098CBBB /* GetReadComicHistory.graphql in Resources */,
+				68F4301B2C562C140075917A /* KomiicAPI in Resources */,
+				681DB01D2C8DAFDF00A84B4B /* FavoritesQuery.graphql in Resources */,
+				6890B5922C8D9B0800371261 /* RemoveFolder.graphql in Resources */,
+				6811ADB62C57EBB70054E430 /* GetFolderComicIds.graphql in Resources */,
+				68B858BA2C563DB90098CBBB /* GetComicByIDs.graphql in Resources */,
+				6890B58C2C8D788100371261 /* GetImageLimit.graphql in Resources */,
+				68F42FFB2C56216B0075917A /* Preview Assets.xcassets in Resources */,
+				6890B5A02C8DA4A100371261 /* AddFavorite.graphql in Resources */,
+				68B858B62C563CC00098CBBB /* GetHotComics.graphql in Resources */,
+				6890B59C2C8DA3C000371261 /* AddComicToFolder.graphql in Resources */,
+				68E609672C590AA100A6234E /* GetAccountQuery.graphql in Resources */,
+				6890B5902C8D987500371261 /* UpdateFolderName.graphql in Resources */,
+				68F4301F2C562C200075917A /* GetRecentUpdate.graphql in Resources */,
+				68F42FF72C56216B0075917A /* Assets.xcassets in Resources */,
+				68F430162C562A720075917A /* apollo-codegen-config.json in Resources */,
+				6815E61D2CA94F5C00881642 /* GetLastReadByComicId.graphql in Resources */,
+				68FA39B82CA0205C0075F779 /* GetChapterByComicIdQuery.graphql in Resources */,
+				6890B59A2C8DA20300371261 /* GetComicInAccountFolders.graphql in Resources */,
+				68B858C02C564A270098CBBB /* ComicFragment.graphql in Resources */,
+				6815E61F2CA956BA00881642 /* AddReadComicHistory.graphql in Resources */,
+				68F4300D2C5625ED0075917A /* schema.json in Resources */,
+				68F430202C562C200075917A /* schema.graphqls in Resources */,
+				688FE8F42CAE6ADB0027E56E /* GetComicsByAuthor.graphql in Resources */,
+				6890B59E2C8DA3E400371261 /* RemoveComicToFolder.graphql in Resources */,
+				682169C42C5697320026F389 /* GetMyFolder.graphql in Resources */,
+				68B858BE2C563E270098CBBB /* GetComicByCategory.graphql in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		503566452B9D64650059072E /* Sources */ = {
+		68F42FEB2C56216A0075917A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5035665E2B9D7B250059072E /* KomiicAPI.swift in Sources */,
-				50EE239B2BCBBC840003939F /* ComicContextMenuPreview.swift in Sources */,
-				50356BE52BA490C4009A4C6D /* SmallComicListView.swift in Sources */,
-				501CB2182BAB2AA600F8CC34 /* FolderComicView.swift in Sources */,
-				50DE4F6E2BA0696D00645CA7 /* ReaderView.swift in Sources */,
-				502F05E12BBEBF9A001816E0 /* ComicDownloadView.swift in Sources */,
-				5035664F2B9D64650059072E /* ContentView.swift in Sources */,
-				50A116712BA9E611007E2396 /* ComicFolderView.swift in Sources */,
-				50EE23B92BCBCDE00003939F /* ComicMessagesView.swift in Sources */,
-				5035665C2B9D7A0A0059072E /* ComicListView.swift in Sources */,
-				50B599D32B9DFB3A00B9C4B9 /* AuthorView.swift in Sources */,
-				50392F3C2BA9C95700E88ABE /* ComicHistoryView.swift in Sources */,
-				506503C22BAC8CEF00EE3E7D /* AddToFolderSheet.swift in Sources */,
-				50AD51B42BA568C200AB09E9 /* AllCategoryView.swift in Sources */,
-				5039C88B2B9F0166000BE97F /* BookStoreView.swift in Sources */,
-				50C542E32BB8754000469D02 /* LoginView.swift in Sources */,
-				502F05E62BBEFB77001816E0 /* OfflineComicView.swift in Sources */,
-				5035664D2B9D64650059072E /* KomiicApp.swift in Sources */,
-				50356BE02BA45B17009A4C6D /* UserView.swift in Sources */,
-				5039C88D2B9F4EDD000BE97F /* CategoryView.swift in Sources */,
-				50A116732BA9E945007E2396 /* FavoritesComicView.swift in Sources */,
-				50B599D12B9DC17A00B9C4B9 /* ComicDetailView.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		50EE239C2BCBC7810003939F /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				50EE23A82BCBC7810003939F /* ComicWidgetBundle.swift in Sources */,
-				50EE23AA2BCBC7810003939F /* ComicWidget.swift in Sources */,
-				50EE23AC2BCBC7810003939F /* AppIntent.swift in Sources */,
+				682169C22C5688340026F389 /* LoginView.swift in Sources */,
+				68FA39BA2CA020A60075F779 /* ReaderView.swift in Sources */,
+				68B858B12C5635D00098CBBB /* ComicListView.swift in Sources */,
+				6890B58E2C8D94C300371261 /* FolderView.swift in Sources */,
+				681DB01F2C8DB66200A84B4B /* AllCategoryView.swift in Sources */,
+				68F430222C562C7A0075917A /* APIManager.swift in Sources */,
+				68E6096A2C591F8E00A6234E /* BookLibraryView.swift in Sources */,
+				68F42FF52C56216A0075917A /* ContentView.swift in Sources */,
+				682169BD2C5683920026F389 /* HomeView.swift in Sources */,
+				68F42FF32C56216A0075917A /* KomiicApp.swift in Sources */,
+				68E6096E2C592D3400A6234E /* BookStoreView.swift in Sources */,
+				6815E61B2CA93E4600881642 /* GetImagesByChapterID.graphql in Sources */,
+				68002C052C67C6B9001F44E0 /* BookDetailView.swift in Sources */,
+				68E609652C590A3800A6234E /* UserView.swift in Sources */,
+				6890B5972C8DA12500371261 /* AddToFolderSheet.swift in Sources */,
+				68E6096C2C592AFB00A6234E /* SmallComicListView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		501734A52BCBDBBC00BCC459 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 50EE239F2BCBC7810003939F /* ComicWidgetExtension */;
-			targetProxy = 501734A42BCBDBBC00BCC459 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin XCBuildConfiguration section */
-		503566562B9D64660059072E /* Debug */ = {
+		68F42FFC2C56216B0075917A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -469,7 +436,7 @@
 			};
 			name = Debug;
 		};
-		503566572B9D64660059072E /* Release */ = {
+		68F42FFD2C56216B0075917A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -522,10 +489,9 @@
 			};
 			name = Release;
 		};
-		503566592B9D64660059072E /* Debug */ = {
+		68F42FFF2C56216B0075917A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Komiic/Komiic.entitlements;
@@ -536,47 +502,34 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Komiic/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Komiic;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.books";
-				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
-				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "用於漫畫圖片儲存";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
-				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 14.4;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nexify.Komiic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
-		5035665A2B9D64660059072E /* Release */ = {
+		68F430002C56216B0075917A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Komiic/Komiic.entitlements;
@@ -587,191 +540,122 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Komiic/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Komiic;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.books";
-				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
-				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "用於漫畫圖片儲存";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
-				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 14.4;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nexify.Komiic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		50EE23B42BCBC7830003939F /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 8JKX45L7LX;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ComicWidget/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = ComicWidget;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.nexify.Komiic.ComicWidget;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		50EE23B52BCBC7830003939F /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 8JKX45L7LX;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = ComicWidget/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = ComicWidget;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.nexify.Komiic.ComicWidget;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		503566442B9D64650059072E /* Build configuration list for PBXProject "Komiic" */ = {
+		68F42FEA2C56216A0075917A /* Build configuration list for PBXProject "Komiic" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				503566562B9D64660059072E /* Debug */,
-				503566572B9D64660059072E /* Release */,
+				68F42FFC2C56216B0075917A /* Debug */,
+				68F42FFD2C56216B0075917A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		503566582B9D64660059072E /* Build configuration list for PBXNativeTarget "Komiic" */ = {
+		68F42FFE2C56216B0075917A /* Build configuration list for PBXNativeTarget "Komiic" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				503566592B9D64660059072E /* Debug */,
-				5035665A2B9D64660059072E /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		50EE23B32BCBC7830003939F /* Build configuration list for PBXNativeTarget "ComicWidgetExtension" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				50EE23B42BCBC7830003939F /* Debug */,
-				50EE23B52BCBC7830003939F /* Release */,
+				68F42FFF2C56216B0075917A /* Debug */,
+				68F430002C56216B0075917A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		68F430172C562B300075917A /* XCLocalSwiftPackageReference "KomiicAPI" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = KomiicAPI;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
-		500C7BA82BA3032800F7C4F4 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/onevcat/Kingfisher";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 7.11.0;
-			};
-		};
-		502F05E22BBEC3E5001816E0 /* XCRemoteSwiftPackageReference "CustomAlert" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/divadretlaw/CustomAlert";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.5.0;
-			};
-		};
-		50356BE12BA46A2F009A4C6D /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
+		682169BE2C5686280026F389 /* XCRemoteSwiftPackageReference "keychain-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/evgenyneu/keychain-swift";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 21.0.0;
+				minimumVersion = 24.0.0;
 			};
 		};
-		50FB6C562BA6EEA6006BA657 /* XCRemoteSwiftPackageReference "SwiftUISnackbar" */ = {
+		6890B5932C8D9D5200371261 /* XCRemoteSwiftPackageReference "AlertToast" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/zaniluca/SwiftUISnackbar";
+			repositoryURL = "https://github.com/elai950/AlertToast";
 			requirement = {
-				branch = main;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.3.9;
+			};
+		};
+		68B858B22C56369F0098CBBB /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.12.0;
+			};
+		};
+		68F430122C5629970075917A /* XCRemoteSwiftPackageReference "apollo-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apollographql/apollo-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.14.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		500C7BA92BA3032800F7C4F4 /* Kingfisher */ = {
+		682169BF2C5686280026F389 /* KeychainSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 500C7BA82BA3032800F7C4F4 /* XCRemoteSwiftPackageReference "Kingfisher" */;
-			productName = Kingfisher;
-		};
-		502F05E32BBEC3E5001816E0 /* CustomAlert */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 502F05E22BBEC3E5001816E0 /* XCRemoteSwiftPackageReference "CustomAlert" */;
-			productName = CustomAlert;
-		};
-		50356BE22BA46A2F009A4C6D /* KeychainSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 50356BE12BA46A2F009A4C6D /* XCRemoteSwiftPackageReference "keychain-swift" */;
+			package = 682169BE2C5686280026F389 /* XCRemoteSwiftPackageReference "keychain-swift" */;
 			productName = KeychainSwift;
 		};
-		50FB6C572BA6EEA7006BA657 /* SwiftUISnackbar */ = {
+		6890B5942C8D9D5200371261 /* AlertToast */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 50FB6C562BA6EEA6006BA657 /* XCRemoteSwiftPackageReference "SwiftUISnackbar" */;
-			productName = SwiftUISnackbar;
+			package = 6890B5932C8D9D5200371261 /* XCRemoteSwiftPackageReference "AlertToast" */;
+			productName = AlertToast;
+		};
+		68B858B32C56369F0098CBBB /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 68B858B22C56369F0098CBBB /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+		68F430132C5629970075917A /* Apollo */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 68F430122C5629970075917A /* XCRemoteSwiftPackageReference "apollo-ios" */;
+			productName = Apollo;
+		};
+		68F430182C562B300075917A /* KomiicAPI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = KomiicAPI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
-	rootObject = 503566412B9D64650059072E /* Project object */;
+	rootObject = 68F42FE72C56216A0075917A /* Project object */;
 }

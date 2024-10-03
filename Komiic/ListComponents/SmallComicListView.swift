@@ -1,99 +1,120 @@
 //
-//  ComicListView.swift
+//  SmallComicListView.swift
 //  Komiic
 //
-//  Created by 梁承樸 on 2024/3/10.
+//  Created by 梁承樸 on 2024/7/28.
 //
 
+import Apollo
+import Kingfisher
+import KomiicAPI
 import SwiftUI
 
 struct SmallComicListView: View {
-    @EnvironmentObject var app:AppEnvironment
-    @State var comics: [KomiicAPI.ComicData] = []
-    @State var isLoading = true
-    var folder:KomiicAPI.ComicFolder = KomiicAPI.ComicFolder(id: "", key: "", name: "", views: 0, comicCount: 0)
-    var listType:Int = 0
-    let title:String
-    let requestParameters:String
+    @Namespace var namespace
+    @EnvironmentObject var appEnv: AppEnvironment
+    let listType: ListType
+    let title: String
+    @State var comics: [KomiicAPI.ComicFrag] = []
+    @State private var loadState: LoadState = .loading
     var body: some View {
-        Spacer().frame(height: 10)
-        HStack {
-            Text(title).font(.title2).bold()
-            Spacer()
-            if (listType == 0) {
-                NavigationLink(destination: ComicListView(title: title, requestParameters: requestParameters), label: {
-                    Text("查看全部")
-                })
-            } else if (listType == 1) {
-                NavigationLink(destination: ComicListView(title: title, requestParameters: requestParameters, listType: 1), label: {
-                    Text("查看全部")
-                })
-            } else if (listType == 3){
-                NavigationLink(destination: FavoritesComicView(), label: {
-                    Text("查看全部")
-                })
-            } else if (listType == 4) {
-                NavigationLink(destination: FolderComicView(folder: folder), label: {
-                    Text("查看全部")
-                })
-            }
-        }.onFirstAppear {
-            if (listType == 0 || listType == 1) {
-                app.komiicApi.fetchComicList(parameters: requestParameters,completion: {comicsResp in
-                    comics.append(contentsOf: comicsResp)
-                    isLoading = false})
-            } else if (listType == 3) {
-                app.komiicApi.fetchFavoritesComic(completion: {history in
-                    var queryString = "["
-                    for (index,comic) in history.enumerated() {
-                        queryString += "\"\(comic.comicId)\""
-                        queryString += (index == history.endIndex-1 ? "]" : ",")
-                    }
-                    app.komiicApi.fetchComicList(parameters: "{\"query\":\"query comicByIds($comicIds: [ID]!) {\\n  comicByIds(comicIds: $comicIds) {\\n    id\\n    title\\n    status\\n    year\\n    imageUrl\\n    authors {\\n      id\\n      name\\n    }\\n    categories {\\n      id\\n      name\\n    }\\n    dateUpdated\\n    monthViews\\n    views\\n    favoriteCount\\n    lastBookUpdate\\n    lastChapterUpdate\\n  }\\n}\",\"variables\":{\"comicIds\":\(queryString)}}",completion: {resp in 
-                        comics.append(contentsOf: resp)
-                        isLoading = false})
-                })
-            } else if (listType == 4) {
-                app.komiicApi.fetchFolderComics(parameters: requestParameters,completion: {folderComics in
-                    app.komiicApi.fetchComicList(parameters: "{\"query\":\"query comicByIds($comicIds: [ID]!) {\\n  comicByIds(comicIds: $comicIds) {\\n    id\\n    title\\n    status\\n    year\\n    imageUrl\\n    authors {\\n      id\\n      name\\n    }\\n    categories {\\n      id\\n      name\\n    }\\n    dateUpdated\\n    monthViews\\n    views\\n    favoriteCount\\n    lastBookUpdate\\n    lastChapterUpdate\\n  }\\n}\",\"variables\":{\"comicIds\":\(folderComics)}}",completion: {resp in
-                        comics.append(contentsOf: resp)
-                        isLoading = false})
-                    
-                })
-            } else if (listType == 6) {
-                app.komiicApi.fetchRecommendComicById(comicId: requestParameters, completion: {comicList in
-                    app.komiicApi.fetchComicList(parameters: "{\"query\":\"query comicByIds($comicIds: [ID]!) {\\n  comicByIds(comicIds: $comicIds) {\\n    id\\n    title\\n    status\\n    year\\n    imageUrl\\n    authors {\\n      id\\n      name\\n    }\\n    categories {\\n      id\\n      name\\n    }\\n    dateUpdated\\n    monthViews\\n    views\\n    favoriteCount\\n    lastBookUpdate\\n    lastChapterUpdate\\n  }\\n}\",\"variables\":{\"comicIds\":\(comicList)}}",completion: {resp in
-                        comics.append(contentsOf: resp)
-                        isLoading = false})
-                })
+        NavigationLink {
+            ComicListView(listType: listType, comics: comics).navigationTitle(title)
+        } label: {
+            HStack {
+                Spacer().frame(width: 5)
+                Text(title).foregroundColor(.primary).font(.title3).bold()
+                Image(systemName: "chevron.right").foregroundColor(Color.gray).bold()
+                Spacer()
             }
         }
-        if (isLoading) {
-            ProgressView().frame(height: 183)
-        } else {
-            ScrollView (.horizontal, showsIndicators: false){
-                LazyHStack {
-                    ForEach(comics, id: \.id) {comic in
-                        SmallComicItemView(comic: comic)}
+        if loadState == LoadState.loading {
+            VStack {
+                ProgressView().controlSize(.extraLarge).onFirstAppear {
+                    fetchData()
                 }
-            }.frame(height: 183)
+            }.frame(height: 210)
+        } else if loadState == .failed {
+            VStack {
+                Text("無法載入").font(.title).bold()
+                Button(action: {
+                    loadState = .loading
+                }) {
+                    Image(systemName: "arrow.triangle.2.circlepath.circle.fill")
+                        .imageScale(.large)
+                    Text("重試")
+                }
+                .buttonStyle(.borderedProminent)
+                .buttonBorderShape(.capsule)
+            }.frame(height: 210)
+        } else {
+            ScrollView(.horizontal, showsIndicators: false) {
+                LazyHStack {
+                    ForEach(Array(comics.enumerated()), id: \.offset) { index, comic in
+                        NavigationLink {
+                            BookDetailView(namespace: namespace, comic: comic)
+                        }label: {
+                            KFImage(URL(string: comic.imageUrl))
+                                .resizable()
+                                .placeholder {
+                                    Color.gray.frame(width: 150, height: 200).cornerRadius(6).redacted(reason: .placeholder)
+                                }
+                                .cancelOnDisappear(true)
+                                .fade(duration: 0.5)
+                                .id(index)
+                                .cornerRadius(6)
+                                .scaledToFit()
+                                .frame(width: 150, height: 200)
+                                .padding(5)
+                                .matchedTransitionSource(id: comic.id, in: namespace)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    func fetchData() {
+        if listType == .recentUpdate {
+            APIManager.shared.apolloClient
+                .fetch(query: RecentUpdateQuery(pagination: Pagination(limit: 20, offset: 0, orderBy: GraphQLEnum(OrderBy.dateUpdated), asc: true))) { result in
+                    switch result {
+                    case .success(let response):
+                        comics.append(contentsOf: response.data!.recentUpdate!.compactMap { $0?.fragments.comicFrag })
+                        loadState = .loaded
+                    case .failure(let error):
+                        loadState = .failed
+                        print(error)
+                    }
+                }
+        } else if listType == .monthHotComic {
+            APIManager.shared.apolloClient
+                .fetch(query: HotComicsQuery(pagination: Pagination(limit: 20, offset: 0, orderBy: GraphQLEnum(OrderBy.monthViews), asc: true))) { result in
+                    switch result {
+                    case .success(let response):
+                        comics.append(contentsOf: response.data!.hotComics.compactMap { $0?.fragments.comicFrag })
+                        loadState = .loaded
+                    case .failure(let error):
+                        loadState = .failed
+                        print(error)
+                    }
+                }
+        } else if listType == .hotComic {
+            APIManager.shared.apolloClient
+                .fetch(query: HotComicsQuery(pagination: Pagination(limit: 20, offset: 0, orderBy: GraphQLEnum(OrderBy.views), asc: true))) { result in
+                    switch result {
+                    case .success(let response):
+                        comics.append(contentsOf: response.data!.hotComics.compactMap { $0?.fragments.comicFrag })
+                        loadState = .loaded
+                    case .failure(let error):
+                        loadState = .failed
+                        print(error)
+                    }
+                }
         }
     }
 }
 
-struct SmallComicItemView: View {
-    var comic: KomiicAPI.ComicData
-    @State private var openDetailPage = false
-    var body: some View {
-        VStack {
-            ImageView(withURL: comic.imageUrl).padding(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5))
-            NavigationLink(destination:
-                ComicDetailView(comicData: comic)
-               , isActive: $openDetailPage ){EmptyView()}
-        }.onTapGesture {
-            openDetailPage = true
-        }
-    }
+#Preview {
+    ComicListView(listType: .recentUpdate)
 }
-
-

@@ -1,0 +1,3 @@
+query comicInAccountFolders($comicId: ID!) {
+  comicInAccountFolders(comicId: $comicId)
+}

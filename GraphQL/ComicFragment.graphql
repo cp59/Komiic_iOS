@@ -1,0 +1,21 @@
+fragment ComicFrag on Comic {
+    id,
+    title,
+    status,
+    year,
+    imageUrl,
+    authors {
+      id
+      name
+    },
+    categories {
+      id
+      name
+    },
+    dateUpdated,
+    monthViews,
+    views,
+    favoriteCount,
+    lastBookUpdate,
+    lastChapterUpdate,
+}

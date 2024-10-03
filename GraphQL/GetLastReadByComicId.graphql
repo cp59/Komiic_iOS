@@ -1,0 +1,18 @@
+query comicsLastRead($comicIds: [ID]!) {
+  lastReadByComicIds(comicIds: $comicIds) {
+    comicId
+    book {
+      page
+      chapterId
+      serial
+      __typename
+    }
+    chapter {
+      page
+      chapterId
+      serial
+      __typename
+    }
+    __typename
+  }
+}
