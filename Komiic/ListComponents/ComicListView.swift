@@ -11,7 +11,7 @@ import KomiicAPI
 import SwiftUI
 
 struct ComicListView: View {
-    @EnvironmentObject var appEnv:AppEnvironment
+    @EnvironmentObject var appEnv: AppEnvironment
     @Namespace var namespace
     let listType: ListType
     var args: String = ""
@@ -21,8 +21,9 @@ struct ComicListView: View {
     @State private var scrollID: Int?
     @Binding var orderBy: OrderBy
     @Binding var status: String
-    @Binding var categoryId: String
-    init(listType: ListType, args: String = "", comics: [KomiicAPI.ComicFrag] = [], page: Int = -1, orderBy: Binding<OrderBy> = .constant(.dateUpdated), status: Binding<String> = .constant(""), categoryId: Binding<String> = .constant("0")) {
+    @Binding var categoryId: [String]
+    @Binding var readProgressType: ReadProgressType
+    init(listType: ListType, args: String = "", comics: [KomiicAPI.ComicFrag] = [], page: Int = -1, orderBy: Binding<OrderBy> = .constant(.dateUpdated), status: Binding<String> = .constant(""), categoryId: Binding<[String]> = .constant([]), scrollID: Binding<Int> = .constant(0), readProgressType: Binding<ReadProgressType> = .constant(.all)) {
         self.listType = listType
         self.args = args
         self.comics = comics
@@ -30,7 +31,9 @@ struct ComicListView: View {
         self._orderBy = orderBy
         self._status = status
         self._categoryId = categoryId
+        self._readProgressType = readProgressType
     }
+
     var body: some View {
         if loadState == LoadState.loading {
             VStack {
@@ -72,10 +75,10 @@ struct ComicListView: View {
                                     .cancelOnDisappear(true)
                                     .fade(duration: 0.25)
                                     .id(index)
-                                    .matchedTransitionSource(id: comic.id, in: namespace)
                                     .cornerRadius(8)
                                     .scaledToFit()
                                     .frame(width: 150, height: 200)
+                                    .matchedTransitionSource(id: comic.id, in: namespace)
                                 Text(comic.title).font(.subheadline).truncationMode(.tail).bold().lineLimit(1).frame(width: 150, alignment: .leading).foregroundColor(.primary)
                                 Text("\(comic.views!)次點閱").font(.caption).frame(width: 150, alignment: .leading).foregroundColor(.primary)
                             }
@@ -90,19 +93,23 @@ struct ComicListView: View {
                         }
                     }
                 }
-            }.scrollPosition(id: $scrollID).onChange(of: orderBy, {
+            }.scrollPosition(id: $scrollID).onChange(of: orderBy) {
                 comics.removeAll()
                 page = -1
                 loadState = .loading
-            }).onChange(of: status, {
+            }.onChange(of: status) {
                 comics.removeAll()
                 page = -1
                 loadState = .loading
-            }).onChange(of: categoryId, {
+            }.onChange(of: categoryId) {
                 comics.removeAll()
                 page = -1
                 loadState = .loading
-            })
+            }.onChange(of: readProgressType) {
+                comics.removeAll()
+                page = -1
+                loadState = .loading
+            }
         }
     }
 
@@ -144,7 +151,7 @@ struct ComicListView: View {
                     }
                 }
         } else if listType == .folderComic {
-            APIManager.shared.apolloClient.fetch(query: FolderComicIdsQuery(folderId: args, pagination: Pagination(limit: 20, offset: (page + 1) * 20, orderBy: GraphQLEnum(OrderBy.dateUpdated), asc: true))) { result in
+            APIManager.shared.apolloClient.fetch(query: FolderComicIdsQuery(folderId: args, pagination: Pagination(limit: 20, offset: (page + 1) * 20, orderBy: GraphQLEnum(orderBy), asc: true, status: GraphQLNullable(stringLiteral: status)))) { result in
                 switch result {
                 case .success(let response):
                     if response.data!.folderComicIds.comicIds.isEmpty {
@@ -167,10 +174,10 @@ struct ComicListView: View {
                 }
             }
         } else if listType == .allComics {
-            APIManager.shared.apolloClient.fetch(query: ComicByCategoryQuery(categoryId: categoryId, pagination: Pagination(limit: 20, offset: (page + 1) * 20, orderBy: GraphQLEnum(orderBy), asc: false, status: GraphQLNullable(stringLiteral: status)))) { result in
+            APIManager.shared.apolloClient.fetch(query: ComicByCategoriesQuery(categoryId: categoryId, pagination: Pagination(limit: 20, offset: (page + 1) * 20, orderBy: GraphQLEnum(orderBy), asc: false, status: GraphQLNullable(stringLiteral: status)))) { result in
                 switch result {
                 case .success(let response):
-                    comics.append(contentsOf: response.data!.comicByCategory.compactMap { $0?.fragments.comicFrag })
+                    comics.append(contentsOf: response.data!.comicByCategories.compactMap { $0?.fragments.comicFrag })
                     loadSuccessHandler()
                 case .failure(let error):
                     loadFailureHandler()
@@ -180,9 +187,32 @@ struct ComicListView: View {
         } else if listType == .authorComics {
             APIManager.shared.apolloClient.fetch(query: ComicsByAuthorQuery(authorId: args)) { result in
                 switch result {
-                    case .success(let response):
-                    comics.append(contentsOf: response.data!.getComicsByAuthor.compactMap{$0?.fragments.comicFrag})
+                case .success(let response):
+                    comics.append(contentsOf: response.data!.getComicsByAuthor.compactMap { $0?.fragments.comicFrag })
                     loadState = .end
+                case .failure(let error):
+                    loadFailureHandler()
+                    print(error)
+                }
+            }
+        } else if listType == .favoriteComics {
+            APIManager.shared.apolloClient.fetch(query: FavoritesQuery(pagination: Pagination(limit: 20, offset: (page + 1) * 20, orderBy: GraphQLEnum(orderBy),asc: true, status: GraphQLNullable(stringLiteral: status), readProgress: GraphQLNullable(readProgressType )))) { result in
+                switch result {
+                case .success(let response):
+                    if response.data!.favoritesV2.isEmpty {
+                        loadSuccessHandler()
+                    } else {
+                        APIManager.shared.apolloClient.fetch(query: ComicByIdsQuery(comicIds: (response.data?.favoritesV2.compactMap{$0!.comicId})!)) { comicResult in
+                            switch comicResult {
+                            case .success(let response):
+                                comics.append(contentsOf: response.data!.comicByIds.compactMap { $0?.fragments.comicFrag })
+                                loadSuccessHandler()
+                            case .failure(let error):
+                                loadFailureHandler()
+                                print(error)
+                            }
+                        }
+                    }
                 case .failure(let error):
                     loadFailureHandler()
                     print(error)

@@ -42,28 +42,29 @@ struct UserView: View {
                         }
                     }
                 } else if loadState == .loaded {
-                    Spacer().frame(height: 40)
-                    Image(systemName: "person.crop.circle").font(.system(size: 120))
-                    Spacer().frame(height: 10)
-                    Text(account!.nickname).font(.title).bold()
-                    Text(account!.email).font(.title3)
                     Spacer().frame(height: 20)
-                    HStack {
-                        ImageLimitCard(value: "\(imageLimit!.limit - imageLimit!.usage)張", caption: "剩餘")
-                        ImageLimitCard(value: "\(imageLimit!.usage)張", caption: "已讀取")
-                        ImageLimitCard(value: "\(imageLimit!.limit)張", caption: "單日讀取上限")
-                        
-                    }
+                    Image(systemName: "person.crop.circle").font(.system(size: 100))
                     Spacer().frame(height: 5)
-                    if Int(imageLimit!.resetInSeconds)! / 60 / 60 > 0 {
-                        Text("\(Int(imageLimit!.resetInSeconds)! / 60 / 60)小時後重置").font(.footnote).foregroundColor(.gray)
-                    } else {
-                        Text("\(Int(imageLimit!.resetInSeconds)! / 60)分鐘後重置").font(.footnote).foregroundColor(.gray)
-                    }
-                    Spacer().frame(height: 40)
+                    Text(account!.nickname).font(.title).bold()
+                    Text(account!.email).font(.headline).foregroundStyle(.secondary)
                     List {
                         Section {
-                            Link("贊助Komiic.com", destination: URL(string: "https://donate.komiic.com/")!)
+                            VStack (alignment: .leading){
+                                HStack (alignment: .bottom){
+                                    Text("單日圖片讀取用量").bold()
+                                    Spacer()
+                                    if Int(imageLimit!.resetInSeconds)! / 60 / 60 > 0 {
+                                        Text("\(Int(imageLimit!.resetInSeconds)! / 60 / 60)小時後重置").font(.callout).foregroundColor(.gray)
+                                    } else {
+                                        Text("\(Int(imageLimit!.resetInSeconds)! / 60)分鐘後重置").font(.callout).foregroundColor(.gray)
+                                    }
+                                }
+                                ImageLimitProgressBarView(value: Double(imageLimit!.usage), total: Double(imageLimit!.limit)).frame(height: 8)
+                                Text("\(imageLimit!.limit) (額度) - \(imageLimit!.usage) (已讀取) = \(imageLimit!.limit - imageLimit!.usage) (剩餘)").font(.subheadline).foregroundStyle(.secondary)
+                            }.padding(2)
+                            Link("贊助 Komiic.com 即可升級讀取額度", destination: URL(string: "https://komiic.com/donate")!)
+                        }
+                        Section {
                         }
                         Section {
                             Button(role: .destructive, action: {
@@ -72,7 +73,7 @@ struct UserView: View {
                                 Text("登出").frame(maxWidth: .infinity,alignment: .center)
                             })
                         } footer: {
-                            Text("App designed by 梁承樸")
+                            Text("App designed by 梁承樸").frame(maxWidth: .infinity).padding(5)
                         }
                     }.alert(isPresented: $showLogoutAlert) {
                         Alert(
@@ -96,8 +97,19 @@ struct UserView: View {
                         )
                     }
                     Spacer()
+                } else if loadState == .failed {
+                    Text("無法載入").font(.title).bold()
+                    Button(action: {
+                        loadState = .loading
+                    }) {
+                        Image(systemName: "arrow.triangle.2.circlepath.circle.fill")
+                            .imageScale(.large)
+                        Text("重試")
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .buttonBorderShape(.capsule)
                 }
-            }.navigationTitle("帳號").navigationBarItems(trailing:
+            }.navigationTitle("Komiic ID").navigationBarItems(trailing:
                 Button(action: {
                     isPresented.toggle()
                 }) {
@@ -108,13 +120,30 @@ struct UserView: View {
     }
 }
 
-struct ImageLimitCard: View {
-    var value: String
-    var caption: String
+struct ImageLimitProgressBarView: View {
+    
+    let value: CGFloat
+    let total: CGFloat
+    
     var body: some View {
-        VStack {
-            Text(caption).font(.subheadline)
-            Text(value).font(.title2)
-        }.padding().background(Color(.systemGray6)).cornerRadius(8)
+        GeometryReader(content: { geometry in
+            ZStack(alignment: .leading, content: {
+                Rectangle()
+                    .foregroundColor(Color.gray.opacity(0.2))
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .clipShape(Capsule())
+                
+                Rectangle()
+                    .foregroundColor(.accent)
+                    .frame(maxHeight: .infinity)
+                    .frame(width: calculateBarWidth(contentWidth: geometry.size.width))
+                    .clipShape(Capsule())
+            })
+            .clipped()
+        })
+    }
+    
+    private func calculateBarWidth(contentWidth: CGFloat) -> CGFloat {
+        return (value / total) * contentWidth
     }
 }

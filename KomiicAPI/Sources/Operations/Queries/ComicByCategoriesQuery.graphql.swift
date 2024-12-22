@@ -3,19 +3,19 @@
 
 @_exported import ApolloAPI
 
-public class ComicByCategoryQuery: GraphQLQuery {
-  public static let operationName: String = "comicByCategory"
+public class ComicByCategoriesQuery: GraphQLQuery {
+  public static let operationName: String = "comicByCategories"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query comicByCategory($categoryId: ID!, $pagination: Pagination!) { comicByCategory(categoryId: $categoryId, pagination: $pagination) { __typename ...ComicFrag } }"#,
+      #"query comicByCategories($categoryId: [ID!]!, $pagination: Pagination!) { comicByCategories(categoryId: $categoryId, pagination: $pagination) { __typename ...ComicFrag } }"#,
       fragments: [ComicFrag.self]
     ))
 
-  public var categoryId: ID
+  public var categoryId: [ID]
   public var pagination: Pagination
 
   public init(
-    categoryId: ID,
+    categoryId: [ID],
     pagination: Pagination
   ) {
     self.categoryId = categoryId
@@ -33,13 +33,13 @@ public class ComicByCategoryQuery: GraphQLQuery {
 
     public static var __parentType: any ApolloAPI.ParentType { KomiicAPI.Objects.Query }
     public static var __selections: [ApolloAPI.Selection] { [
-      .field("comicByCategory", [ComicByCategory?].self, arguments: [
+      .field("comicByCategories", [ComicByCategory?].self, arguments: [
         "categoryId": .variable("categoryId"),
         "pagination": .variable("pagination")
       ]),
     ] }
 
-    public var comicByCategory: [ComicByCategory?] { __data["comicByCategory"] }
+    public var comicByCategories: [ComicByCategory?] { __data["comicByCategories"] }
 
     /// ComicByCategory
     ///

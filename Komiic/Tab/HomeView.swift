@@ -61,11 +61,11 @@ struct HomeView: View {
                     }) {
                         Image(systemName: "person.crop.circle").font(.system(size: 25))
                     }
-                ).sheet(isPresented: $openAccountSheet, content: {
-                    UserView(isPresented: $openAccountSheet)
-                })
+                )
             }
-        }
+        }.sheet(isPresented: $openAccountSheet, content: {
+            UserView(isPresented: $openAccountSheet)
+        })
     }
 }
 

@@ -3,12 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		68002C052C67C6B9001F44E0 /* BookDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68002C042C67C6B9001F44E0 /* BookDetailView.swift */; };
-		6811ADB62C57EBB70054E430 /* GetFolderComicIds.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 6811ADB52C57EBB70054E430 /* GetFolderComicIds.graphql */; };
 		6815E61B2CA93E4600881642 /* GetImagesByChapterID.graphql in Sources */ = {isa = PBXBuildFile; fileRef = 6815E61A2CA93E4000881642 /* GetImagesByChapterID.graphql */; };
 		6815E61D2CA94F5C00881642 /* GetLastReadByComicId.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 6815E61C2CA94F5300881642 /* GetLastReadByComicId.graphql */; };
 		6815E61F2CA956BA00881642 /* AddReadComicHistory.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 6815E61E2CA956AA00881642 /* AddReadComicHistory.graphql */; };
@@ -18,18 +17,17 @@
 		682169BD2C5683920026F389 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682169BC2C5683920026F389 /* HomeView.swift */; };
 		682169C02C5686280026F389 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 682169BF2C5686280026F389 /* KeychainSwift */; };
 		682169C22C5688340026F389 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682169C12C5688340026F389 /* LoginView.swift */; };
-		682169C42C5697320026F389 /* GetMyFolder.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 682169C32C5697320026F389 /* GetMyFolder.graphql */; };
 		688FE8F42CAE6ADB0027E56E /* GetComicsByAuthor.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 688FE8F32CAE6AC60027E56E /* GetComicsByAuthor.graphql */; };
 		6890B58C2C8D788100371261 /* GetImageLimit.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 6890B58B2C8D786F00371261 /* GetImageLimit.graphql */; };
 		6890B58E2C8D94C300371261 /* FolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6890B58D2C8D94C300371261 /* FolderView.swift */; };
 		6890B5902C8D987500371261 /* UpdateFolderName.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 6890B58F2C8D986900371261 /* UpdateFolderName.graphql */; };
-		6890B5922C8D9B0800371261 /* RemoveFolder.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 6890B5912C8D9AF300371261 /* RemoveFolder.graphql */; };
 		6890B5952C8D9D5200371261 /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = 6890B5942C8D9D5200371261 /* AlertToast */; };
 		6890B5972C8DA12500371261 /* AddToFolderSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6890B5962C8DA12500371261 /* AddToFolderSheet.swift */; };
 		6890B59A2C8DA20300371261 /* GetComicInAccountFolders.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 6890B5992C8DA1FA00371261 /* GetComicInAccountFolders.graphql */; };
 		6890B59C2C8DA3C000371261 /* AddComicToFolder.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 6890B59B2C8DA3B600371261 /* AddComicToFolder.graphql */; };
 		6890B59E2C8DA3E400371261 /* RemoveComicToFolder.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 6890B59D2C8DA3D700371261 /* RemoveComicToFolder.graphql */; };
 		6890B5A02C8DA4A100371261 /* AddFavorite.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 6890B59F2C8DA49300371261 /* AddFavorite.graphql */; };
+		68B720C62D18401300E96B7A /* FavoritesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68B720C52D18401300E96B7A /* FavoritesView.swift */; };
 		68B858B12C5635D00098CBBB /* ComicListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68B858B02C5635D00098CBBB /* ComicListView.swift */; };
 		68B858B42C56369F0098CBBB /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 68B858B32C56369F0098CBBB /* Kingfisher */; };
 		68B858B62C563CC00098CBBB /* GetHotComics.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 68B858B52C563CC00098CBBB /* GetHotComics.graphql */; };
@@ -38,8 +36,8 @@
 		68B858BC2C563DFB0098CBBB /* GetAllCategory.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 68B858BB2C563DFB0098CBBB /* GetAllCategory.graphql */; };
 		68B858BE2C563E270098CBBB /* GetComicByCategory.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 68B858BD2C563E270098CBBB /* GetComicByCategory.graphql */; };
 		68B858C02C564A270098CBBB /* ComicFragment.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 68B858BF2C564A270098CBBB /* ComicFragment.graphql */; };
+		68DA92E62D17270700225E11 /* CreateFolderSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68DA92E52D17270700225E11 /* CreateFolderSheet.swift */; };
 		68E609652C590A3800A6234E /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68E609642C590A3800A6234E /* UserView.swift */; };
-		68E609672C590AA100A6234E /* GetAccountQuery.graphql in Resources */ = {isa = PBXBuildFile; fileRef = 68E609662C590AA000A6234E /* GetAccountQuery.graphql */; };
 		68E6096A2C591F8E00A6234E /* BookLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68E609692C591F8E00A6234E /* BookLibraryView.swift */; };
 		68E6096C2C592AFB00A6234E /* SmallComicListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68E6096B2C592AFB00A6234E /* SmallComicListView.swift */; };
 		68E6096E2C592D3400A6234E /* BookStoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68E6096D2C592D3400A6234E /* BookStoreView.swift */; };
@@ -61,7 +59,6 @@
 
 /* Begin PBXFileReference section */
 		68002C042C67C6B9001F44E0 /* BookDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailView.swift; sourceTree = "<group>"; };
-		6811ADB52C57EBB70054E430 /* GetFolderComicIds.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = GetFolderComicIds.graphql; sourceTree = "<group>"; };
 		6815E61A2CA93E4000881642 /* GetImagesByChapterID.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = GetImagesByChapterID.graphql; sourceTree = "<group>"; };
 		6815E61C2CA94F5300881642 /* GetLastReadByComicId.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = GetLastReadByComicId.graphql; sourceTree = "<group>"; };
 		6815E61E2CA956AA00881642 /* AddReadComicHistory.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = AddReadComicHistory.graphql; sourceTree = "<group>"; };
@@ -70,17 +67,16 @@
 		681DB01E2C8DB66200A84B4B /* AllCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllCategoryView.swift; sourceTree = "<group>"; };
 		682169BC2C5683920026F389 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		682169C12C5688340026F389 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
-		682169C32C5697320026F389 /* GetMyFolder.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = GetMyFolder.graphql; sourceTree = "<group>"; };
 		688FE8F32CAE6AC60027E56E /* GetComicsByAuthor.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = GetComicsByAuthor.graphql; sourceTree = "<group>"; };
 		6890B58B2C8D786F00371261 /* GetImageLimit.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = GetImageLimit.graphql; sourceTree = "<group>"; };
 		6890B58D2C8D94C300371261 /* FolderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderView.swift; sourceTree = "<group>"; };
 		6890B58F2C8D986900371261 /* UpdateFolderName.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = UpdateFolderName.graphql; sourceTree = "<group>"; };
-		6890B5912C8D9AF300371261 /* RemoveFolder.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = RemoveFolder.graphql; sourceTree = "<group>"; };
 		6890B5962C8DA12500371261 /* AddToFolderSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToFolderSheet.swift; sourceTree = "<group>"; };
 		6890B5992C8DA1FA00371261 /* GetComicInAccountFolders.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = GetComicInAccountFolders.graphql; sourceTree = "<group>"; };
 		6890B59B2C8DA3B600371261 /* AddComicToFolder.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = AddComicToFolder.graphql; sourceTree = "<group>"; };
 		6890B59D2C8DA3D700371261 /* RemoveComicToFolder.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = RemoveComicToFolder.graphql; sourceTree = "<group>"; };
 		6890B59F2C8DA49300371261 /* AddFavorite.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = AddFavorite.graphql; sourceTree = "<group>"; };
+		68B720C52D18401300E96B7A /* FavoritesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesView.swift; sourceTree = "<group>"; };
 		68B858B02C5635D00098CBBB /* ComicListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComicListView.swift; sourceTree = "<group>"; };
 		68B858B52C563CC00098CBBB /* GetHotComics.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = GetHotComics.graphql; sourceTree = "<group>"; };
 		68B858B72C563D6B0098CBBB /* GetReadComicHistory.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = GetReadComicHistory.graphql; sourceTree = "<group>"; };
@@ -88,8 +84,8 @@
 		68B858BB2C563DFB0098CBBB /* GetAllCategory.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = GetAllCategory.graphql; sourceTree = "<group>"; };
 		68B858BD2C563E270098CBBB /* GetComicByCategory.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = GetComicByCategory.graphql; sourceTree = "<group>"; };
 		68B858BF2C564A270098CBBB /* ComicFragment.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = ComicFragment.graphql; sourceTree = "<group>"; };
+		68DA92E52D17270700225E11 /* CreateFolderSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFolderSheet.swift; sourceTree = "<group>"; };
 		68E609642C590A3800A6234E /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
-		68E609662C590AA000A6234E /* GetAccountQuery.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = GetAccountQuery.graphql; sourceTree = "<group>"; };
 		68E609692C591F8E00A6234E /* BookLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookLibraryView.swift; sourceTree = "<group>"; };
 		68E6096B2C592AFB00A6234E /* SmallComicListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallComicListView.swift; sourceTree = "<group>"; };
 		68E6096D2C592D3400A6234E /* BookStoreView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookStoreView.swift; sourceTree = "<group>"; };
@@ -108,6 +104,11 @@
 		68FA39B72CA020420075F779 /* GetChapterByComicIdQuery.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = GetChapterByComicIdQuery.graphql; sourceTree = "<group>"; };
 		68FA39B92CA020A60075F779 /* ReaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		68DA92E32D16E15800225E11 /* Account */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Account; sourceTree = "<group>"; };
+		68DA92E42D16E18D00225E11 /* Folder */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Folder; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		68F42FEC2C56216A0075917A /* Frameworks */ = {
@@ -184,20 +185,22 @@
 		68F42FF12C56216A0075917A /* Komiic */ = {
 			isa = PBXGroup;
 			children = (
+				6890B5982C8DA13000371261 /* InfoView */,
 				68E609682C59108400A6234E /* AccountUI */,
 				682169BB2C5683850026F389 /* Tab */,
 				68B858AF2C5635420098CBBB /* ListComponents */,
 				68F42FF22C56216A0075917A /* KomiicApp.swift */,
-				6890B5982C8DA13000371261 /* InfoView */,
 				68F42FF42C56216A0075917A /* ContentView.swift */,
+				68DA92E52D17270700225E11 /* CreateFolderSheet.swift */,
 				681DB01E2C8DB66200A84B4B /* AllCategoryView.swift */,
-				68F4300C2C5625ED0075917A /* schema.json */,
+				68B720C52D18401300E96B7A /* FavoritesView.swift */,
 				68F430212C562C7A0075917A /* APIManager.swift */,
 				6890B58D2C8D94C300371261 /* FolderView.swift */,
+				68FA39B92CA020A60075F779 /* ReaderView.swift */,
+				68F4300C2C5625ED0075917A /* schema.json */,
 				68F42FF62C56216B0075917A /* Assets.xcassets */,
 				68F42FF82C56216B0075917A /* Komiic.entitlements */,
 				68F42FF92C56216B0075917A /* Preview Content */,
-				68FA39B92CA020A60075F779 /* ReaderView.swift */,
 			);
 			path = Komiic;
 			sourceTree = "<group>";
@@ -213,6 +216,8 @@
 		68F4301E2C562C200075917A /* GraphQL */ = {
 			isa = PBXGroup;
 			children = (
+				68DA92E42D16E18D00225E11 /* Folder */,
+				68DA92E32D16E15800225E11 /* Account */,
 				688FE8F32CAE6AC60027E56E /* GetComicsByAuthor.graphql */,
 				6815E61E2CA956AA00881642 /* AddReadComicHistory.graphql */,
 				6815E61C2CA94F5300881642 /* GetLastReadByComicId.graphql */,
@@ -224,7 +229,6 @@
 				6890B59D2C8DA3D700371261 /* RemoveComicToFolder.graphql */,
 				6890B59B2C8DA3B600371261 /* AddComicToFolder.graphql */,
 				6890B5992C8DA1FA00371261 /* GetComicInAccountFolders.graphql */,
-				6890B5912C8D9AF300371261 /* RemoveFolder.graphql */,
 				6890B58F2C8D986900371261 /* UpdateFolderName.graphql */,
 				6890B58B2C8D786F00371261 /* GetImageLimit.graphql */,
 				68F4301C2C562C200075917A /* GetRecentUpdate.graphql */,
@@ -235,9 +239,6 @@
 				68B858BB2C563DFB0098CBBB /* GetAllCategory.graphql */,
 				68B858BD2C563E270098CBBB /* GetComicByCategory.graphql */,
 				68B858BF2C564A270098CBBB /* ComicFragment.graphql */,
-				682169C32C5697320026F389 /* GetMyFolder.graphql */,
-				6811ADB52C57EBB70054E430 /* GetFolderComicIds.graphql */,
-				68E609662C590AA000A6234E /* GetAccountQuery.graphql */,
 			);
 			path = GraphQL;
 			sourceTree = "<group>";
@@ -256,6 +257,10 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				68DA92E32D16E15800225E11 /* Account */,
+				68DA92E42D16E18D00225E11 /* Folder */,
 			);
 			name = Komiic;
 			packageProductDependencies = (
@@ -319,15 +324,12 @@
 				68B858B82C563D6B0098CBBB /* GetReadComicHistory.graphql in Resources */,
 				68F4301B2C562C140075917A /* KomiicAPI in Resources */,
 				681DB01D2C8DAFDF00A84B4B /* FavoritesQuery.graphql in Resources */,
-				6890B5922C8D9B0800371261 /* RemoveFolder.graphql in Resources */,
-				6811ADB62C57EBB70054E430 /* GetFolderComicIds.graphql in Resources */,
 				68B858BA2C563DB90098CBBB /* GetComicByIDs.graphql in Resources */,
 				6890B58C2C8D788100371261 /* GetImageLimit.graphql in Resources */,
 				68F42FFB2C56216B0075917A /* Preview Assets.xcassets in Resources */,
 				6890B5A02C8DA4A100371261 /* AddFavorite.graphql in Resources */,
 				68B858B62C563CC00098CBBB /* GetHotComics.graphql in Resources */,
 				6890B59C2C8DA3C000371261 /* AddComicToFolder.graphql in Resources */,
-				68E609672C590AA100A6234E /* GetAccountQuery.graphql in Resources */,
 				6890B5902C8D987500371261 /* UpdateFolderName.graphql in Resources */,
 				68F4301F2C562C200075917A /* GetRecentUpdate.graphql in Resources */,
 				68F42FF72C56216B0075917A /* Assets.xcassets in Resources */,
@@ -341,7 +343,6 @@
 				68F430202C562C200075917A /* schema.graphqls in Resources */,
 				688FE8F42CAE6ADB0027E56E /* GetComicsByAuthor.graphql in Resources */,
 				6890B59E2C8DA3E400371261 /* RemoveComicToFolder.graphql in Resources */,
-				682169C42C5697320026F389 /* GetMyFolder.graphql in Resources */,
 				68B858BE2C563E270098CBBB /* GetComicByCategory.graphql in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -364,8 +365,10 @@
 				682169BD2C5683920026F389 /* HomeView.swift in Sources */,
 				68F42FF32C56216A0075917A /* KomiicApp.swift in Sources */,
 				68E6096E2C592D3400A6234E /* BookStoreView.swift in Sources */,
+				68DA92E62D17270700225E11 /* CreateFolderSheet.swift in Sources */,
 				6815E61B2CA93E4600881642 /* GetImagesByChapterID.graphql in Sources */,
 				68002C052C67C6B9001F44E0 /* BookDetailView.swift in Sources */,
+				68B720C62D18401300E96B7A /* FavoritesView.swift in Sources */,
 				68E609652C590A3800A6234E /* UserView.swift in Sources */,
 				6890B5972C8DA12500371261 /* AddToFolderSheet.swift in Sources */,
 				68E6096C2C592AFB00A6234E /* SmallComicListView.swift in Sources */,

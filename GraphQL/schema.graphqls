@@ -170,10 +170,14 @@ type Folder {
   dateUpdated: Time
 }
 
+type FolderAllComicIds {
+  comicIds: [ID!]!
+}
+
 type FolderComicIds {
   folderId: ID!
   key: String!
-  comicIds: [ID]!
+  comicIds: [ID!]!
 }
 
 type Image {
@@ -211,13 +215,13 @@ type MessageVote {
 type Mutation {
   addFeedback(request: FeedbackRequest!): Boolean!
   registerAccountV2(request: RegisterAccountRequest!): Boolean!
-  registerAccount(request: RegisterAccountRequest!): Boolean!
+  registerAccountMobile(email: String!, password: String!, nickName: String!, secret: String!): Boolean!
   deleteAccount: Boolean!
   editAccount(request: EditAccountRequest!): Account!
   sendResetPasswordEmailV2(email: String!, recaptchaToken: String!): Boolean!
-  sendResetPasswordEmail(email: String!, recaptchaToken: String!): Boolean!
   resetPassword(token: String!, newPassword: String!): Boolean!
   addReadComicHistory(comicId: ID!, chapterId: ID!, page: Int!): ReadComicHistory!
+  addReadComicHistoryV2(comicId: ID!, chapterId: ID!, page: Int!): Boolean!
   deleteReadComicHistory(comicId: ID!): Boolean!
   addFavorite(comicId: ID!): FavoriteV2!
   removeFavorite(comicId: ID!): Boolean!
@@ -226,7 +230,9 @@ type Mutation {
   createFolder(name: String!): Folder!
   removeFolder(folderId: ID!): Boolean!
   addComicToFolder(comicId: ID!, folderId: ID!): Boolean!
+  addComicsToFolder(comicIds: [ID!]!, folderId: ID!): Boolean!
   removeComicToFolder(comicId: ID!, folderId: ID!): Boolean!
+  removeComicsToFolder(comicIds: [ID!]!, folderId: ID!): Boolean!
   updateFolderName(folderId: ID!, name: String!): Boolean!
   addMessageToComic(comicId: ID!, replyToId: ID!, message: String!): Message!
   voteMessage(messageId: ID!, up: Boolean!): Boolean!
@@ -261,7 +267,7 @@ type Query {
   chapterById(comicId: ID!, chapterId: ID!): Chapter
   imagesByChapterId(chapterId: ID!): [Image]!
   recentUpdate(pagination: Pagination!): [Comic]
-  comicByCategory(categoryId: ID!, pagination: Pagination!): [Comic]!
+  comicByCategories(categoryId: [ID!]!, pagination: Pagination!): [Comic]!
   allCategory: [Category]!
   comicByIds(comicIds: [ID]!): [Comic]!
   hotComics(pagination: Pagination!): [Comic]!
@@ -283,6 +289,7 @@ type Query {
   folders: [Folder]!
   folder(folderKey: String!): Folder!
   folderComicIds(folderId: ID!, pagination: Pagination!): FolderComicIds!
+  folderAllComicIds(folderId: ID!): [ID!]!
   comicInAccountFolders(comicId: ID!): [ID]!
   getMessagesByComicId(comicId: ID!, pagination: Pagination!): [Message]!
   messageCountByComicId(comicId: ID!): Int!
@@ -291,6 +298,8 @@ type Query {
   lastMessageByComicId(comicId: ID!): Message
   getImageLimit: ImageLimit!
   reachedImageLimit: Boolean!
+  iosVersion: String!
+  androidVersion: String!
 }
 
 type ReadChapterHistory {

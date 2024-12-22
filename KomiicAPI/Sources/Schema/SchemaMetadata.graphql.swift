@@ -25,17 +25,17 @@ public enum SchemaMetadata: ApolloAPI.SchemaMetadata {
     case "Author": return KomiicAPI.Objects.Author
     case "Category": return KomiicAPI.Objects.Category
     case "ImageLimit": return KomiicAPI.Objects.ImageLimit
-    case "Mutation": return KomiicAPI.Objects.Mutation
     case "Image": return KomiicAPI.Objects.Image
-    case "Account": return KomiicAPI.Objects.Account
-    case "FolderComicIds": return KomiicAPI.Objects.FolderComicIds
+    case "Mutation": return KomiicAPI.Objects.Mutation
     case "FavoriteV2": return KomiicAPI.Objects.FavoriteV2
-    case "Folder": return KomiicAPI.Objects.Folder
     case "ComicLastReadObj": return KomiicAPI.Objects.ComicLastReadObj
     case "ComicLastRead": return KomiicAPI.Objects.ComicLastRead
     case "Chapter": return KomiicAPI.Objects.Chapter
     case "ReadComicHistory": return KomiicAPI.Objects.ReadComicHistory
     case "ReadChapterHistory": return KomiicAPI.Objects.ReadChapterHistory
+    case "Folder": return KomiicAPI.Objects.Folder
+    case "FolderComicIds": return KomiicAPI.Objects.FolderComicIds
+    case "Account": return KomiicAPI.Objects.Account
     default: return nil
     }
   }

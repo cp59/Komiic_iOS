@@ -1,0 +1,5 @@
+mutation createFolder($name: String!) {
+  createFolder(name: $name) {
+    ...FolderFrag
+   }
+}

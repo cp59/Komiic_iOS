@@ -3,31 +3,37 @@
 
 @_exported import ApolloAPI
 
-public class MyFolderQuery: GraphQLQuery {
-  public static let operationName: String = "myFolder"
+public class CreateFolderMutation: GraphQLMutation {
+  public static let operationName: String = "createFolder"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query myFolder { folders { __typename ...FolderFrag } }"#,
+      #"mutation createFolder($name: String!) { createFolder(name: $name) { __typename ...FolderFrag } }"#,
       fragments: [FolderFrag.self]
     ))
 
-  public init() {}
+  public var name: String
+
+  public init(name: String) {
+    self.name = name
+  }
+
+  public var __variables: Variables? { ["name": name] }
 
   public struct Data: KomiicAPI.SelectionSet {
     public let __data: DataDict
     public init(_dataDict: DataDict) { __data = _dataDict }
 
-    public static var __parentType: any ApolloAPI.ParentType { KomiicAPI.Objects.Query }
+    public static var __parentType: any ApolloAPI.ParentType { KomiicAPI.Objects.Mutation }
     public static var __selections: [ApolloAPI.Selection] { [
-      .field("folders", [Folder?].self),
+      .field("createFolder", CreateFolder.self, arguments: ["name": .variable("name")]),
     ] }
 
-    public var folders: [Folder?] { __data["folders"] }
+    public var createFolder: CreateFolder { __data["createFolder"] }
 
-    /// Folder
+    /// CreateFolder
     ///
     /// Parent Type: `Folder`
-    public struct Folder: KomiicAPI.SelectionSet {
+    public struct CreateFolder: KomiicAPI.SelectionSet {
       public let __data: DataDict
       public init(_dataDict: DataDict) { __data = _dataDict }
 

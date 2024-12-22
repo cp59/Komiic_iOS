@@ -95,4 +95,5 @@ enum ListType {
     case allComics
     case authorComics
     case categoryComics
+    case favoriteComics
 }

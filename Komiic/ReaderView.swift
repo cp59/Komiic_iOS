@@ -139,7 +139,7 @@ struct ReaderView: View {
                             .tag(page)
                             .aspectRatio(CGSize(width: img.width, height: img.height), contentMode: .fit)
                     }
-                }.tabViewStyle(PageTabViewStyle()).scrollIndicators(.hidden).onTapGesture {
+                }.tabViewStyle(PageTabViewStyle(indexDisplayMode: showingButton ? .always : .never)).scrollIndicators(.hidden).onTapGesture {
                     if showingButton {
                         withAnimation {
                             showingButton = false
@@ -183,54 +183,54 @@ struct ReaderView: View {
                             .padding(5)
                             .background(.gray)
                             .cornerRadius(8).padding(.horizontal, 20)
-                    }.opacity(showingButton ? 1 : 0).sheet(isPresented: $showingChapterPicker, content: {
-                        NavigationView {
-                            VStack {
-                                List {
-                                    Section {
-                                        ForEach(bookList, id: \.id) { book in
-                                            let currentChapterBadge = (currentChapterId == book.id ? "目前章節" : "\(book.size)p")
-                                            Button("\(book.serial)卷") {
-                                                currentChapterId = book.id
-                                                currentPage = 0
-                                                loadState = .fetchingImages
-                                                showingChapterPicker = false
-                                            }.badge(currentChapterBadge)
-                                        }
-                                    } header: {
-                                        if !bookList.isEmpty {
-                                            Text("卷")
-                                        }
-                                    }
-                                    Section {
-                                        ForEach(chapterList, id: \.id) { chapter in
-                                            let currentChapterBadge = (currentChapterId == chapter.id ? "目前章節" : "\(chapter.size)p")
-                                            Button("\(chapter.serial)話") {
-                                                currentChapterId = chapter.id
-                                                currentPage = 0
-                                                loadState = .fetchingImages
-                                                showingChapterPicker = false
-                                            }.badge(currentChapterBadge)
-                                        }
-                                    } header: {
-                                        if !chapterList.isEmpty {
-                                            Text("話")
-                                        }
-                                    }
-                                }
-                            }.navigationTitle("章節").navigationBarItems(trailing:
-                                Button(action: {
-                                    showingChapterPicker = false
-                                }) {
-                                    ExitButtonView().frame(width: 32, height: 32)
-                                }.padding(EdgeInsets(top: 15, leading: 0, bottom: 0, trailing: 10))
-                            )
-                        }
-                    })
+                    }.opacity(showingButton ? 1 : 0)
                 }
             }
         }.toast(isPresenting: $showLastReadToast) {
             AlertToast(displayMode: .hud, type: .regular, title: "已自動跳轉到上次閱讀的頁面")
-        }
+        }.sheet(isPresented: $showingChapterPicker, content: {
+            NavigationView {
+                VStack {
+                    List {
+                        Section {
+                            ForEach(bookList, id: \.id) { book in
+                                let currentChapterBadge = (currentChapterId == book.id ? "目前章節" : "\(book.size)p")
+                                Button("\(book.serial)卷") {
+                                    currentChapterId = book.id
+                                    currentPage = 0
+                                    loadState = .fetchingImages
+                                    showingChapterPicker = false
+                                }.badge(currentChapterBadge)
+                            }
+                        } header: {
+                            if !bookList.isEmpty {
+                                Text("卷")
+                            }
+                        }
+                        Section {
+                            ForEach(chapterList, id: \.id) { chapter in
+                                let currentChapterBadge = (currentChapterId == chapter.id ? "目前章節" : "\(chapter.size)p")
+                                Button("\(chapter.serial)話") {
+                                    currentChapterId = chapter.id
+                                    currentPage = 0
+                                    loadState = .fetchingImages
+                                    showingChapterPicker = false
+                                }.badge(currentChapterBadge)
+                            }
+                        } header: {
+                            if !chapterList.isEmpty {
+                                Text("話")
+                            }
+                        }
+                    }
+                }.navigationTitle("章節").navigationBarItems(trailing:
+                    Button(action: {
+                        showingChapterPicker = false
+                    }) {
+                        ExitButtonView().frame(width: 32, height: 32)
+                    }.padding(EdgeInsets(top: 15, leading: 0, bottom: 0, trailing: 10))
+                )
+            }
+        })
     }
 }

@@ -22,7 +22,7 @@ struct BookStoreView: View {
                     Divider()
                     NavigationLink(destination: AllCategoryView().navigationTransition(.zoom(sourceID: "allCategory", in: namespace)).navigationTitle("所有漫畫")) {
                         HStack {
-                            Text("所有漫畫").foregroundStyle(.blue)
+                            Text("所有漫畫").bold().font(.title2)
                             Spacer()
                             Image(systemName: "books.vertical").font(.system(size: 40))
                         }.frame(height: 70).padding(2)

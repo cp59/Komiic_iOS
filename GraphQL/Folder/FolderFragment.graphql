@@ -1,5 +1,4 @@
-query myFolder {
-  folders {
+fragment FolderFrag on Folder {
     id
     key
     name
@@ -7,6 +6,5 @@ query myFolder {
     comicCount
     dateCreated
     dateUpdated
-    __typename
-  }
 }
+

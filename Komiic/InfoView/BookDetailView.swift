@@ -5,7 +5,6 @@
 //  Created by 梁承樸 on 2024/8/11.
 //
 
-import DominantColors
 import Kingfisher
 import KomiicAPI
 import SwiftUI
@@ -27,13 +26,11 @@ struct BookDetailView: View {
                 .cancelOnDisappear(true)
                 .fade(duration: 0.25)
                 .navigationTransition(.zoom(sourceID: comic.id, in: namespace))
-                .matchedTransitionSource(id: "cover", in: readNamespace)
                 .frame(width: 240, height: 320)
                 .cornerRadius(8)
-                .padding()
                 .shadow(radius: 5)
                 .scaledToFit()
-            Spacer().frame(height: 20)
+            Spacer().frame(height: 15)
             Text(comic.title).font(.title2).bold().contextMenu {
                 Button(action: {
                     UIPasteboard.general.string = comic.title
@@ -49,24 +46,26 @@ struct BookDetailView: View {
                 } label: {
                     HStack {
                         Text(comic.authors.map(\.self!.name).joined(separator: " 和 ")).foregroundColor(.secondary).font(.subheadline)
-                        Image(systemName: "chevron.right").foregroundColor(Color.gray).bold().font(.subheadline)
+                        Image(systemName: "chevron.right").foregroundColor(Color.gray).font(.caption)
                     }
                 }
             } else {
                 Menu {
-                    ForEach(comic.authors.compactMap { $0! }, id: \.id) { author in
-                        NavigationLink {
-                            ComicListView(listType: .authorComics, args: "\(author.id)").navigationTitle(author.name).navigationBarTitleDisplayMode(.large)
-                        } label: {
-                            HStack {
-                                Text(author.name)
+                    Section("作者") {
+                        ForEach(comic.authors.compactMap { $0! }, id: \.id) { author in
+                            NavigationLink {
+                                ComicListView(listType: .authorComics, args: "\(author.id)").navigationTitle(author.name).navigationBarTitleDisplayMode(.large)
+                            } label: {
+                                HStack {
+                                    Text(author.name)
+                                }
                             }
                         }
                     }
                 } label: {
                     HStack {
                         Text(comic.authors.map(\.self!.name).joined(separator: " 和 ")).foregroundColor(.secondary).font(.subheadline)
-                        Image(systemName: "chevron.right").foregroundColor(Color.gray).bold().font(.subheadline)
+                        Image(systemName: "chevron.right").foregroundColor(Color.gray).font(.caption)
                     }
                 }
             }
@@ -74,8 +73,8 @@ struct BookDetailView: View {
             Button(action: {
                 startReading = true
             }) {
-                Text("開始閱讀").font(.title3).frame(maxWidth: .infinity)
-            }.buttonStyle(.borderedProminent).controlSize(.large)
+                Text("開始閱讀").font(.title3).frame(maxWidth: .infinity).foregroundStyle(.onAccent)
+            }.matchedTransitionSource(id: "cover", in: readNamespace).buttonStyle(.borderedProminent).controlSize(.large)
             Spacer().frame(height: 20)
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(alignment: .center, spacing: 10) {
@@ -96,7 +95,7 @@ struct BookDetailView: View {
                     Divider()
                     if comic.categories.count < 2 {
                         NavigationLink {
-                            AllCategoryView(categoryId: comic.categories.first!!.id).navigationTitle(comic.categories.first!!.name).navigationBarTitleDisplayMode(.large)
+                            AllCategoryView(categoryId: [comic.categories.first!!.id]).navigationTitle(comic.categories.first!!.name).navigationBarTitleDisplayMode(.large)
                         } label: {
                             VStack {
                                 Text("類型").font(.caption).foregroundColor(.primary)
@@ -105,9 +104,9 @@ struct BookDetailView: View {
                         }
                     } else {
                         Menu {
-                            ForEach(comic.categories.compactMap{$0!}, id: \.id) { category in
+                            ForEach(comic.categories.compactMap { $0! }, id: \.id) { category in
                                 NavigationLink {
-                                    AllCategoryView(categoryId: category.id).navigationTitle(category.name).navigationBarTitleDisplayMode(.large)
+                                    AllCategoryView(categoryId: [category.id]).navigationTitle(category.name).navigationBarTitleDisplayMode(.large)
                                 } label: {
                                     Text(category.name)
                                 }

@@ -14,12 +14,14 @@ struct AllCategoryView: View {
     private let sortList: [OrderBy: String] = [.dateUpdated: "更新", .views: "觀看數", .favoriteCount: "喜愛數"]
     private let statusList: [String: String] = ["": "全部", "ONGOING": "連載", "END": "完結"]
     @State private var sort: OrderBy = .dateUpdated
-    @State private var categoryId: String
+    @State private var categoryId: [String] = []
     @State private var status: String
-    init (categoryId: String = "0", status: String = "") {
+    @State private var showFilterSheet: Bool = false
+    init(categoryId: [String] = [], status: String = "") {
         self.categoryId = categoryId
         self.status = status
     }
+
     var body: some View {
         if loadState == .loading {
             ProgressView().controlSize(.extraLarge).onFirstAppear {
@@ -27,13 +29,7 @@ struct AllCategoryView: View {
                     switch result {
                     case .success(let response):
                         categoryList.append(contentsOf: response.data!.allCategory.compactMap { $0! })
-                        do {
-                            categoryList.insert(try KomiicAPI.AllCategoryQuery.Data.AllCategory(data: ["id": "0", "name": "全部", "__typename": "Category"]),at: 0)
-                            loadState = .loaded
-                        } catch {
-                            print(error)
-                            loadState = .failed
-                        }
+                        loadState = .loaded
                     case .failure(let error):
                         loadState = .failed
                         print(error)
@@ -54,52 +50,81 @@ struct AllCategoryView: View {
                 .buttonBorderShape(.capsule)
             }.frame(height: 210)
         } else {
-            ComicListView(listType: .allComics,orderBy: $sort,status: $status, categoryId: $categoryId).toolbar {
+            ComicListView(listType: .allComics, orderBy: $sort, status: $status, categoryId: $categoryId).toolbar {
                 ToolbarItem(placement: .primaryAction) {
-                    Menu {
-                        Menu {
-                            Picker(selection: $sort, label: Label("排序方式", systemImage: "arrow.up.arrow.down")) {
-                                ForEach(Array(sortList.keys), id: \.self) { key in
-                                    Text(sortList[key]!).tag(key)
-                                }
-                            }
-                        } label: {
-                            Button(action: {}) {
-                                Text("排序方式")
-                                Text(sortList[sort]!)
-                                Image(systemName: "arrow.up.arrow.down")
-                            }
-                        }
-                        Menu {
-                            Picker(selection: $status, label: Label("狀態", systemImage: "arrow.up.arrow.down")) {
-                                ForEach(Array(statusList.keys), id: \.self) { key in
-                                    Text(statusList[key]!).tag(key)
-                                }
-                            }
-                        } label: {
-                            Button(action: {}) {
-                                Text("狀態")
-                                Text(statusList[status]!)
-                                Image(systemName: "checkmark.square")
-                            }
-                        }
-                        Menu {
-                            Picker(selection: $categoryId, label: Label("分類", systemImage: "list.bullet")) {
-                                ForEach(categoryList, id: \.id) { category in
-                                    Text(category.name).tag(category.id)
-                                }
-                            }
-                        } label: {
-                            Button(action: {}) {
-                                Text("分類")
-                                Text(categoryList.filter { x -> Bool in x.id == categoryId }.first!.name)
-                                Image(systemName: "square.grid.2x2")
-                            }
-                        }
+                    Button(action: {
+                        showFilterSheet = true
+                    }) {
+                        Image(systemName: "line.3.horizontal.decrease.circle")
                     }
-                    label: {
-                        Label("Sort", systemImage: "line.3.horizontal.decrease.circle")
-                    }
+                }
+            }.sheet(isPresented: $showFilterSheet) {
+                ScrollView {
+                    VStack(alignment: .leading) {
+                        Text("排序方式").font(.footnote).foregroundStyle(.secondary)
+                        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 5), count: 3), spacing: 5) {
+                            ForEach(Array(sortList.keys), id: \.self) { key in
+                                if sort == key {
+                                    Button(action: {}) {
+                                        Text(sortList[key]!).frame(maxWidth: .infinity).foregroundStyle(.onAccent)
+                                    }.buttonStyle(.borderedProminent)
+                                } else {
+                                    Button(action: {
+                                        sort = key
+                                    }) {
+                                        Text(sortList[key]!).frame(maxWidth: .infinity)
+                                    }.buttonStyle(.bordered)
+                                }
+                            }
+                        }
+                        Spacer().frame(height: 10)
+                        Text("狀態").font(.footnote).foregroundStyle(.secondary)
+                        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 5), count: 3), spacing: 5) {
+                            ForEach(Array(statusList.keys), id: \.self) { key in
+                                if status == key {
+                                    Button(action: {}) {
+                                        Text(statusList[key]!).frame(maxWidth: .infinity).foregroundStyle(.onAccent)
+                                    }.buttonStyle(.borderedProminent)
+                                } else {
+                                    Button(action: {
+                                        status = key
+                                    }) {
+                                        Text(statusList[key]!).frame(maxWidth: .infinity)
+                                    }.buttonStyle(.bordered)
+                                }
+                            }
+                        }
+                        Spacer().frame(height: 10)
+                        Text("分類 （可多選）").font(.footnote).foregroundStyle(.secondary)
+                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 60))], spacing: 5) {
+                            if categoryId.isEmpty {
+                                Button(action: {}) {
+                                    Text("全部").foregroundStyle(.onAccent)
+                                }.buttonStyle(.borderedProminent)
+                            } else {
+                                Button(action: {
+                                    categoryId.removeAll()
+                                }) {
+                                    Text("全部")
+                                }.buttonStyle(.bordered)
+                            }
+                            ForEach(categoryList, id: \.id) { category in
+                                if categoryId.contains(category.id) {
+                                    Button(action: {
+                                        categoryId.remove(at: categoryId.firstIndex(of: category.id)!)
+                                    }) {
+                                        Text(category.name).foregroundStyle(.onAccent)
+                                    }.buttonStyle(.borderedProminent)
+                                } else {
+                                    Button(action: {
+                                        categoryId.append(category.id)
+                                    }) {
+                                        Text(category.name)
+                                    }.buttonStyle(.bordered)
+                                }
+                            }
+                        }
+                    }.padding().presentationDetents([.medium, .large])
                 }
             }
         }

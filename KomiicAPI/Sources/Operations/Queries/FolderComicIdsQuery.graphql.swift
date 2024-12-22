@@ -52,12 +52,12 @@ public class FolderComicIdsQuery: GraphQLQuery {
         .field("__typename", String.self),
         .field("folderId", KomiicAPI.ID.self),
         .field("key", String.self),
-        .field("comicIds", [KomiicAPI.ID?].self),
+        .field("comicIds", [KomiicAPI.ID].self),
       ] }
 
       public var folderId: KomiicAPI.ID { __data["folderId"] }
       public var key: String { __data["key"] }
-      public var comicIds: [KomiicAPI.ID?] { __data["comicIds"] }
+      public var comicIds: [KomiicAPI.ID] { __data["comicIds"] }
     }
   }
 }

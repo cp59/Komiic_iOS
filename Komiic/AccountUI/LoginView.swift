@@ -29,7 +29,7 @@ struct LoginView: View {
                 .sheet(isPresented: $showingLoginSheet, content: {
                     NavigationStack {
                         VStack {
-                            Text("登入Komiic")
+                            Text("登入 Komiic ID")
                                 .font(.largeTitle)
                                 .bold()
                             TextField(text: $username, prompt: Text("電子郵件地址")) { Text("電子郵件地址") }
@@ -62,7 +62,7 @@ struct LoginView: View {
                                             keychain.set(password, forKey: "password")
                                             keychain.set(String(Int(expireDate.timeIntervalSince1970)), forKey: "expire")
                                             showingLoginSheet.toggle()
-                                            DispatchQueue.main.async {
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                                                 appEnv.token = result.token
                                                 appEnv.isLogin.toggle()
                                             }
@@ -86,6 +86,7 @@ struct LoginView: View {
                                 Link("忘記密碼？", destination: URL(string: "https://komiic.com/sendResetPassword")!)
                                 Link("註冊帳戶", destination: URL(string: "https://komiic.com/register")!)
                             })
+                            Spacer().frame(height: 60)
                         }.padding().toolbar {
                             ToolbarItem(placement: .cancellationAction, content: {
                                 Button("取消", role: .cancel) {
